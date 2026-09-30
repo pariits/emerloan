@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Due Date Checker — Emergency Loan Monitor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f9f9f9;font-family:system-ui,-apple-system,sans-serif;color:#222;padding:20px;max-width:900px;margin:0 auto}
+h1{font-size:22px;font-weight:700;color:#111;margin-bottom:4px}
+.subtitle{color:#666;font-size:13px;margin-bottom:16px}
+.config-bar{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#856404;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.config-bar input{flex:1;min-width:200px;padding:6px 10px;border:1px solid #ddd;border-radius:4px;font-size:12px;font-family:monospace}
+.config-bar button{padding:6px 14px;border:none;border-radius:4px;background:#ffc107;color:#856404;font-weight:600;font-size:12px;cursor:pointer}
+.connected-bar{background:#d4edda;border:1px solid #28a745;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#155724;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.connected-bar button{padding:4px 12px;border:none;border-radius:4px;background:#28a745;color:#fff;font-size:11px;cursor:pointer;font-weight:600}
+.error-bar{background:#f8d7da;border:1px solid #f5c6cb;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#721c24;display:none;line-height:1.6}
+.picker-section{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin-bottom:20px;text-align:center}
+.picker-section label{font-size:13px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.04em;margin-right:10px}
+.picker-section input[type="date"]{padding:10px 16px;border:2px solid #2563eb;border-radius:8px;font-size:16px;font-family:inherit;color:#111;cursor:pointer;outline:none}
+.picker-section input[type="date"]:focus{border-color:#1d4ed8;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.picker-section .today-btn{padding:10px 20px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;margin-left:10px;transition:background .15s}
+.picker-section .today-btn:hover{background:#1d4ed8}
+.selected-date-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 20px;margin-bottom:16px;text-align:center}
+.selected-date-banner .label{font-size:11px;color:#1e40af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.selected-date-banner .date{font-size:20px;font-weight:700;color:#1e40af;font-family:'SF Mono','Cascadia Code',monospace}
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.card{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;text-align:center}
+.card-label{color:#666;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.card-value{font-size:24px;font-weight:700;font-family:'SF Mono','Cascadia Code',monospace}
+.card-value.blue{color:#2563eb}.card-value.green{color:#16a34a}.card-value.red{color:#dc2626}.card-value.amber{color:#d97706}
+.table-wrapper{background:#fff;border:1px solid #eee;border-radius:10px;overflow-x:auto;margin-bottom:16px}
+.table-header{padding:12px 16px;background:#f8fafc;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.table-header h3{font-size:14px;font-weight:700;color:#333}
+.badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+.badge-due{background:#fef3c7;color:#92400e}
+.badge-today{background:#dcfce7;color:#166534}
+.badge-overdue{background:#fef2f2;color:#991b1b}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:#555;font-weight:600;padding:10px 12px;border-bottom:2px solid #e5e7eb;font-size:11px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+td{padding:8px 12px;color:#222;border-bottom:1px solid #f0f0f0;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px;white-space:nowrap}
+tr:hover td{background:#f8fafc}
+.right{text-align:right}
+tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1;border-bottom:none;color:#111}
+.status-paid{background:#dcfce7;color:#166534;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.status-pending{background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.status-overdue{background:#fef2f2;color:#991b1b;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.empty-state{text-align:center;padding:40px 20px;color:#999;font-size:13px}
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#1e40af;line-height:1.6}
+.info-box strong{font-weight:700}
+.overdue-section{margin-top:16px}
+.overdue-header{background:#fef2f2;border:1px solid #fecaca;border-radius:8px 8px 0 0;padding:12px 16px;font-size:13px;font-weight:700;color:#991b1b}
+.btn-download{padding:8px 18px;border:none;border-radius:6px;background:#16a34a;color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-download:hover{background:#15803d}
+.toast{position:fixed;top:20px;right:20px;background:#111;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:200;opacity:0;transform:translateY(-10px);transition:all .3s ease;pointer-events:none;max-width:350px}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#2563eb}
+.loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.7);z-index:90;justify-content:center;align-items:center;font-size:14px;color:#555}
+.loading-overlay.show{display:flex}
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid #ddd;border-top-color:#2563eb;border-radius:50%;animation:spin .6s linear infinite;margin-right:10px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav-arrows{display:flex;gap:8px;margin-top:12px;justify-content:center}
+.nav-arrows button{padding:8px 16px;border:1px solid #ddd;border-radius:6px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:#333;transition:all .15s}
+.nav-arrows button:hover{background:#f3f4f6;border-color:#bbb}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loadingOverlay"><div><span class="spinner"></span> Loading from Google Sheets...</div></div>
+
+<h1>📅 Due Date Checker</h1>
+<p class="subtitle">Emergency Loan Monitor · Select any date to see who's due · Read-Only · UTC+8</p>
+
+<div class="config-bar" id="configBar">
+  ⚙️ <strong>Setup:</strong> Paste the same Google Apps Script URL →
+  <input type="text" id="urlInput" placeholder="https://script.google.com/macros/s/XXXXX/exec">
+  <button onclick="saveUrl()">Connect</button>
+</div>
+
+<div class="connected-bar" id="connectedBar" style="display:none">
+  ✅ <strong>Connected</strong>
+  <span style="font-size:11px;color:#666;margin-left:8px" id="syncStatus">Last sync: just now</span>
+  <div>
+    <button onclick="loadLoans()" style="margin-right:4px">🔄 Refresh</button>
+    <button onclick="resetUrl()" style="background:#dc3545">Disconnect</button>
+  </div>
+</div>
+
+<div class="error-bar" id="errorBar">
+  <strong>⚠️ Connection Error:</strong> <span id="errorMsg"></span>
+</div>
+
+<div class="picker-section">
+  <label for="datePicker">📆 Select Due Date:</label>
+  <input type="date" id="datePicker">
+  <button class="today-btn" onclick="goToday()">Today</button>
+  <div class="nav-arrows">
+    <button onclick="shiftDate(-1)">◀ Previous Day</button>
+    <button onclick="shiftDate(1)">Next Day ▶</button>
+  </div>
+</div>
+
+<div id="resultArea"></div>
+
+<div class="info-box">
+  <strong>📌 How to use:</strong><br>
+  • Select any date using the calendar picker above<br>
+  • The table shows all <strong>Pending</strong> loans due on that date<br>
+  • <strong>Overdue</strong> loans (past due dates still Pending) are shown separately below<br>
+  • Use <strong>◀ ▶ arrows</strong> to quickly navigate between days<br>
+  • Click <strong>📥 Download</strong> to export the table as Excel<br>
+  • This page is <strong>read-only</strong> — updates are done on the main system
+</div>
+
+<script>
+var UTC_OFFSET = 8;
+var WEB_APP_URL = localStorage.getItem('loanDueCheckerUrl') || '';
+var loans = [];
+
+function getNowUTC8() {
+  var now = new Date();
+  var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  return new Date(utc + (UTC_OFFSET * 3600000));
+}
+
+function todayStr() {
+  var d = getNowUTC8();
+  return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+}
+
+function addDays(dateStr, n) {
+  var p = dateStr.split('-');
+  var dt = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10), 12, 0, 0);
+  dt.setDate(dt.getDate() + n);
+  return dt.getFullYear() + '-' + ('0' + (dt.getMonth() + 1)).slice(-2) + '-' + ('0' + dt.getDate()).slice(-2);
+}
+
+function fixDateStr(val) {
+  if (!val) return '';
+  var s = String(val);
+  if (s.indexOf('T') > -1) {
+    var dt = new Date(s);
+    var utc = dt.getTime() + (dt.getTimezoneOffset() * 60000);
+    var local = new Date(utc + (UTC_OFFSET * 3600000));
+    return local.getFullYear() + '-' + ('0' + (local.getMonth() + 1)).slice(-2) + '-' + ('0' + local.getDate()).slice(-2);
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  try {
+    var dt2 = new Date(s);
+    if (!isNaN(dt2.getTime())) {
+      var utc2 = dt2.getTime() + (dt2.getTimezoneOffset() * 60000);
+      var local2 = new Date(utc2 + (UTC_OFFSET * 3600000));
+      return local2.getFullYear() + '-' + ('0' + (local2.getMonth() + 1)).slice(-2) + '-' + ('0' + local2.getDate()).slice(-2);
+    }
+  } catch (e) {}
+  return s;
+}
+
+function fmtDate(ds) {
+  if (!ds) return '';
+  var p = ds.split('-');
+  return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10), 12, 0, 0)
+    .toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function fmtDateLong(ds) {
+  var p = ds.split('-');
+  return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10), 12, 0, 0)
+    .toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+}
+
+function fmt(n) {
+  return '\u20B1' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 0 });
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || 'info') + ' show';
+  setTimeout(function () { t.classList.remove('show'); }, 3000);
+}
+
+function showError(msg) {
+  document.getElementById('errorMsg').textContent = msg;
+  document.getElementById('errorBar').style.display = 'block';
+}
+
+function hideError() { document.getElementById('errorBar').style.display = 'none'; }
+function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
+function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+function saveUrl() {
+  var url = document.getElementById('urlInput').value.trim();
+  if (!url || url.indexOf('script.google.com') === -1) {
+    alert('Please paste a valid Google Apps Script URL.');
+    return;
+  }
+  localStorage.setItem('loanDueCheckerUrl', url);
+  WEB_APP_URL = url;
+  hideError();
+  updateConfigUI();
+  loadLoans();
+}
+
+function resetUrl() {
+  localStorage.removeItem('loanDueCheckerUrl');
+  WEB_APP_URL = '';
+  loans = [];
+  hideError();
+  updateConfigUI();
+  document.getElementById('resultArea').innerHTML = '';
+}
+
+function updateConfigUI() {
+  document.getElementById('configBar').style.display = WEB_APP_URL ? 'none' : 'flex';
+  document.getElementById('connectedBar').style.display = WEB_APP_URL ? 'flex' : 'none';
+}
+
+function apiCall(params, callback) {
+  if (!WEB_APP_URL) { callback('No URL configured', null); return; }
+  var url = WEB_APP_URL + '?';
+  var parts = [];
+  for (var key in params) {
+    parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+  }
+  url += parts.join('&');
+  var done = false;
+  var timeout = setTimeout(function () {
+    if (!done) { done = true; callback('Request timed out.', null); }
+  }, 20000);
+  fetch(url, { method: 'GET', redirect: 'follow' })
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function (text) {
+      if (done) return;
+      done = true;
+      clearTimeout(timeout);
+      try {
+        var data = JSON.parse(text);
+        if (data.loans && Array.isArray(data.loans)) {
+          data.loans.forEach(function (l) {
+            l.dateReleased = fixDateStr(l.dateReleased);
+            l.dueDate = fixDateStr(l.dueDate);
+            l.amount = Number(l.amount) || 0;
+            l.rate = Number(l.rate) || 0;
+            l.interest = Number(l.interest) || 0;
+            l.total = Number(l.total) || 0;
+            l.cycles = Number(l.cycles) || 1;
+            l.action = l.action || '';
+          });
+        }
+        callback(null, data);
+      } catch (e) {
+        try {
+          var m = text.match(/\{[\s\S]*\}/);
+          if (m) { callback(null, JSON.parse(m[0])); }
+          else { callback('Invalid response from server', null); }
+        } catch (e2) { callback('Could not parse response', null); }
+      }
+    })
+    .catch(function (err) {
+      if (done) return;
+      done = true;
+      clearTimeout(timeout);
+      callback(err.message || 'Network error', null);
+    });
+}
+
+function loadLoans() {
+  if (!WEB_APP_URL) return;
+  hideError();
+  showLoading();
+  document.getElementById('syncStatus').textContent = 'Syncing...';
+  apiCall({ action: 'getAll' }, function (err, data) {
+    hideLoading();
+    if (err) {
+      showError(err);
+      showToast('Failed: ' + err, 'error');
+      document.getElementById('syncStatus').textContent = 'Sync failed';
+      return;
+    }
+    if (data && data.error) { showError(data.error); return; }
+    hideError();
+    loans = (data && data.loans) ? data.loans : [];
+    var now = getNowUTC8();
+    document.getElementById('syncStatus').textContent =
+      'Last sync: ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) + ' (UTC+8)';
+    renderResults();
+    showToast('\u2705 Data loaded: ' + loans.length + ' records', 'success');
+  });
+}
+
+function goToday() {
+  document.getElementById('datePicker').value = todayStr();
+  renderResults();
+}
+
+function shiftDate(n) {
+  var current = document.getElementById('datePicker').value;
+  if (!current) current = todayStr();
+  document.getElementById('datePicker').value = addDays(current, n);
+  renderResults();
+}
+
+function renderResults() {
+  var selectedDate = document.getElementById('datePicker').value;
+  if (!selectedDate) { document.getElementById('resultArea').innerHTML = ''; return; }
+  if (!loans.length) {
+    document.getElementById('resultArea').innerHTML = '<div class="empty-state">No loan data loaded. Connect to Google Sheets first.</div>';
+    return;
+  }
+
+  var today = todayStr();
+  var isToday = selectedDate === today;
+  var isPast = selectedDate < today;
+
+  var duePending = loans.filter(function (l) { return l.dueDate === selectedDate && l.remarks === 'Pending'; });
+  var duePaid = loans.filter(function (l) { return l.dueDate === selectedDate && l.remarks === 'Paid'; });
+  var overdue = [];
+  if (isToday) {
+    overdue = loans.filter(function (l) { return l.dueDate < today && l.remarks === 'Pending'; });
+  }
+
+  var ta = 0, ti = 0, tt = 0;
+  duePending.forEach(function (l) { ta += l.amount; ti += l.interest; tt += l.total; });
+
+  var h = '';
+
+  h += '<div class="selected-date-banner"><div class="label">' + (isToday ? 'TODAY' : isPast ? 'PAST DATE' : 'UPCOMING DATE') + '</div>';
+  h += '<div class="date">' + fmtDateLong(selectedDate) + '</div></div>';
+
+  h += '<div class="summary-cards">';
+  h += '<div class="card"><div class="card-label">Pending Due</div><div class="card-value red">' + duePending.length + '</div></div>';
+  h += '<div class="card"><div class="card-label">Already Paid</div><div class="card-value green">' + duePaid.length + '</div></div>';
+  h += '<div class="card"><div class="card-label">Total to Collect</div><div class="card-value amber">' + fmt(tt) + '</div></div>';
+  if (isToday && overdue.length > 0) {
+    h += '<div class="card"><div class="card-label">Overdue</div><div class="card-value red">' + overdue.length + '</div></div>';
+  }
+  h += '</div>';
+
+  if (duePending.length > 0) {
+    h += '<div class="table-wrapper"><div class="table-header"><h3>\u23F3 Pending Collection — ' + fmtDate(selectedDate) + '</h3>';
+    h += '<div><span class="badge ' + (isToday ? 'badge-today' : 'badge-due') + '">' + duePending.length + ' borrower' + (duePending.length > 1 ? 's' : '') + '</span>';
+    h += ' <button class="btn-download" onclick="downloadDue(\'' + selectedDate + '\')">📥 Download</button></div></div>';
+    h += '<table><thead><tr><th>#</th><th>Name</th><th>Released</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total Due</th><th>Cycle</th></tr></thead><tbody>';
+    duePending.forEach(function (l, i) {
+      h += '<tr><td>' + (i + 1) + '</td><td><strong>' + l.name + '</strong></td><td>' + fmtDate(l.dateReleased) + '</td><td class="right">' + fmt(l.amount) + '</td><td>' + l.rate + '%</td><td class="right">' + fmt(l.interest) + '</td><td class="right"><strong>' + fmt(l.total) + '</strong></td><td>' + l.cycles + '</td></tr>';
+    });
+    h += '<tr class="totals-row"><td colspan="3" style="text-align:right;font-family:system-ui,sans-serif">TOTAL TO COLLECT</td><td class="right">' + fmt(ta) + '</td><td></td><td class="right">' + fmt(ti) + '</td><td class="right">' + fmt(tt) + '</td><td></td></tr>';
+    h += '</tbody></table></div>';
+  } else {
+    h += '<div class="table-wrapper"><div style="padding:30px;text-align:center;color:#999;font-size:13px">\uD83C\uDF89 No pending loans due on <strong>' + fmtDate(selectedDate) + '</strong></div></div>';
+  }
+
+  if (duePaid.length > 0) {
+    h += '<div class="table-wrapper"><div class="table-header"><h3>\u2705 Already Paid — ' + fmtDate(selectedDate) + '</h3>';
+    h += '<span class="badge badge-today">' + duePaid.length + ' paid</span></div>';
+    h += '<table><thead><tr><th>#</th><th>Name</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Action</th></tr></thead><tbody>';
+    duePaid.forEach(function (l, i) {
+      var ab = l.action ? (l.action.indexOf('Renew') === 0 ? '<span style="color:#1e40af;font-weight:600">' + l.action + '</span>' : l.action === 'Remitted' ? '<span style="color:#6b21a8;font-weight:600">Remitted</span>' : l.action) : '\u2014';
+      h += '<tr><td>' + (i + 1) + '</td><td>' + l.name + '</td><td class="right">' + fmt(l.amount) + '</td><td>' + l.rate + '%</td><td class="right">' + fmt(l.interest) + '</td><td class="right">' + fmt(l.total) + '</td><td>' + ab + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+
+  if (isToday && overdue.length > 0) {
+    var ota = 0, oti = 0, ott = 0;
+    overdue.forEach(function (l) { ota += l.amount; oti += l.interest; ott += l.total; });
+    h += '<div class="overdue-section"><div class="overdue-header">\u26A0\uFE0F Overdue Loans — Past Due &amp; Still Pending (' + overdue.length + ')</div>';
+    h += '<div class="table-wrapper" style="border-radius:0 0 10px 10px;border-top:none">';
+    h += '<table><thead><tr><th>#</th><th>Name</th><th>Was Due</th><th>Days Late</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th></tr></thead><tbody>';
+    overdue.forEach(function (l, i) {
+      var dp = l.dueDate.split('-');
+      var dd = new Date(parseInt(dp[0], 10), parseInt(dp[1], 10) - 1, parseInt(dp[2], 10), 12, 0, 0);
+      var tp = today.split('-');
+      var td2 = new Date(parseInt(tp[0], 10), parseInt(tp[1], 10) - 1, parseInt(tp[2], 10), 12, 0, 0);
+      var daysLate = Math.round((td2 - dd) / 86400000);
+      h += '<tr style="background:#fef2f2"><td>' + (i + 1) + '</td><td><strong>' + l.name + '</strong></td><td>' + fmtDate(l.dueDate) + '</td><td><span class="status-overdue">' + daysLate + ' day' + (daysLate > 1 ? 's' : '') + '</span></td><td class="right">' + fmt(l.amount) + '</td><td>' + l.rate + '%</td><td class="right">' + fmt(l.interest) + '</td><td class="right"><strong>' + fmt(l.total) + '</strong></td></tr>';
+    });
+    h += '<tr class="totals-row"><td colspan="4" style="text-align:right;font-family:system-ui,sans-serif">OVERDUE TOTAL</td><td class="right">' + fmt(ota) + '</td><td></td><td class="right">' + fmt(oti) + '</td><td class="right">' + fmt(ott) + '</td></tr>';
+    h += '</tbody></table></div></div>';
+  }
+
+  document.getElementById('resultArea').innerHTML = h;
+}
+
+function downloadDue(dateStr) {
+  var duePending = loans.filter(function (l) { return l.dueDate === dateStr && l.remarks === 'Pending'; });
+  if (!duePending.length) { showToast('No data to download', 'error'); return; }
+  var rows = [];
+  rows.push(['#', 'Name', 'Released', 'Amount', 'Rate', 'Interest', 'Total Due', 'Cycle']);
+  var ta = 0, ti = 0, tt = 0;
+  duePending.forEach(function (l, i) {
+    ta += l.amount; ti += l.interest; tt += l.total;
+    rows.push([i + 1, l.name, l.dateReleased, l.amount, l.rate + '%', l.interest, l.total, l.cycles]);
+  });
+  rows.push(['', '', '', '', '', '', '', '']);
+  rows.push(['', '', 'TOTAL', ta, '', ti, tt, '']);
+
+  var x = '<' + '?xml version="1.0"?' + '><' + '?mso-application progid="Excel.Sheet"?' + '>';
+  x += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
+  x += '<Styles>';
+  x += '<Style ss:ID="h"><Font ss:Bold="1" ss:Size="11" ss:Color="#FFFFFF"/><Interior ss:Color="#2563EB" ss:Pattern="Solid"/></Style>';
+  x += '<Style ss:ID="t"><Font ss:Bold="1" ss:Size="11"/><Interior ss:Color="#F1F5F9" ss:Pattern="Solid"/></Style>';
+  x += '<Style ss:ID="d"><Font ss:Size="11"/></Style>';
+  x += '<Style ss:ID="n"><Font ss:Size="11"/><NumberFormat ss:Format="#,##0.00"/></Style>';
+  x += '<Style ss:ID="nb"><Font ss:Bold="1" ss:Size="11"/><Interior ss:Color="#F1F5F9" ss:Pattern="Solid"/><NumberFormat ss:Format="#,##0.00"/></Style>';
+  x += '</Styles><Worksheet ss:Name="Due ' + dateStr + '"><Table>';
+  rows.forEach(function (r, ri) {
+    x += '<Row>';
+    r.forEach(function (c) {
+      var hd = ri === 0;
+      var tot = ri === rows.length - 1 && rows.length > 2;
+      if (typeof c === 'number') {
+        x += '<Cell ss:StyleID="' + (hd ? 'h' : tot ? 'nb' : 'n') + '"><Data ss:Type="Number">' + c + '</Data></Cell>';
+      } else {
+        x += '<Cell ss:StyleID="' + (hd ? 'h' : tot ? 't' : 'd') + '"><Data ss:Type="String">' + String(c).replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</Data></Cell>';
+      }
+    });
+    x += '</Row>';
+  });
+  x += '</Table></Worksheet></Workbook>';
+  var b = new Blob([x], { type: 'application/vnd.ms-excel' });
+  var u = URL.createObjectURL(b);
+  var a = document.createElement('a');
+  a.href = u;
+  a.download = 'Due_' + dateStr + '.xls';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(u);
+  showToast('\uD83D\uDCE5 Downloaded: Due_' + dateStr + '.xls', 'success');
+}
+
+document.getElementById('datePicker').addEventListener('change', renderResults);
+document.getElementById('datePicker').value = todayStr();
+updateConfigUI();
+if (WEB_APP_URL) { loadLoans(); }
+</script>
+
+</body>
+</html>
+
