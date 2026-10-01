@@ -123,6 +123,8 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .legend-swatch.green{background:#e8f5e9}
 .logout-btn{position:fixed;bottom:20px;right:20px;background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .logout-btn:hover{background:#b91c1c}
+.renew-date-group{display:none;margin-top:10px;padding:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px}
+.renew-date-group.show{display:block}
 </style>
 </head>
 <body>
@@ -185,7 +187,7 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   <div class="info-box">
     <strong>📌 System Rules:</strong><br>
     • Loan cycle: <strong>Every 7 days</strong> from date released · Due Date = Release + 6 days (Day 1 = Release Day)<br>
-    • Interest: <strong>10%</strong> or <strong>15%</strong> · Renewal: <strong>1 day after payment</strong><br>
+    • Interest: <strong>10%</strong> or <strong>15%</strong> · Renewal: <strong>Flexible date</strong><br>
     • Remarks: <strong>Paid</strong> / <strong>Pending</strong> · Action: <strong>Renew</strong> / <strong>Remitted</strong><br>
     • Timezone: <strong>UTC+8 (Philippine Time)</strong> · 👥 Shared by 3 users via Google Sheets
   </div>
@@ -224,10 +226,15 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
     <div id="updateLoanInfo" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:14px;font-size:12px"></div>
     <div class="form-row">
       <div class="form-group"><label>Remarks</label><select id="updateRemarks"><option value="Pending">Pending</option><option value="Paid">Paid</option></select></div>
-      <div class="form-group"><label>Action</label><select id="updateAction"><option value="">— None —</option><option value="Renew">Renew (new 7-day cycle)</option><option value="Remitted">Remitted (fully closed)</option></select></div>
+      <div class="form-group"><label>Action</label><select id="updateAction" onchange="toggleRenewDate()"><option value="">— None —</option><option value="Renew">Renew (new 7-day cycle)</option><option value="Remitted">Remitted (fully closed)</option></select></div>
     </div>
-    <div class="form-group"><label>New Amount (if Renewing, optional)</label><input type="number" id="updateNewAmount" placeholder="Leave blank to keep same amount"></div>
-    <p class="note">If "Renew" is selected, the loan auto-carries to the next table with a new 7-day due date.</p>
+    <div class="renew-date-group" id="renewDateGroup">
+      <div class="form-row">
+        <div class="form-group"><label>Renewal Release Date</label><input type="date" id="renewDate"><p class="auto-note" id="renewDueNote">📌 New Due Date: select a date</p></div>
+        <div class="form-group"><label>New Amount (optional)</label><input type="number" id="updateNewAmount" placeholder="Same amount if blank"></div>
+      </div>
+      <p class="note">The renewed loan will use this date as the new release date. Due date auto-calculated (+6 days).</p>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('update')">Cancel</button>
       <button class="btn btn-warning" onclick="updateLoan()" id="btnUpdateSave">Save Changes</button>
@@ -297,7 +304,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 </div>
 
 <script>
-/* PASSWORD — SHA-256 HASHED */
 var APP_PASSWORD_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
 var MAX_ATTEMPTS=5,LOCKOUT_MINUTES=5;
 var SESSION_KEY='emerloan_session',ATTEMPTS_KEY='emerloan_attempts',LOCKOUT_KEY='emerloan_lockout';
@@ -322,7 +328,6 @@ async function attemptLogin(){
 function unlockApp(){document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('appContainer').classList.add('visible');initApp();}
 function logout(){localStorage.removeItem(SESSION_KEY);document.getElementById('appContainer').classList.remove('visible');document.getElementById('loginOverlay').classList.remove('hidden');document.getElementById('loginPassword').value='';document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='none';}
 
-/* MAIN APP */
 var CYCLE_DAYS=6,UTC_OFFSET=8,WEB_APP_URL='',loans=[],autoRefreshTimer=null,pendingDeleteId=null,pendingUpdateId=null,returnToModal=null,batchProcessing=false;
 
 function initApp(){WEB_APP_URL=localStorage.getItem('loanAppUrl')||'';updateConfigUI();if(WEB_APP_URL){loadLoans();}else{renderAll();}}
@@ -333,7 +338,6 @@ function fixDateStr(val){if(!val)return '';var s=String(val);if(s.indexOf('T')>-
 function fmtDate(ds){if(!ds)return '';var p=ds.split('-');return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
 function fmtDateLong(ds){var p=ds.split('-');return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'long'});}
 
-/* WEEK STARTS ON TUESDAY (day=2) */
 function getWeekKey(ds){var p=ds.split('-');var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0);var day=d.getDay();var diff=(day+5)%7;var tue=new Date(d);tue.setDate(d.getDate()-diff);return tue.getFullYear()+'-'+('0'+(tue.getMonth()+1)).slice(-2)+'-'+('0'+tue.getDate()).slice(-2);}
 
 function getWeekRange(ms){return fmtDate(ms)+' \u2013 '+fmtDate(addDays(ms,6));}
@@ -385,6 +389,15 @@ function openModal(n){
 }
 function closeModal(n){document.getElementById('modal-'+n).classList.remove('show');}
 function updateDueNote(){var dv=document.getElementById('newDate').value;document.getElementById('newDueNote').textContent=dv?'\uD83D\uDCCC Due Date: '+fmtDate(addDays(dv,CYCLE_DAYS)):'\uD83D\uDCCC Due Date: auto-calculated';}
+
+function toggleRenewDate(){
+  var act=document.getElementById('updateAction').value;
+  var grp=document.getElementById('renewDateGroup');
+  if(act==='Renew'){grp.classList.add('show');var loan=loans.find(function(l){return l.id===pendingUpdateId;});if(loan){var defDate=addDays(loan.dueDate,1);document.getElementById('renewDate').value=defDate;updateRenewDueNote();}}
+  else{grp.classList.remove('show');}
+}
+function updateRenewDueNote(){var dv=document.getElementById('renewDate').value;document.getElementById('renewDueNote').textContent=dv?'\uD83D\uDCCC New Due Date: '+fmtDate(addDays(dv,CYCLE_DAYS)):'\uD83D\uDCCC New Due Date: select a date';}
+
 function setDueDateToday(){document.getElementById('dueDatePicker').value=todayStr();populateDueToday();}
 function shiftDueDate(n){var c=document.getElementById('dueDatePicker').value||todayStr();document.getElementById('dueDatePicker').value=addDays(c,n);populateDueToday();}
 function setPaidDateToday(){document.getElementById('paidDatePicker').value=todayStr();populatePaid();}
@@ -395,6 +408,7 @@ function openUpdateForLoan(id,fromModal){
   returnToModal=fromModal;if(fromModal)closeModal(fromModal);pendingUpdateId=id;
   document.getElementById('updateLoanInfo').innerHTML='<strong>'+loan.name+'</strong> \u00B7 '+fmt(loan.amount)+' \u00B7 Due: '+fmtDate(loan.dueDate)+' \u00B7 Cycle #'+loan.cycles+' \u00B7 '+sBadge(loan.remarks)+(loan.action?' \u00B7 '+aBadge(loan.action):'');
   document.getElementById('updateRemarks').value=loan.remarks||'Pending';document.getElementById('updateAction').value='';document.getElementById('updateNewAmount').value='';
+  document.getElementById('renewDateGroup').classList.remove('show');document.getElementById('renewDate').value='';
   document.getElementById('modal-update').classList.add('show');
 }
 
@@ -422,13 +436,17 @@ function addLoan(){
 function updateLoan(){
   var sid=pendingUpdateId;if(!sid)return;var rem=document.getElementById('updateRemarks').value,act=document.getElementById('updateAction').value,na=document.getElementById('updateNewAmount').value;
   var loan=loans.find(function(l){return l.id===sid;});if(!loan)return;
+  if(act==='Renew'){var rd=document.getElementById('renewDate').value;if(!rd){alert('Please select a renewal release date.');return;}}
   document.getElementById('btnUpdateSave').disabled=true;showLoading();
   var actionVal=act==='Renew'?'Renewed':act==='Remitted'?'Remitted':'';
   apiCall({action:'update',data:JSON.stringify({id:sid,remarks:rem,action:actionVal})},function(err,res){
     if(err||!res||res.error){hideLoading();document.getElementById('btnUpdateSave').disabled=false;showToast('Failed to update','error');return;}
-    if(act==='Renew'){var ra=na?parseFloat(na):loan.amount,rt=loan.rate,newRelease=addDays(loan.dueDate,1),newDue=addDays(newRelease,CYCLE_DAYS),newInterest=ra*(rt/100);
+    if(act==='Renew'){
+      var ra=na?parseFloat(na):loan.amount,rt=loan.rate;
+      var newRelease=document.getElementById('renewDate').value;
+      var newDue=addDays(newRelease,CYCLE_DAYS),newInterest=ra*(rt/100);
       var newLoan={name:loan.name,dateReleased:newRelease,dueDate:newDue,amount:ra,rate:rt,interest:newInterest,total:ra+newInterest,remarks:'Pending',action:'',cycles:loan.cycles+1};
-      apiCall({action:'add',data:JSON.stringify(newLoan)},function(err2,res2){hideLoading();document.getElementById('btnUpdateSave').disabled=false;closeModal('update');showToast('\u2705 Renewed for '+loan.name,'success');reopenReturnModal();});
+      apiCall({action:'add',data:JSON.stringify(newLoan)},function(err2,res2){hideLoading();document.getElementById('btnUpdateSave').disabled=false;closeModal('update');showToast('\u2705 Renewed for '+loan.name+' (Release: '+fmtDate(newRelease)+')','success');reopenReturnModal();});
     }else{hideLoading();document.getElementById('btnUpdateSave').disabled=false;closeModal('update');showToast('\u2705 Updated','success');reopenReturnModal();}
   });
 }
@@ -480,13 +498,16 @@ function updatePaidCount(){var c=document.querySelectorAll('.paid-check:checked'
 function batchRenew(){
   var ids=[];document.querySelectorAll('.paid-check:checked').forEach(function(cb){ids.push(cb.getAttribute('data-id'));});
   if(!ids.length)return;var loanNames=ids.map(function(id){var l=loans.find(function(x){return x.id===id;});return l?l.name:'';}).join(', ');
-  if(!confirm('Renew '+ids.length+' loan(s)?\n\n'+loanNames+'\n\nSame amount will be used for each renewal.'))return;
+  var renewDateStr=prompt('Enter renewal release date (YYYY-MM-DD):\nDefault is tomorrow from due date.\n\nLeave blank for default.','')||'';
+  if(!confirm('Renew '+ids.length+' loan(s)?\n\n'+loanNames+'\n\nSame amount will be used for each renewal.'+(renewDateStr?'\nRelease date: '+renewDateStr:'\nDefault release date (day after due date)')))return;
   var btn=document.getElementById('btnBatchRenew');btn.disabled=true;btn.textContent='Processing...';showLoading();batchProcessing=true;
   function processNext(index){
     if(index>=ids.length){batchProcessing=false;hideLoading();btn.textContent='\uD83D\uDD04 Renew Selected';btn.disabled=false;showToast('\u2705 '+ids.length+' loan(s) renewed','success');loadLoans(function(){setTimeout(function(){populatePaid();},100);});return;}
     var id=ids[index];var loan=loans.find(function(l){return l.id===id;});if(!loan){processNext(index+1);return;}
     apiCall({action:'update',data:JSON.stringify({id:id,remarks:'Paid',action:'Renewed'})},function(err,res){
-      var ra=loan.amount,rt=loan.rate,newRelease=addDays(loan.dueDate,1),newDue=addDays(newRelease,CYCLE_DAYS),newInterest=ra*(rt/100);
+      var ra=loan.amount,rt=loan.rate;
+      var newRelease=renewDateStr||addDays(loan.dueDate,1);
+      var newDue=addDays(newRelease,CYCLE_DAYS),newInterest=ra*(rt/100);
       var newLoan={name:loan.name,dateReleased:newRelease,dueDate:newDue,amount:ra,rate:rt,interest:newInterest,total:ra+newInterest,remarks:'Pending',action:'',cycles:loan.cycles+1};
       apiCall({action:'add',data:JSON.stringify(newLoan)},function(err2,res2){processNext(index+1);});
     });
@@ -527,20 +548,20 @@ function genXLS(rows,fn){
 }
 
 function renderDashboard(){
-  var names=[],tl=0,ti=0,pt=0,pa=0,pc=0,rc=0;
+  var names=[],pa=0,pi=0,pt=0,pc=0,rc=0;
+  /* Total Lent Out = only Pending loans + Renewed (money still out there) */
+  /* Paid & Remitted without renewal = money returned, so NOT counted */
   loans.forEach(function(l){
     if(names.indexOf(l.name)===-1)names.push(l.name);
-    tl+=l.amount;ti+=l.interest;
-    if(l.remarks==='Pending'){pt+=l.total;pa+=l.amount;}
+    if(l.remarks==='Pending'){pa+=l.amount;pi+=l.interest;pt+=l.total;}
     if(l.remarks==='Paid'||l.action==='Remitted')pc++;
     if(l.action==='Renewed')rc++;
   });
   document.getElementById('dashboardCards').innerHTML=
     '<div class="card"><div class="card-label">Total Borrowers</div><div class="card-value blue">'+names.length+'</div></div>'+
-    '<div class="card"><div class="card-label">Total Lent Out</div><div class="card-value">'+fmt(tl)+'</div></div>'+
-    '<div class="card"><div class="card-label">Total Interest</div><div class="card-value green">'+fmt(ti)+'</div></div>'+
-    '<div class="card"><div class="card-label">Pending Amount</div><div class="card-value amber">'+fmt(pa)+'</div></div>'+
-    '<div class="card"><div class="card-label">Pending Collection (w/ Interest)</div><div class="card-value red">'+fmt(pt)+'</div></div>'+
+    '<div class="card"><div class="card-label">Total Lent Out</div><div class="card-value amber">'+fmt(pa)+'</div></div>'+
+    '<div class="card"><div class="card-label">Interest on Lent Out</div><div class="card-value green">'+fmt(pi)+'</div></div>'+
+    '<div class="card"><div class="card-label">Total to Collect</div><div class="card-value red">'+fmt(pt)+'</div></div>'+
     '<div class="card"><div class="card-label">Paid / Remitted</div><div class="card-value green">'+pc+'</div></div>'+
     '<div class="card"><div class="card-label">Renewed Loans</div><div class="card-value amber">'+rc+'</div></div>';
   if(!loans.length){document.getElementById('summaryTable').innerHTML='<div class="empty-state">No loans yet. Click <strong>\uFF0B New Loan</strong> to get started.</div>';return;}
@@ -574,6 +595,7 @@ function renderAll(){renderDashboard();renderWeeklyTables();var today=todayStr()
 function startAutoRefresh(){if(autoRefreshTimer)clearInterval(autoRefreshTimer);autoRefreshTimer=setInterval(function(){if(WEB_APP_URL&&!batchProcessing)loadLoans();},30000);}
 
 document.getElementById('newDate').addEventListener('change',updateDueNote);
+document.getElementById('renewDate').addEventListener('change',updateRenewDueNote);
 checkSession();
 </script>
 
