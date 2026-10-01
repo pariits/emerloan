@@ -527,9 +527,22 @@ function genXLS(rows,fn){
 }
 
 function renderDashboard(){
-  var names=[],tl=0,ti=0,pt=0,pc=0,rc=0;
-  loans.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name);tl+=l.amount;ti+=l.interest;if(l.remarks==='Pending')pt+=l.total;if(l.remarks==='Paid'||l.action==='Remitted')pc++;if(l.action==='Renewed')rc++;});
-  document.getElementById('dashboardCards').innerHTML='<div class="card"><div class="card-label">Total Borrowers</div><div class="card-value blue">'+names.length+'</div></div><div class="card"><div class="card-label">Total Lent Out</div><div class="card-value">'+fmt(tl)+'</div></div><div class="card"><div class="card-label">Total Interest</div><div class="card-value green">'+fmt(ti)+'</div></div><div class="card"><div class="card-label">Pending Collection</div><div class="card-value red">'+fmt(pt)+'</div></div><div class="card"><div class="card-label">Paid / Remitted</div><div class="card-value green">'+pc+'</div></div><div class="card"><div class="card-label">Renewed Loans</div><div class="card-value amber">'+rc+'</div></div>';
+  var names=[],tl=0,ti=0,pt=0,pa=0,pc=0,rc=0;
+  loans.forEach(function(l){
+    if(names.indexOf(l.name)===-1)names.push(l.name);
+    tl+=l.amount;ti+=l.interest;
+    if(l.remarks==='Pending'){pt+=l.total;pa+=l.amount;}
+    if(l.remarks==='Paid'||l.action==='Remitted')pc++;
+    if(l.action==='Renewed')rc++;
+  });
+  document.getElementById('dashboardCards').innerHTML=
+    '<div class="card"><div class="card-label">Total Borrowers</div><div class="card-value blue">'+names.length+'</div></div>'+
+    '<div class="card"><div class="card-label">Total Lent Out</div><div class="card-value">'+fmt(tl)+'</div></div>'+
+    '<div class="card"><div class="card-label">Total Interest</div><div class="card-value green">'+fmt(ti)+'</div></div>'+
+    '<div class="card"><div class="card-label">Pending Amount</div><div class="card-value amber">'+fmt(pa)+'</div></div>'+
+    '<div class="card"><div class="card-label">Pending Collection (w/ Interest)</div><div class="card-value red">'+fmt(pt)+'</div></div>'+
+    '<div class="card"><div class="card-label">Paid / Remitted</div><div class="card-value green">'+pc+'</div></div>'+
+    '<div class="card"><div class="card-label">Renewed Loans</div><div class="card-value amber">'+rc+'</div></div>';
   if(!loans.length){document.getElementById('summaryTable').innerHTML='<div class="empty-state">No loans yet. Click <strong>\uFF0B New Loan</strong> to get started.</div>';return;}
   var latest={};loans.forEach(function(l){if(!latest[l.name]||Number(l.id)>Number(latest[l.name].id))latest[l.name]=l;});
   var h='<div class="table-wrapper"><div class="week-header"><h3>All Loans Summary</h3></div><table><thead><tr><th>Name</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th>Cycles</th><th></th></tr></thead><tbody>';
