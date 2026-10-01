@@ -8,8 +8,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#f9f9f9;font-family:system-ui,-apple-system,sans-serif;color:#222;padding:20px}
-
-/* LOGIN SCREEN */
 .login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#f9f9f9;z-index:9999;display:flex;justify-content:center;align-items:center}
 .login-overlay.hidden{display:none}
 .login-box{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:40px 32px;width:90%;max-width:380px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.08)}
@@ -24,11 +22,8 @@ body{background:#f9f9f9;font-family:system-ui,-apple-system,sans-serif;color:#22
 .login-error{color:#dc2626;font-size:12px;font-weight:600;margin-bottom:12px;display:none}
 .login-box .hint{font-size:11px;color:#999;margin-top:16px}
 .login-box .lock-msg{color:#dc2626;font-size:12px;font-weight:600;margin-bottom:12px;display:none}
-
-/* MAIN APP (hidden until login) */
 .app-container{display:none}
 .app-container.visible{display:block}
-
 h1{font-size:22px;font-weight:700;color:#111;margin-bottom:4px}
 .subtitle{color:#666;font-size:13px;margin-bottom:10px}
 .config-bar{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#856404;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -132,15 +127,12 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 </head>
 <body>
 
-<!-- ============================================================
-     LOGIN SCREEN
-     ============================================================ -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-box">
     <div class="logo">🔐</div>
     <h1>Emergency Loan Monitor</h1>
     <p class="sub">Enter password to access the system</p>
-    <div class="login-error" id="loginError">❌ Incorrect password. Try again.</div>
+    <div class="login-error" id="loginError"></div>
     <div class="lock-msg" id="lockMsg"></div>
     <input type="password" id="loginPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')attemptLogin()">
     <button onclick="attemptLogin()" id="loginBtn">🔓 Unlock</button>
@@ -148,9 +140,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- ============================================================
-     MAIN APP (hidden until login)
-     ============================================================ -->
 <div class="app-container" id="appContainer">
 
 <div class="toast" id="toast"></div>
@@ -211,7 +200,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   <div id="weeklyTables"></div>
 </div>
 
-<!-- NEW LOAN MODAL -->
 <div class="modal-overlay" id="modal-new" onclick="if(event.target===this)closeModal('new')">
   <div class="modal">
     <h2>＋ New Emergency Loan</h2>
@@ -230,7 +218,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- UPDATE MODAL -->
 <div class="modal-overlay" id="modal-update" onclick="if(event.target===this)closeModal('update')">
   <div class="modal">
     <h2>✏️ Update Loan Record</h2>
@@ -248,7 +235,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- DELETE CONFIRM MODAL -->
 <div class="modal-overlay" id="modal-delete" onclick="if(event.target===this)closeModal('delete')">
   <div class="modal">
     <h2>🗑️ Confirm Delete</h2>
@@ -261,7 +247,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- DUE MODAL -->
 <div class="modal-overlay" id="modal-due" onclick="if(event.target===this)closeModal('due')">
   <div class="modal" style="max-width:800px">
     <h2>📅 Loans Due</h2>
@@ -279,7 +264,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- PAID MODAL -->
 <div class="modal-overlay" id="modal-paid" onclick="if(event.target===this)closeModal('paid')">
   <div class="modal" style="max-width:800px">
     <h2>💰 Paid Loans</h2>
@@ -297,7 +281,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- DOWNLOAD MODAL -->
 <div class="modal-overlay" id="modal-download" onclick="if(event.target===this)closeModal('download')">
   <div class="modal">
     <h2>📥 Download Table as Excel</h2>
@@ -311,89 +294,48 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 
 <button class="logout-btn" onclick="logout()">🔒 Logout</button>
 
-</div><!-- end app-container -->
+</div>
 
 <script>
 /* ============================================================
-   PASSWORD PROTECTION
+   PASSWORD — SHA-256 HASHED (original password NOT stored)
    ============================================================ */
-var APP_PASSWORD = 'akdoy_emerloan2026';
-var MAX_ATTEMPTS = 5;
-var LOCKOUT_MINUTES = 5;
-var SESSION_KEY = 'emerloan_session';
-var ATTEMPTS_KEY = 'emerloan_attempts';
-var LOCKOUT_KEY = 'emerloan_lockout';
-var SESSION_DURATION = 8 * 60 * 60 * 1000;
+var APP_PASSWORD_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
+var MAX_ATTEMPTS=5;
+var LOCKOUT_MINUTES=5;
+var SESSION_KEY='emerloan_session';
+var ATTEMPTS_KEY='emerloan_attempts';
+var LOCKOUT_KEY='emerloan_lockout';
+var SESSION_DURATION=8*60*60*1000;
 
-function checkSession() {
-  var session = localStorage.getItem(SESSION_KEY);
-  if (session) {
-    var ts = parseInt(session, 10);
-    if (Date.now() - ts < SESSION_DURATION) { unlockApp(); return; }
-    else { localStorage.removeItem(SESSION_KEY); }
-  }
-  document.getElementById('loginOverlay').classList.remove('hidden');
-}
+async function hashStr(str){var enc=new TextEncoder().encode(str);var buf=await crypto.subtle.digest('SHA-256',enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');}
 
-function attemptLogin() {
-  var lockUntil = localStorage.getItem(LOCKOUT_KEY);
-  if (lockUntil && Date.now() < parseInt(lockUntil, 10)) {
-    var mins = Math.ceil((parseInt(lockUntil, 10) - Date.now()) / 60000);
-    document.getElementById('lockMsg').style.display = 'block';
-    document.getElementById('lockMsg').textContent = '\uD83D\uDD12 Too many attempts. Try again in ' + mins + ' minute(s).';
-    return;
-  }
-  var pw = document.getElementById('loginPassword').value;
-  if (pw === APP_PASSWORD) {
-    localStorage.setItem(SESSION_KEY, Date.now().toString());
-    localStorage.removeItem(ATTEMPTS_KEY);
-    localStorage.removeItem(LOCKOUT_KEY);
-    unlockApp();
-  } else {
-    var attempts = parseInt(localStorage.getItem(ATTEMPTS_KEY) || '0', 10) + 1;
-    localStorage.setItem(ATTEMPTS_KEY, attempts.toString());
-    if (attempts >= MAX_ATTEMPTS) {
-      var lockTime = Date.now() + (LOCKOUT_MINUTES * 60000);
-      localStorage.setItem(LOCKOUT_KEY, lockTime.toString());
-      localStorage.removeItem(ATTEMPTS_KEY);
-      document.getElementById('loginError').style.display = 'none';
-      document.getElementById('lockMsg').style.display = 'block';
-      document.getElementById('lockMsg').textContent = '\uD83D\uDD12 Locked out for ' + LOCKOUT_MINUTES + ' minutes after ' + MAX_ATTEMPTS + ' failed attempts.';
-    } else {
-      document.getElementById('loginError').style.display = 'block';
-      document.getElementById('loginError').textContent = '\u274C Incorrect password. ' + (MAX_ATTEMPTS - attempts) + ' attempt(s) remaining.';
-    }
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginPassword').focus();
+function checkSession(){var session=localStorage.getItem(SESSION_KEY);if(session){var ts=parseInt(session,10);if(Date.now()-ts<SESSION_DURATION){unlockApp();return;}else{localStorage.removeItem(SESSION_KEY);}}document.getElementById('loginOverlay').classList.remove('hidden');}
+
+async function attemptLogin(){
+  var lockUntil=localStorage.getItem(LOCKOUT_KEY);
+  if(lockUntil&&Date.now()<parseInt(lockUntil,10)){var mins=Math.ceil((parseInt(lockUntil,10)-Date.now())/60000);document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Too many attempts. Try again in '+mins+' minute(s).';return;}
+  var pw=document.getElementById('loginPassword').value;
+  var hash=await hashStr(pw);
+  if(hash===APP_PASSWORD_HASH){
+    localStorage.setItem(SESSION_KEY,Date.now().toString());localStorage.removeItem(ATTEMPTS_KEY);localStorage.removeItem(LOCKOUT_KEY);unlockApp();
+  }else{
+    var attempts=parseInt(localStorage.getItem(ATTEMPTS_KEY)||'0',10)+1;localStorage.setItem(ATTEMPTS_KEY,attempts.toString());
+    if(attempts>=MAX_ATTEMPTS){var lockTime=Date.now()+(LOCKOUT_MINUTES*60000);localStorage.setItem(LOCKOUT_KEY,lockTime.toString());localStorage.removeItem(ATTEMPTS_KEY);document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Locked out for '+LOCKOUT_MINUTES+' minutes after '+MAX_ATTEMPTS+' failed attempts.';}
+    else{document.getElementById('loginError').style.display='block';document.getElementById('loginError').textContent='\u274C Incorrect password. '+(MAX_ATTEMPTS-attempts)+' attempt(s) remaining.';}
+    document.getElementById('loginPassword').value='';document.getElementById('loginPassword').focus();
   }
 }
 
-function unlockApp() {
-  document.getElementById('loginOverlay').classList.add('hidden');
-  document.getElementById('appContainer').classList.add('visible');
-  initApp();
-}
-
-function logout() {
-  localStorage.removeItem(SESSION_KEY);
-  document.getElementById('appContainer').classList.remove('visible');
-  document.getElementById('loginOverlay').classList.remove('hidden');
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('loginError').style.display = 'none';
-  document.getElementById('lockMsg').style.display = 'none';
-}
+function unlockApp(){document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('appContainer').classList.add('visible');initApp();}
+function logout(){localStorage.removeItem(SESSION_KEY);document.getElementById('appContainer').classList.remove('visible');document.getElementById('loginOverlay').classList.remove('hidden');document.getElementById('loginPassword').value='';document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='none';}
 
 /* ============================================================
    MAIN APP
    ============================================================ */
 var CYCLE_DAYS=6,UTC_OFFSET=8,WEB_APP_URL='',loans=[],autoRefreshTimer=null,pendingDeleteId=null,pendingUpdateId=null,returnToModal=null,batchProcessing=false;
 
-function initApp() {
-  WEB_APP_URL = localStorage.getItem('loanAppUrl') || '';
-  updateConfigUI();
-  if (WEB_APP_URL) { loadLoans(); } else { renderAll(); }
-}
-
+function initApp(){WEB_APP_URL=localStorage.getItem('loanAppUrl')||'';updateConfigUI();if(WEB_APP_URL){loadLoans();}else{renderAll();}}
 function getNowUTC8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UTC_OFFSET*3600000));}
 function todayStr(){var d=getNowUTC8();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function addDays(ds,n){var p=ds.split('-');var dt=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0);dt.setDate(dt.getDate()+n);return dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);}
@@ -503,7 +445,6 @@ function confirmDelete(){
   apiCall({action:'delete',id:pendingDeleteId},function(err,res){hideLoading();document.getElementById('btnDeleteConfirm').disabled=false;if(err||!res||res.error){showToast('Failed to delete','error');return;}closeModal('delete');showToast('\uD83D\uDDD1\uFE0F Deleted','error');pendingDeleteId=null;reopenReturnModal();});
 }
 
-/* DUE — checkboxes + batch paid */
 function populateDueToday(){
   var selDate=document.getElementById('dueDatePicker').value||todayStr();
   document.getElementById('dueTodayBtn').className=selDate===todayStr()?'active-today':'';
@@ -527,7 +468,6 @@ function batchMarkPaid(){
   ids.forEach(function(id){apiCall({action:'update',data:JSON.stringify({id:id,remarks:'Paid',action:''})},function(err,res){completed++;if(completed===total){batchProcessing=false;hideLoading();btn.textContent='\u2705 Mark Selected as Paid';btn.disabled=false;showToast('\u2705 '+total+' loan(s) marked as Paid','success');loadLoans(function(){setTimeout(function(){populateDueToday();},100);});}});});
 }
 
-/* PAID — checkboxes + batch renew */
 function populatePaid(){
   var selDate=document.getElementById('paidDatePicker').value||todayStr();
   document.getElementById('paidTodayBtn').className=selDate===todayStr()?'active-today':'';
