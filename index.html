@@ -297,42 +297,32 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 </div>
 
 <script>
-/* ============================================================
-   PASSWORD — SHA-256 HASHED (original password NOT stored)
-   ============================================================ */
+/* PASSWORD — SHA-256 HASHED */
 var APP_PASSWORD_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
-var MAX_ATTEMPTS=5;
-var LOCKOUT_MINUTES=5;
-var SESSION_KEY='emerloan_session';
-var ATTEMPTS_KEY='emerloan_attempts';
-var LOCKOUT_KEY='emerloan_lockout';
+var MAX_ATTEMPTS=5,LOCKOUT_MINUTES=5;
+var SESSION_KEY='emerloan_session',ATTEMPTS_KEY='emerloan_attempts',LOCKOUT_KEY='emerloan_lockout';
 var SESSION_DURATION=8*60*60*1000;
 
 async function hashStr(str){var enc=new TextEncoder().encode(str);var buf=await crypto.subtle.digest('SHA-256',enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');}
 
-function checkSession(){var session=localStorage.getItem(SESSION_KEY);if(session){var ts=parseInt(session,10);if(Date.now()-ts<SESSION_DURATION){unlockApp();return;}else{localStorage.removeItem(SESSION_KEY);}}document.getElementById('loginOverlay').classList.remove('hidden');}
+function checkSession(){var s=localStorage.getItem(SESSION_KEY);if(s){if(Date.now()-parseInt(s,10)<SESSION_DURATION){unlockApp();return;}else{localStorage.removeItem(SESSION_KEY);}}document.getElementById('loginOverlay').classList.remove('hidden');}
 
 async function attemptLogin(){
   var lockUntil=localStorage.getItem(LOCKOUT_KEY);
   if(lockUntil&&Date.now()<parseInt(lockUntil,10)){var mins=Math.ceil((parseInt(lockUntil,10)-Date.now())/60000);document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Too many attempts. Try again in '+mins+' minute(s).';return;}
   var pw=document.getElementById('loginPassword').value;
   var hash=await hashStr(pw);
-  if(hash===APP_PASSWORD_HASH){
-    localStorage.setItem(SESSION_KEY,Date.now().toString());localStorage.removeItem(ATTEMPTS_KEY);localStorage.removeItem(LOCKOUT_KEY);unlockApp();
-  }else{
-    var attempts=parseInt(localStorage.getItem(ATTEMPTS_KEY)||'0',10)+1;localStorage.setItem(ATTEMPTS_KEY,attempts.toString());
-    if(attempts>=MAX_ATTEMPTS){var lockTime=Date.now()+(LOCKOUT_MINUTES*60000);localStorage.setItem(LOCKOUT_KEY,lockTime.toString());localStorage.removeItem(ATTEMPTS_KEY);document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Locked out for '+LOCKOUT_MINUTES+' minutes after '+MAX_ATTEMPTS+' failed attempts.';}
+  if(hash===APP_PASSWORD_HASH){localStorage.setItem(SESSION_KEY,Date.now().toString());localStorage.removeItem(ATTEMPTS_KEY);localStorage.removeItem(LOCKOUT_KEY);unlockApp();}
+  else{var attempts=parseInt(localStorage.getItem(ATTEMPTS_KEY)||'0',10)+1;localStorage.setItem(ATTEMPTS_KEY,attempts.toString());
+    if(attempts>=MAX_ATTEMPTS){var lt=Date.now()+(LOCKOUT_MINUTES*60000);localStorage.setItem(LOCKOUT_KEY,lt.toString());localStorage.removeItem(ATTEMPTS_KEY);document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Locked out for '+LOCKOUT_MINUTES+' minutes.';}
     else{document.getElementById('loginError').style.display='block';document.getElementById('loginError').textContent='\u274C Incorrect password. '+(MAX_ATTEMPTS-attempts)+' attempt(s) remaining.';}
-    document.getElementById('loginPassword').value='';document.getElementById('loginPassword').focus();
-  }
+    document.getElementById('loginPassword').value='';document.getElementById('loginPassword').focus();}
 }
 
 function unlockApp(){document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('appContainer').classList.add('visible');initApp();}
 function logout(){localStorage.removeItem(SESSION_KEY);document.getElementById('appContainer').classList.remove('visible');document.getElementById('loginOverlay').classList.remove('hidden');document.getElementById('loginPassword').value='';document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='none';}
 
-/* ============================================================
-   MAIN APP
-   ============================================================ */
+/* MAIN APP */
 var CYCLE_DAYS=6,UTC_OFFSET=8,WEB_APP_URL='',loans=[],autoRefreshTimer=null,pendingDeleteId=null,pendingUpdateId=null,returnToModal=null,batchProcessing=false;
 
 function initApp(){WEB_APP_URL=localStorage.getItem('loanAppUrl')||'';updateConfigUI();if(WEB_APP_URL){loadLoans();}else{renderAll();}}
@@ -342,7 +332,10 @@ function addDays(ds,n){var p=ds.split('-');var dt=new Date(parseInt(p[0],10),par
 function fixDateStr(val){if(!val)return '';var s=String(val);if(s.indexOf('T')>-1){var dt=new Date(s);var u=dt.getTime()+(dt.getTimezoneOffset()*60000);var l=new Date(u+(UTC_OFFSET*3600000));return l.getFullYear()+'-'+('0'+(l.getMonth()+1)).slice(-2)+'-'+('0'+l.getDate()).slice(-2);}if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;try{var d2=new Date(s);if(!isNaN(d2.getTime())){var u2=d2.getTime()+(d2.getTimezoneOffset()*60000);var l2=new Date(u2+(UTC_OFFSET*3600000));return l2.getFullYear()+'-'+('0'+(l2.getMonth()+1)).slice(-2)+'-'+('0'+l2.getDate()).slice(-2);}}catch(e){}return s;}
 function fmtDate(ds){if(!ds)return '';var p=ds.split('-');return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
 function fmtDateLong(ds){var p=ds.split('-');return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'long'});}
-function getWeekKey(ds){var p=ds.split('-');var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0);var day=d.getDay();var mon=new Date(d);mon.setDate(d.getDate()-((day+6)%7));return mon.getFullYear()+'-'+('0'+(mon.getMonth()+1)).slice(-2)+'-'+('0'+mon.getDate()).slice(-2);}
+
+/* WEEK STARTS ON TUESDAY (day=2) */
+function getWeekKey(ds){var p=ds.split('-');var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0);var day=d.getDay();var diff=(day+5)%7;var tue=new Date(d);tue.setDate(d.getDate()-diff);return tue.getFullYear()+'-'+('0'+(tue.getMonth()+1)).slice(-2)+'-'+('0'+tue.getDate()).slice(-2);}
+
 function getWeekRange(ms){return fmtDate(ms)+' \u2013 '+fmtDate(addDays(ms,6));}
 function fmt(n){return '\u20B1'+Number(n).toLocaleString('en-PH',{minimumFractionDigits:0});}
 function sBadge(s){return '<span class="status-'+(s==='Paid'?'paid':'pending')+'">'+s+'</span>';}
