@@ -8,6 +8,27 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#f9f9f9;font-family:system-ui,-apple-system,sans-serif;color:#222;padding:20px}
+
+/* LOGIN SCREEN */
+.login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#f9f9f9;z-index:9999;display:flex;justify-content:center;align-items:center}
+.login-overlay.hidden{display:none}
+.login-box{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:40px 32px;width:90%;max-width:380px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.08)}
+.login-box .logo{font-size:48px;margin-bottom:12px}
+.login-box h1{font-size:20px;font-weight:700;color:#111;margin-bottom:4px}
+.login-box .sub{font-size:13px;color:#666;margin-bottom:24px}
+.login-box input{width:100%;padding:12px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;background:#fafafa;margin-bottom:12px;text-align:center;letter-spacing:2px}
+.login-box input:focus{outline:none;border-color:#2563eb;background:#fff}
+.login-box button{width:100%;padding:12px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s ease}
+.login-box button:hover{background:#1d4ed8}
+.login-box button:active{transform:scale(.98)}
+.login-error{color:#dc2626;font-size:12px;font-weight:600;margin-bottom:12px;display:none}
+.login-box .hint{font-size:11px;color:#999;margin-top:16px}
+.login-box .lock-msg{color:#dc2626;font-size:12px;font-weight:600;margin-bottom:12px;display:none}
+
+/* MAIN APP (hidden until login) */
+.app-container{display:none}
+.app-container.visible{display:block}
+
 h1{font-size:22px;font-weight:700;color:#111;margin-bottom:4px}
 .subtitle{color:#666;font-size:13px;margin-bottom:10px}
 .config-bar{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#856404;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -105,9 +126,32 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .legend-swatch{width:14px;height:14px;border-radius:3px;border:1px solid #ccc}
 .legend-swatch.yellow{background:#fff9c4}
 .legend-swatch.green{background:#e8f5e9}
+.logout-btn{position:fixed;bottom:20px;right:20px;background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logout-btn:hover{background:#b91c1c}
 </style>
 </head>
 <body>
+
+<!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="logo">🔐</div>
+    <h1>Emergency Loan Monitor</h1>
+    <p class="sub">Enter password to access the system</p>
+    <div class="login-error" id="loginError">❌ Incorrect password. Try again.</div>
+    <div class="lock-msg" id="lockMsg"></div>
+    <input type="password" id="loginPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')attemptLogin()">
+    <button onclick="attemptLogin()" id="loginBtn">🔓 Unlock</button>
+    <p class="hint">🔒 Authorized users only</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN APP (hidden until login)
+     ============================================================ -->
+<div class="app-container" id="appContainer">
 
 <div class="toast" id="toast"></div>
 <div class="loading-overlay" id="loadingOverlay"><div><span class="spinner"></span> Syncing with Google Sheets...</div></div>
@@ -265,8 +309,90 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
+<button class="logout-btn" onclick="logout()">🔒 Logout</button>
+
+</div><!-- end app-container -->
+
 <script>
-var CYCLE_DAYS=6,UTC_OFFSET=8,WEB_APP_URL=localStorage.getItem('loanAppUrl')||'',loans=[],autoRefreshTimer=null,pendingDeleteId=null,pendingUpdateId=null,returnToModal=null,batchProcessing=false;
+/* ============================================================
+   PASSWORD PROTECTION
+   ============================================================ */
+var APP_PASSWORD = 'emerloan2026';
+var MAX_ATTEMPTS = 5;
+var LOCKOUT_MINUTES = 5;
+var SESSION_KEY = 'emerloan_session';
+var ATTEMPTS_KEY = 'emerloan_attempts';
+var LOCKOUT_KEY = 'emerloan_lockout';
+var SESSION_DURATION = 8 * 60 * 60 * 1000;
+
+function checkSession() {
+  var session = localStorage.getItem(SESSION_KEY);
+  if (session) {
+    var ts = parseInt(session, 10);
+    if (Date.now() - ts < SESSION_DURATION) { unlockApp(); return; }
+    else { localStorage.removeItem(SESSION_KEY); }
+  }
+  document.getElementById('loginOverlay').classList.remove('hidden');
+}
+
+function attemptLogin() {
+  var lockUntil = localStorage.getItem(LOCKOUT_KEY);
+  if (lockUntil && Date.now() < parseInt(lockUntil, 10)) {
+    var mins = Math.ceil((parseInt(lockUntil, 10) - Date.now()) / 60000);
+    document.getElementById('lockMsg').style.display = 'block';
+    document.getElementById('lockMsg').textContent = '\uD83D\uDD12 Too many attempts. Try again in ' + mins + ' minute(s).';
+    return;
+  }
+  var pw = document.getElementById('loginPassword').value;
+  if (pw === APP_PASSWORD) {
+    localStorage.setItem(SESSION_KEY, Date.now().toString());
+    localStorage.removeItem(ATTEMPTS_KEY);
+    localStorage.removeItem(LOCKOUT_KEY);
+    unlockApp();
+  } else {
+    var attempts = parseInt(localStorage.getItem(ATTEMPTS_KEY) || '0', 10) + 1;
+    localStorage.setItem(ATTEMPTS_KEY, attempts.toString());
+    if (attempts >= MAX_ATTEMPTS) {
+      var lockTime = Date.now() + (LOCKOUT_MINUTES * 60000);
+      localStorage.setItem(LOCKOUT_KEY, lockTime.toString());
+      localStorage.removeItem(ATTEMPTS_KEY);
+      document.getElementById('loginError').style.display = 'none';
+      document.getElementById('lockMsg').style.display = 'block';
+      document.getElementById('lockMsg').textContent = '\uD83D\uDD12 Locked out for ' + LOCKOUT_MINUTES + ' minutes after ' + MAX_ATTEMPTS + ' failed attempts.';
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('loginError').textContent = '\u274C Incorrect password. ' + (MAX_ATTEMPTS - attempts) + ' attempt(s) remaining.';
+    }
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginPassword').focus();
+  }
+}
+
+function unlockApp() {
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('appContainer').classList.add('visible');
+  initApp();
+}
+
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('appContainer').classList.remove('visible');
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('lockMsg').style.display = 'none';
+}
+
+/* ============================================================
+   MAIN APP
+   ============================================================ */
+var CYCLE_DAYS=6,UTC_OFFSET=8,WEB_APP_URL='',loans=[],autoRefreshTimer=null,pendingDeleteId=null,pendingUpdateId=null,returnToModal=null,batchProcessing=false;
+
+function initApp() {
+  WEB_APP_URL = localStorage.getItem('loanAppUrl') || '';
+  updateConfigUI();
+  if (WEB_APP_URL) { loadLoans(); } else { renderAll(); }
+}
 
 function getNowUTC8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UTC_OFFSET*3600000));}
 function todayStr(){var d=getNowUTC8();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
@@ -502,8 +628,7 @@ function renderAll(){renderDashboard();renderWeeklyTables();var today=todayStr()
 function startAutoRefresh(){if(autoRefreshTimer)clearInterval(autoRefreshTimer);autoRefreshTimer=setInterval(function(){if(WEB_APP_URL&&!batchProcessing)loadLoans();},30000);}
 
 document.getElementById('newDate').addEventListener('change',updateDueNote);
-updateConfigUI();
-if(WEB_APP_URL){loadLoans();}else{renderAll();}
+checkSession();
 </script>
 
 </body>
