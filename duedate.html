@@ -26,45 +26,35 @@ body{background:#f9f9f9;font-family:system-ui,-apple-system,sans-serif;color:#22
 .app-container.visible{display:block}
 h1{font-size:22px;font-weight:700;color:#111;margin-bottom:4px}
 .subtitle{color:#666;font-size:13px;margin-bottom:16px}
+.connected-bar{background:#d4edda;border:1px solid #28a745;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#155724;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.connected-bar button{padding:4px 12px;border:none;border-radius:4px;background:#28a745;color:#fff;font-size:11px;cursor:pointer;font-weight:600}
 .config-bar{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#856404;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .config-bar input{flex:1;min-width:200px;padding:6px 10px;border:1px solid #ddd;border-radius:4px;font-size:12px;font-family:monospace}
 .config-bar button{padding:6px 14px;border:none;border-radius:4px;background:#ffc107;color:#856404;font-weight:600;font-size:12px;cursor:pointer}
-.connected-bar{background:#d4edda;border:1px solid #28a745;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#155724;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.connected-bar button{padding:4px 12px;border:none;border-radius:4px;background:#28a745;color:#fff;font-size:11px;cursor:pointer;font-weight:600}
 .error-bar{background:#f8d7da;border:1px solid #f5c6cb;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#721c24;display:none;line-height:1.6}
 .date-picker-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .date-picker-row label{font-size:12px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.04em}
 .date-picker-row input[type="date"]{padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:14px;font-family:inherit}
-.date-picker-row button{padding:8px 16px;border:1px solid #ddd;border-radius:6px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:#333}
+.date-picker-row button{padding:8px 16px;border:1px solid #ddd;border-radius:6px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:#333}
 .date-picker-row button:hover{background:#f3f4f6}
 .date-picker-row button.active-today{background:#2563eb;color:#fff;border-color:#2563eb}
-.btn{padding:7px 16px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
-.btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
-.due-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px 20px;margin-bottom:16px;text-align:center}
-.due-banner .date{font-size:22px;font-weight:700;color:#dc2626;font-family:'SF Mono','Cascadia Code',monospace}
-.due-banner .label{font-size:11px;color:#991b1b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.due-banner .count{font-size:14px;color:#991b1b;font-weight:600;margin-top:4px}
-.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.card{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;text-align:center}
-.card-label{color:#666;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-.card-value{color:#111;font-size:22px;font-weight:700;font-family:'SF Mono','Cascadia Code',monospace}
-.card-value.red{color:#dc2626}.card-value.green{color:#16a34a}.card-value.blue{color:#2563eb}
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.filter-bar label{font-size:12px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.04em}
+.filter-bar select{padding:6px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit;background:#fff}
+.filter-bar select:focus{outline:none;border-color:#2563eb}
+.due-date-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px 20px;margin-bottom:16px;text-align:center}
+.due-date-banner .date{font-size:22px;font-weight:700;color:#dc2626;font-family:'SF Mono','Cascadia Code',monospace}
+.due-date-banner .label{font-size:11px;color:#991b1b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.due-date-banner .count{font-size:13px;color:#991b1b;margin-top:4px;font-weight:600}
 .table-wrapper{background:#fff;border:1px solid #eee;border-radius:10px;overflow-x:auto;margin-bottom:16px}
-.table-header{padding:12px 16px;background:#f8fafc;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.table-header h3{font-size:14px;font-weight:700;color:#333}
-.badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600;display:inline-block}
-.badge-pending{background:#fef3c7;color:#92400e}
-.badge-paid{background:#dcfce7;color:#166534}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{text-align:left;color:#555;font-weight:600;padding:10px 12px;border-bottom:2px solid #e5e7eb;font-size:11px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 td{padding:8px 12px;color:#222;border-bottom:1px solid #f0f0f0;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px;white-space:nowrap}
 tr:hover td{background:#f8fafc}
-tr.row-pending td{background:#fff9c4!important}
-tr.row-pending:hover td{background:#fff176!important}
-tr.row-paid td{background:#e8f5e9!important}
-tr.row-paid:hover td{background:#c8e6c9!important}
 .right{text-align:right}
 tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1;border-bottom:none;color:#111}
+.status-paid{background:#dcfce7;color:#166534;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.status-pending{background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
 .empty-state{text-align:center;padding:40px 20px;color:#999;font-size:13px}
 .info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#1e40af;line-height:1.6}
 .info-box strong{font-weight:700}
@@ -75,20 +65,24 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .loading-overlay.show{display:flex}
 .spinner{display:inline-block;width:20px;height:20px;border:3px solid #ddd;border-top-color:#2563eb;border-radius:50%;animation:spin .6s linear infinite;margin-right:10px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
-.legend{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;font-size:11px;color:#555}
-.legend-item{display:flex;align-items:center;gap:4px}
-.legend-swatch{width:14px;height:14px;border-radius:3px;border:1px solid #ccc}
-.legend-swatch.yellow{background:#fff9c4}
-.legend-swatch.green{background:#e8f5e9}
-.nav-link{display:inline-block;margin-bottom:16px;font-size:12px;color:#2563eb;text-decoration:none;font-weight:600}
-.nav-link:hover{text-decoration:underline}
+.fin-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
+.fin-axl{background:#fef2f2;color:#dc2626}
+.fin-fritz{background:#eff6ff;color:#2563eb}
+.fin-axlthea{background:#f5f3ff;color:#7c3aed}
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.summary-card{background:#fff;border:1px solid #eee;border-radius:8px;padding:14px;text-align:center}
+.summary-card .sc-label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.summary-card .sc-value{font-size:22px;font-weight:700;font-family:'SF Mono','Cascadia Code',monospace}
+.summary-card .sc-value.red{color:#dc2626}
+.summary-card .sc-value.green{color:#16a34a}
+.summary-card .sc-value.blue{color:#2563eb}
+.summary-card .sc-value.amber{color:#d97706}
 .logout-btn{position:fixed;bottom:20px;right:20px;background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .logout-btn:hover{background:#b91c1c}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-box">
     <div class="logo">📅</div>
@@ -102,16 +96,13 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div class="app-container" id="appContainer">
 
 <div class="toast" id="toast"></div>
 <div class="loading-overlay" id="loadingOverlay"><div><span class="spinner"></span> Loading from Google Sheets...</div></div>
 
-<a href="index.html" class="nav-link">← Back to Main System</a>
-
 <h1>📅 Due Date Checker</h1>
-<p class="subtitle">Quick lookup for loans due on any date · Read-only · UTC+8</p>
+<p class="subtitle">Read-only view · Select a date to see who's due · UTC+8</p>
 
 <div class="config-bar" id="configBar">
   ⚙️ <strong>Setup:</strong> Paste your Google Apps Script Web App URL →
@@ -132,78 +123,64 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   <strong>⚠️ Connection Error:</strong> <span id="errorMsg"></span>
 </div>
 
-<div class="date-picker-row">
-  <label>Select Date:</label>
-  <input type="date" id="datePicker" onchange="renderDate()">
-  <button onclick="setToday()" id="todayBtn">Today</button>
-  <button onclick="shiftDate(-1)">◀ Prev Day</button>
-  <button onclick="shiftDate(1)">Next Day ▶</button>
-  <button onclick="shiftDate(-7)">◀ Prev Week</button>
-  <button onclick="shiftDate(7)">Next Week ▶</button>
+<div class="filter-bar">
+  <label>👤 Financer:</label>
+  <select id="financerFilter" onchange="populateDue()">
+    <option value="All">All Financers</option>
+    <option value="Axl">Axl</option>
+    <option value="Fritz">Fritz</option>
+    <option value="Axlthea">Axlthea</option>
+  </select>
 </div>
 
-<div class="due-banner">
-  <div class="label">Showing Loans Due On (UTC+8)</div>
+<div class="date-picker-row">
+  <label>Select Date:</label>
+  <input type="date" id="dueDatePicker" onchange="populateDue()">
+  <button onclick="setToday()" id="todayBtn">Today</button>
+  <button onclick="shiftDate(-1)">◀ Prev</button>
+  <button onclick="shiftDate(1)">Next ▶</button>
+</div>
+
+<div class="due-date-banner">
+  <div class="label">Due Date (UTC+8)</div>
   <div class="date" id="bannerDate"></div>
   <div class="count" id="bannerCount"></div>
 </div>
 
 <div class="summary-cards" id="summaryCards"></div>
 
-<div class="legend">
-  <div class="legend-item"><div class="legend-swatch yellow"></div> Pending (Due)</div>
-  <div class="legend-item"><div class="legend-swatch green"></div> Paid</div>
-</div>
-
-<!-- PENDING TABLE -->
-<div id="pendingSection"></div>
-
-<!-- PAID TABLE -->
-<div id="paidSection"></div>
-
 <div class="info-box">
-  <strong>📌 How to use:</strong><br>
-  • Select any date to see who has loans due on that day<br>
-  • <strong>Yellow rows</strong> = Pending (still needs to pay)<br>
-  • <strong>Green rows</strong> = Already Paid<br>
-  • Use the <strong>◀ ▶ buttons</strong> to navigate days or weeks<br>
-  • This page is <strong>read-only</strong> — use the main system to make changes
+  <strong>📌 How to use:</strong> Select a date above to see all borrowers with loans due on that date. Use the Financer filter to view by lender. This page is <strong>read-only</strong> — use the main system (EmerLoan) to make changes.
 </div>
+
+<div id="dueContent"></div>
 
 <button class="logout-btn" onclick="logout()">🔒 Logout</button>
 
 </div>
 
 <script>
-/* PASSWORD — SHA-256 HASHED */
 var APP_PASSWORD_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
 var MAX_ATTEMPTS=5,LOCKOUT_MINUTES=5;
 var SESSION_KEY='duedate_session',ATTEMPTS_KEY='duedate_attempts',LOCKOUT_KEY='duedate_lockout';
 var SESSION_DURATION=8*60*60*1000;
+var UTC_OFFSET=8,WEB_APP_URL='',loans=[],autoRefreshTimer=null;
 
 async function hashStr(str){var enc=new TextEncoder().encode(str);var buf=await crypto.subtle.digest('SHA-256',enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');}
-
 function checkSession(){var s=localStorage.getItem(SESSION_KEY);if(s){if(Date.now()-parseInt(s,10)<SESSION_DURATION){unlockApp();return;}else{localStorage.removeItem(SESSION_KEY);}}document.getElementById('loginOverlay').classList.remove('hidden');}
-
 async function attemptLogin(){
   var lockUntil=localStorage.getItem(LOCKOUT_KEY);
   if(lockUntil&&Date.now()<parseInt(lockUntil,10)){var mins=Math.ceil((parseInt(lockUntil,10)-Date.now())/60000);document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Too many attempts. Try again in '+mins+' minute(s).';return;}
-  var pw=document.getElementById('loginPassword').value;
-  var hash=await hashStr(pw);
+  var pw=document.getElementById('loginPassword').value;var hash=await hashStr(pw);
   if(hash===APP_PASSWORD_HASH){localStorage.setItem(SESSION_KEY,Date.now().toString());localStorage.removeItem(ATTEMPTS_KEY);localStorage.removeItem(LOCKOUT_KEY);unlockApp();}
   else{var attempts=parseInt(localStorage.getItem(ATTEMPTS_KEY)||'0',10)+1;localStorage.setItem(ATTEMPTS_KEY,attempts.toString());
     if(attempts>=MAX_ATTEMPTS){var lt=Date.now()+(LOCKOUT_MINUTES*60000);localStorage.setItem(LOCKOUT_KEY,lt.toString());localStorage.removeItem(ATTEMPTS_KEY);document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='\uD83D\uDD12 Locked out for '+LOCKOUT_MINUTES+' minutes.';}
     else{document.getElementById('loginError').style.display='block';document.getElementById('loginError').textContent='\u274C Incorrect password. '+(MAX_ATTEMPTS-attempts)+' attempt(s) remaining.';}
     document.getElementById('loginPassword').value='';document.getElementById('loginPassword').focus();}
 }
-
 function unlockApp(){document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('appContainer').classList.add('visible');initApp();}
 function logout(){localStorage.removeItem(SESSION_KEY);document.getElementById('appContainer').classList.remove('visible');document.getElementById('loginOverlay').classList.remove('hidden');document.getElementById('loginPassword').value='';document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='none';}
 
-/* MAIN APP */
-var UTC_OFFSET=8,WEB_APP_URL='',loans=[],autoRefreshTimer=null;
-
-function initApp(){WEB_APP_URL=localStorage.getItem('loanAppUrl')||'';updateConfigUI();document.getElementById('datePicker').value=todayStr();if(WEB_APP_URL){loadLoans();}else{renderDate();}}
 function getNowUTC8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UTC_OFFSET*3600000));}
 function todayStr(){var d=getNowUTC8();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function addDays(ds,n){var p=ds.split('-');var dt=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0);dt.setDate(dt.getDate()+n);return dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2);}
@@ -211,14 +188,17 @@ function fixDateStr(val){if(!val)return '';var s=String(val);if(s.indexOf('T')>-
 function fmtDate(ds){if(!ds)return '';var p=ds.split('-');return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
 function fmtDateLong(ds){var p=ds.split('-');return new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10),12,0,0).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'long'});}
 function fmt(n){return '\u20B1'+Number(n).toLocaleString('en-PH',{minimumFractionDigits:0});}
-
+function sBadge(s){return '<span class="status-'+(s==='Paid'?'paid':'pending')+'">'+s+'</span>';}
+function fBadge(f){if(!f)return '';var cls='fin-'+f.toLowerCase();return '<span class="fin-badge '+cls+'">'+f+'</span>';}
 function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type||'info')+' show';setTimeout(function(){t.classList.remove('show');},3000);}
 function showError(msg){document.getElementById('errorMsg').textContent=msg;document.getElementById('errorBar').style.display='block';}
 function hideError(){document.getElementById('errorBar').style.display='none';}
 function showLoading(){document.getElementById('loadingOverlay').classList.add('show');}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show');}
+
+function initApp(){WEB_APP_URL=localStorage.getItem('loanAppUrl')||'';updateConfigUI();document.getElementById('dueDatePicker').value=todayStr();if(WEB_APP_URL){loadLoans();}else{populateDue();}}
 function saveUrl(){var url=document.getElementById('urlInput').value.trim();if(!url||url.indexOf('script.google.com')===-1){alert('Please paste a valid Google Apps Script URL.');return;}localStorage.setItem('loanAppUrl',url);WEB_APP_URL=url;hideError();updateConfigUI();loadLoans();}
-function resetUrl(){localStorage.removeItem('loanAppUrl');WEB_APP_URL='';loans=[];hideError();updateConfigUI();renderDate();}
+function resetUrl(){localStorage.removeItem('loanAppUrl');WEB_APP_URL='';loans=[];hideError();updateConfigUI();populateDue();if(autoRefreshTimer)clearInterval(autoRefreshTimer);}
 function updateConfigUI(){document.getElementById('configBar').style.display=WEB_APP_URL?'none':'flex';document.getElementById('connectedBar').style.display=WEB_APP_URL?'flex':'none';}
 
 function apiCall(params,callback){
@@ -227,7 +207,7 @@ function apiCall(params,callback){
   var done=false;var timeout=setTimeout(function(){if(!done){done=true;callback('Request timed out.',null);}},20000);
   fetch(url,{method:'GET',redirect:'follow'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(text){
     if(done)return;done=true;clearTimeout(timeout);
-    try{var data=JSON.parse(text);if(data.loans&&Array.isArray(data.loans)){data.loans.forEach(function(l){l.dateReleased=fixDateStr(l.dateReleased);l.dueDate=fixDateStr(l.dueDate);l.amount=Number(l.amount)||0;l.rate=Number(l.rate)||0;l.interest=Number(l.interest)||0;l.total=Number(l.total)||0;l.cycles=Number(l.cycles)||1;l.action=l.action||'';});}callback(null,data);}
+    try{var data=JSON.parse(text);if(data.loans&&Array.isArray(data.loans)){data.loans.forEach(function(l){l.dateReleased=fixDateStr(l.dateReleased);l.dueDate=fixDateStr(l.dueDate);l.amount=Number(l.amount)||0;l.rate=Number(l.rate)||0;l.interest=Number(l.interest)||0;l.total=Number(l.total)||0;l.cycles=Number(l.cycles)||1;l.action=l.action||'';l.financer=l.financer||'';});}callback(null,data);}
     catch(e){try{var m=text.match(/\{[\s\S]*\}/);if(m)callback(null,JSON.parse(m[0]));else callback('Invalid response',null);}catch(e2){callback('Could not parse response',null);}}
   }).catch(function(err){if(done)return;done=true;clearTimeout(timeout);callback(err.message||'Network error',null);});
 }
@@ -237,61 +217,67 @@ function loadLoans(){
   apiCall({action:'getAll'},function(err,data){
     hideLoading();if(err){showError(err);showToast('Failed: '+err,'error');document.getElementById('syncStatus').textContent='Sync failed';return;}
     if(data&&data.error){showError(data.error);return;}
-    hideError();loans=(data&&data.loans)?data.loans:[];renderDate();
+    hideError();loans=(data&&data.loans)?data.loans:[];populateDue();
     var now=getNowUTC8();document.getElementById('syncStatus').textContent='Last sync: '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true})+' (UTC+8)';
     startAutoRefresh();
   });
 }
 
-function setToday(){document.getElementById('datePicker').value=todayStr();renderDate();}
-function shiftDate(n){var c=document.getElementById('datePicker').value||todayStr();document.getElementById('datePicker').value=addDays(c,n);renderDate();}
+function setToday(){document.getElementById('dueDatePicker').value=todayStr();populateDue();}
+function shiftDate(n){var c=document.getElementById('dueDatePicker').value||todayStr();document.getElementById('dueDatePicker').value=addDays(c,n);populateDue();}
 
-function renderDate(){
-  var selDate=document.getElementById('datePicker').value||todayStr();
+function populateDue(){
+  var selDate=document.getElementById('dueDatePicker').value||todayStr();
+  var finFilter=document.getElementById('financerFilter').value;
   document.getElementById('todayBtn').className=selDate===todayStr()?'active-today':'';
   document.getElementById('bannerDate').textContent=fmtDateLong(selDate);
 
-  var pending=loans.filter(function(l){return l.dueDate===selDate&&l.remarks==='Pending';});
-  var paid=loans.filter(function(l){return l.dueDate===selDate&&l.remarks==='Paid';});
-  var allDue=pending.concat(paid);
-  var totalCount=allDue.length;
+  /* Filter loans by financer */
+  var filtered=loans;
+  if(finFilter!=='All')filtered=loans.filter(function(l){return l.financer===finFilter;});
 
-  document.getElementById('bannerCount').textContent=totalCount===0?'No loans due on this date':totalCount+' loan(s) due — '+pending.length+' pending, '+paid.length+' paid';
+  /* All due on this date (pending) */
+  var due=filtered.filter(function(l){return l.dueDate===selDate&&l.remarks==='Pending';});
+  /* All paid on this date */
+  var paid=filtered.filter(function(l){return l.dueDate===selDate&&l.remarks==='Paid';});
 
-  /* Summary Cards */
-  var pa=0,pi=0,pt=0,da=0,di=0,dt2=0;
-  pending.forEach(function(l){pa+=l.amount;pi+=l.interest;pt+=l.total;});
-  paid.forEach(function(l){da+=l.amount;di+=l.interest;dt2+=l.total;});
+  document.getElementById('bannerCount').textContent=due.length+' pending · '+paid.length+' paid';
+
+  /* Summary cards */
+  var dueAmt=0,dueInt=0,dueTot=0,paidAmt=0,paidInt=0,paidTot=0;
+  due.forEach(function(l){dueAmt+=l.amount;dueInt+=l.interest;dueTot+=l.total;});
+  paid.forEach(function(l){paidAmt+=l.amount;paidInt+=l.interest;paidTot+=l.total;});
   document.getElementById('summaryCards').innerHTML=
-    '<div class="card"><div class="card-label">Pending Count</div><div class="card-value red">'+pending.length+'</div></div>'+
-    '<div class="card"><div class="card-label">To Collect</div><div class="card-value red">'+fmt(pt)+'</div></div>'+
-    '<div class="card"><div class="card-label">Paid Count</div><div class="card-value green">'+paid.length+'</div></div>'+
-    '<div class="card"><div class="card-label">Total Paid</div><div class="card-value green">'+fmt(dt2)+'</div></div>'+
-    '<div class="card"><div class="card-label">Grand Total</div><div class="card-value blue">'+fmt(pt+dt2)+'</div></div>';
+    '<div class="summary-card"><div class="sc-label">Pending Count</div><div class="sc-value red">'+due.length+'</div></div>'+
+    '<div class="summary-card"><div class="sc-label">To Collect</div><div class="sc-value red">'+fmt(dueTot)+'</div></div>'+
+    '<div class="summary-card"><div class="sc-label">Paid Count</div><div class="sc-value green">'+paid.length+'</div></div>'+
+    '<div class="summary-card"><div class="sc-label">Total Paid</div><div class="sc-value green">'+fmt(paidTot)+'</div></div>';
 
-  /* Pending Table */
-  if(pending.length){
-    var h='<div class="table-wrapper"><div class="table-header"><h3>⏳ Pending — Need to Collect</h3><span class="badge badge-pending">'+pending.length+' borrower(s)</span></div>';
-    h+='<table><thead><tr><th>#</th><th>Name</th><th>Released</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total Due</th><th>Cycle</th></tr></thead><tbody>';
+  var h='';
+
+  /* PENDING TABLE */
+  if(due.length){
     var ta=0,ti=0,tt=0;
-    pending.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;h+='<tr class="row-pending"><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fmtDate(l.dateReleased)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>#'+l.cycles+'</td></tr>';});
-    h+='<tr class="totals-row"><td colspan="3" style="text-align:right;font-family:system-ui,sans-serif">TOTAL TO COLLECT</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td></td></tr></tbody></table></div>';
-    document.getElementById('pendingSection').innerHTML=h;
-  }else{
-    document.getElementById('pendingSection').innerHTML='<div class="table-wrapper"><div class="table-header"><h3>⏳ Pending</h3></div><div class="empty-state">\uD83C\uDF89 No pending loans due on '+fmtDate(selDate)+'!</div></div>';
+    h+='<div class="table-wrapper"><table><thead><tr><th colspan="8" style="background:#fef3c7;color:#92400e;text-align:center;font-size:13px;padding:10px">⏳ PENDING — Due on '+fmtDate(selDate)+'</th></tr><tr><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Cycle</th></tr></thead><tbody>';
+    due.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;h+='<tr><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fBadge(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+l.cycles+'</td></tr>';});
+    h+='<tr class="totals-row"><td></td><td colspan="2" style="text-align:right;font-family:system-ui,sans-serif">TOTAL TO COLLECT</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td></td></tr></tbody></table></div>';
   }
 
-  /* Paid Table */
+  /* PAID TABLE */
   if(paid.length){
-    var h2='<div class="table-wrapper"><div class="table-header"><h3>✅ Paid — Already Collected</h3><span class="badge badge-paid">'+paid.length+' borrower(s)</span></div>';
-    h2+='<table><thead><tr><th>#</th><th>Name</th><th>Released</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total Paid</th><th>Action</th><th>Cycle</th></tr></thead><tbody>';
-    var ta2=0,ti2=0,tt2=0;
-    paid.forEach(function(l,i){ta2+=l.amount;ti2+=l.interest;tt2+=l.total;h2+='<tr class="row-paid"><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fmtDate(l.dateReleased)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+(l.action||'\u2014')+'</td><td>#'+l.cycles+'</td></tr>';});
-    h2+='<tr class="totals-row"><td colspan="3" style="text-align:right;font-family:system-ui,sans-serif">TOTAL PAID</td><td class="right">'+fmt(ta2)+'</td><td></td><td class="right">'+fmt(ti2)+'</td><td class="right">'+fmt(tt2)+'</td><td colspan="2"></td></tr></tbody></table></div>';
-    document.getElementById('paidSection').innerHTML=h2;
-  }else{
-    document.getElementById('paidSection').innerHTML='<div class="table-wrapper"><div class="table-header"><h3>✅ Paid</h3></div><div class="empty-state">\uD83D\uDCED No paid loans for '+fmtDate(selDate)+'</div></div>';
+    var pa=0,pi=0,pt=0;
+    h+='<div class="table-wrapper"><table><thead><tr><th colspan="9" style="background:#dcfce7;color:#166534;text-align:center;font-size:13px;padding:10px">✅ PAID — Due on '+fmtDate(selDate)+'</th></tr><tr><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total Paid</th><th>Action</th><th>Cycle</th></tr></thead><tbody>';
+    paid.forEach(function(l,i){
+      pa+=l.amount;pi+=l.interest;pt+=l.total;
+      var ab=l.action?('<span class="status-'+(l.action==='Renewed'?'renewed':'remitted')+'">'+l.action+'</span>'):'\u2014';
+      h+='<tr><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fBadge(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+ab+'</td><td>'+l.cycles+'</td></tr>';
+    });
+    h+='<tr class="totals-row"><td></td><td colspan="2" style="text-align:right;font-family:system-ui,sans-serif">TOTAL PAID</td><td class="right">'+fmt(pa)+'</td><td></td><td class="right">'+fmt(pi)+'</td><td class="right">'+fmt(pt)+'</td><td colspan="2"></td></tr></tbody></table></div>';
   }
+
+  if(!due.length&&!paid.length){h='<div class="empty-state">\uD83C\uDF89 No loans due on '+fmtDate(selDate)+'!</div>';}
+
+  document.getElementById('dueContent').innerHTML=h;
 }
 
 function startAutoRefresh(){if(autoRefreshTimer)clearInterval(autoRefreshTimer);autoRefreshTimer=setInterval(function(){if(WEB_APP_URL)loadLoans();},30000);}
