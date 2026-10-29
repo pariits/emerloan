@@ -12,8 +12,6 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--txt);padding-bottom:72px;overflow-x:hidden}
 input,select,button{font-family:inherit}
-
-/* APP */
 .app{padding:16px 14px 20px}
 
 /* HEADER */
@@ -48,10 +46,10 @@ input,select,button{font-family:inherit}
 .dc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 10px;text-align:center;box-shadow:var(--sh)}
 .dc .dl{color:var(--txt2);font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;font-weight:600}
 .dc .dv{font-size:18px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
-.dv.blue{color:var(--pri)}.dv.red{color:var(--red)}.dv.green{color:var(--grn)}.dv.amber{color:var(--amb)}.dv.purple{color:var(--pur)}
+.dv.blue{color:var(--pri)}.dv.red{color:var(--red)}.dv.green{color:var(--grn)}.dv.amber{color:var(--amb)}
 
 /* FINANCER CARDS */
-.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .fc{background:var(--card);border-radius:var(--r);padding:12px;box-shadow:var(--sh);border-left:4px solid var(--pri)}
 .fc.axl{border-left-color:var(--red)}.fc.fritz{border-left-color:var(--pri)}.fc.axlthea{border-left-color:var(--pur)}
 .fc .fn{font-size:12px;font-weight:700;margin-bottom:6px}
@@ -59,38 +57,6 @@ input,select,button{font-family:inherit}
 .fc .fl{color:var(--txt2)}.fc .fv{font-weight:700;font-family:'SF Mono','Cascadia Code',monospace}
 
 .info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:11px;color:#1e40af;line-height:1.6}
-
-/* ===== SHEET TABS (Excel-like) ===== */
-.sheet-tabs-wrap{position:relative;margin-bottom:12px}
-.sheet-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:0;border-bottom:2px solid var(--bdr);padding:0}
-.sheet-tabs::-webkit-scrollbar{display:none}
-.stab{padding:10px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--txt2);transition:all .15s;border-radius:8px 8px 0 0;flex-shrink:0;position:relative;bottom:-2px}
-.stab.active{background:var(--card);color:var(--pri);border-color:var(--bdr);border-bottom:2px solid var(--card)}
-.stab:not(.active):active{background:#f1f5f9}
-.sheet-indicator{font-size:9px;color:var(--txt2);text-align:center;margin-top:-8px;margin-bottom:8px;letter-spacing:.05em}
-
-/* SWIPE CONTAINER */
-.swipe-container{overflow:hidden;position:relative;touch-action:pan-y}
-.swipe-track{display:flex;transition:transform .3s ease;will-change:transform}
-.swipe-panel{min-width:100%;flex-shrink:0}
-
-/* TABLE WRAPPER */
-.tw{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
-.tw-hd{padding:10px 14px;background:#f8fafc;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none}
-.tw-hd h3{font-size:13px;font-weight:700}
-.tw-bg{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700}
-.tw-bg.cur{background:#dcfce7;color:#166534}
-.tw-bg.past{background:#e0e7ff;color:#3730a3}
-.tw-bd{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tw-bd.collapsed{display:none}
-table{width:100%;border-collapse:collapse;font-size:11px}
-th{text-align:left;color:var(--txt2);font-weight:600;padding:8px 8px;border-bottom:2px solid var(--bdr);font-size:10px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;position:sticky;top:0;background:var(--card);z-index:1}
-td{padding:7px 8px;color:var(--txt);border-bottom:1px solid #f1f5f9;font-family:'SF Mono','Cascadia Code',monospace;font-size:11px;white-space:nowrap}
-tr:active td{background:#f8fafc}
-tr.row-due td{background:#fef9c3!important}
-tr.row-paid td{background:#dcfce7!important}
-tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1;border-bottom:none}
-.right{text-align:right}
 
 /* MOBILE CARDS */
 .lcards{display:none}
@@ -102,8 +68,66 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .lc-gr{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:11px;margin-bottom:6px}
 .lc-l{color:var(--txt2);font-size:10px}
 .lc-v{font-weight:600;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px}
-.lc-act{display:flex;gap:4px;justify-content:flex-end}
-.lc-tot{background:#f1f5f9;border-radius:var(--r);padding:10px;text-align:center;margin-bottom:8px;font-size:12px;font-weight:700}
+.lc-act{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ===== EXCEL WORKBOOK STYLE ===== */
+.workbook{background:var(--card);border:1px solid #c0c0c0;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+
+/* Excel toolbar */
+.wb-toolbar{background:#f3f3f3;border-bottom:1px solid #d0d0d0;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.wb-toolbar .wb-title{font-size:12px;font-weight:700;color:#333}
+.wb-actions{display:flex;gap:4px;flex-wrap:wrap}
+.wb-btn{padding:6px 12px;border:1px solid #c0c0c0;border-radius:4px;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#333;transition:all .1s}
+.wb-btn:active{background:#e8e8e8;transform:scale(.97)}
+.wb-btn.sel-all{background:#e8f0fe;color:var(--pri);border-color:#b0c4de}
+.wb-btn.paid-all{background:#e8f5e9;color:var(--grn);border-color:#a5d6a7}
+.wb-btn.renew-all{background:#fff3e0;color:#e65100;border-color:#ffcc80}
+.wb-sel-ct{font-size:11px;color:var(--pri);font-weight:700;padding:0 6px}
+
+/* Excel sheet area */
+.wb-sheet{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:65vh;overflow-y:auto}
+
+/* Excel table */
+.xt{width:100%;border-collapse:collapse;font-size:11px}
+.xt th{background:#e8eaed;color:#333;font-weight:600;padding:6px 8px;border:1px solid #c0c0c0;font-size:10px;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;position:sticky;top:0;z-index:2}
+.xt td{padding:5px 8px;border:1px solid #d5d5d5;color:#222;font-family:'SF Mono','Cascadia Code',monospace;font-size:11px;white-space:nowrap;background:#fff}
+.xt tr:nth-child(even) td{background:#fafafa}
+.xt tr:hover td{background:#f0f4ff}
+.xt tr.xr-due td{background:#fff9c3!important;border-color:#e6d98c}
+.xt tr.xr-paid td{background:#e8f5e9!important;border-color:#a5d6a7}
+.xt tr.xr-totals td{background:#e8eaed!important;font-weight:700;border-top:2px solid #999;font-family:system-ui,sans-serif}
+.xt .right{text-align:right}
+.xt .center{text-align:center}
+
+/* Row action buttons */
+.xact{display:flex;gap:3px;align-items:center}
+.xbtn{padding:4px 8px;border:1px solid #ccc;border-radius:3px;font-size:10px;font-weight:700;cursor:pointer;transition:all .1s;white-space:nowrap}
+.xbtn:active{transform:scale(.93)}
+.xbtn.xpaid{background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7}
+.xbtn.xrenew{background:#fff3e0;color:#e65100;border-color:#ffcc80}
+.xbtn.xedit{background:#fff8e1;color:#f57f17;border-color:#ffe082}
+.xbtn.xdel{background:#ffebee;color:#c62828;border-color:#ef9a9a}
+.xchk{width:16px;height:16px;cursor:pointer;accent-color:var(--pri)}
+
+/* Excel sheet tabs */
+.wb-tabs-wrap{background:#e0e0e0;border-top:1px solid #c0c0c0;display:flex;align-items:stretch;overflow:hidden}
+.wb-tabs-scroll{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1}
+.wb-tabs-scroll::-webkit-scrollbar{display:none}
+.wb-tab{padding:8px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border-right:1px solid #c0c0c0;background:#e0e0e0;color:#555;transition:all .12s;flex-shrink:0;position:relative;user-select:none;-webkit-user-select:none}
+.wb-tab.active{background:#fff;color:var(--pri);font-weight:700;border-bottom:2px solid var(--pri)}
+.wb-tab:not(.active):active{background:#d0d0d0}
+.wb-tab .tab-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px}
+.tab-dot.cur{background:var(--grn)}
+.tab-dot.past{background:#999}
+.wb-nav{display:flex;align-items:center;border-right:1px solid #c0c0c0}
+.wb-nav button{background:none;border:none;padding:8px 10px;font-size:14px;cursor:pointer;color:#555}
+.wb-nav button:active{background:#d0d0d0}
+.wb-indicator{text-align:center;padding:4px;font-size:10px;color:var(--txt2);background:#f5f5f5;border-top:1px solid #e0e0e0}
+
+/* Swipe container for sheets */
+.wb-swipe{overflow:hidden;position:relative;touch-action:pan-y}
+.wb-track{display:flex;transition:transform .3s ease;will-change:transform}
+.wb-panel{min-width:100%;flex-shrink:0}
 
 /* BADGES */
 .badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
@@ -115,18 +139,12 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .b-fritz{background:#eff6ff;color:var(--pri)}
 .b-axlthea{background:#f5f3ff;color:var(--pur)}
 
-/* ACTION BTNS */
-.abtn{padding:5px 8px;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-weight:600}
-.abtn:active{transform:scale(.93)}
-.abtn.edit{background:#fef3c7;color:#92400e}
-.abtn.del{background:#fef2f2;color:#991b1b}
-
 /* LEGEND */
 .legend{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;font-size:11px;color:var(--txt2)}
 .legend-i{display:flex;align-items:center;gap:4px}
 .legend-s{width:12px;height:12px;border-radius:3px;border:1px solid #ccc}
-.legend-s.yellow{background:#fef9c3}
-.legend-s.green{background:#dcfce7}
+.legend-s.yellow{background:#fff9c3}
+.legend-s.green{background:#e8f5e9}
 
 /* MODAL */
 .mo{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100}
@@ -150,7 +168,6 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .mb-s{background:var(--pri);color:#fff}
 .mb-w{background:var(--amb);color:#fff}
 .mb-d{background:var(--red);color:#fff}
-.mb-g{background:var(--grn);color:#fff}
 
 .renew-grp{display:none;margin-top:10px;padding:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px}
 .renew-grp.show{display:block}
@@ -184,13 +201,14 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{background:var(--grn)}.toast.error{background:var(--red)}.toast.info{background:var(--pri)}
 
+.lc-tot{background:#f1f5f9;border-radius:var(--r);padding:10px;text-align:center;margin-bottom:8px;font-size:12px;font-weight:700}
+
 @media(max-width:640px){
   .dg{grid-template-columns:repeat(2,1fr)}
-  .fg{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
   .lcards{display:block}
   .tdesk{display:none}
   .fg-row{grid-template-columns:1fr}
-  .qa{grid-template-columns:1fr 1fr}
 }
 @media(min-width:641px){
   .lcards{display:none}
@@ -219,40 +237,32 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
   <button class="qb dl" onclick="toast('📥 Download works in live version','info')">📥 Download</button>
 </div>
 
-<!-- SECTIONS -->
 <!-- DASHBOARD -->
 <div class="sec active" id="sec-dash">
   <div class="dg" id="dashCards"></div>
   <div id="finBreak"></div>
-  <div class="info"><strong>📌 Rules:</strong> Due = Release + 6 days · Interest: 10% or 15% · Weeks start Tuesday · UTC+8 · Financers: Axl, Fritz, Axlthea</div>
+  <div class="info"><strong>📌 Rules:</strong> Due = Release + 6 days · Interest: 10% or 15% · Weeks start Tuesday · UTC+8</div>
   <div id="summaryContent"></div>
 </div>
 
-<!-- TABLES with SHEET TABS -->
+<!-- TABLES — EXCEL WORKBOOK -->
 <div class="sec" id="sec-tables">
   <div class="legend">
     <div class="legend-i"><div class="legend-s yellow"></div> Due Today</div>
     <div class="legend-i"><div class="legend-s green"></div> Paid</div>
   </div>
-
-  <!-- Excel-like sheet tabs -->
-  <div class="sheet-tabs-wrap">
-    <div class="sheet-tabs" id="sheetTabs">
-      <div class="stab active" data-sheet="0" onclick="goSheet(0)">📋 Weekly</div>
-      <div class="stab" data-sheet="1" onclick="goSheet(1)">👤 By Financer</div>
-      <div class="stab" data-sheet="2" onclick="goSheet(2)">📊 All Loans</div>
-      <div class="stab" data-sheet="3" onclick="goSheet(3)">📜 History</div>
+  <div class="workbook" id="workbook">
+    <div class="wb-toolbar" id="wbToolbar">
+      <div class="wb-title" id="wbTitle">📋 Week: —</div>
+      <div class="wb-actions" id="wbActions"></div>
     </div>
-  </div>
-  <div class="sheet-indicator" id="sheetIndicator">◀ swipe to switch sheets ▶</div>
-
-  <!-- Swipeable panels -->
-  <div class="swipe-container" id="swipeContainer">
-    <div class="swipe-track" id="swipeTrack">
-      <div class="swipe-panel" id="sheet-weekly"></div>
-      <div class="swipe-panel" id="sheet-financer"></div>
-      <div class="swipe-panel" id="sheet-all"></div>
-      <div class="swipe-panel" id="sheet-history"></div>
+    <div class="wb-swipe" id="wbSwipe">
+      <div class="wb-track" id="wbTrack"></div>
+    </div>
+    <div class="wb-indicator" id="wbIndicator"></div>
+    <div class="wb-tabs-wrap">
+      <div class="wb-nav"><button onclick="sheetNav(-1)">◀</button><button onclick="sheetNav(1)">▶</button></div>
+      <div class="wb-tabs-scroll" id="wbTabs"></div>
     </div>
   </div>
 </div>
@@ -339,7 +349,7 @@ tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1
 <script>
 var CD=6,UO=8,FINS=['Axl','Fritz','Axlthea'];
 var loans=[],nextId=30,updId=null,delId=null;
-var curSheet=0,totalSheets=4,touchStartX=0,touchDeltaX=0,isSwiping=false;
+var weekKeys=[],curWk=0,touchSX=0,touchDX=0,isSw=false;
 
 function now8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UO*3600000))}
 function today(){var d=now8();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
@@ -350,11 +360,11 @@ function fDY(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1
 function fDL(ds){var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'short'})}
 function wk(ds){var p=ds.split('-');var d=new Date(+p[0],+p[1]-1,+p[2],12);var dy=d.getDay();var diff=(dy+5)%7;var t=new Date(d);t.setDate(d.getDate()-diff);return t.getFullYear()+'-'+p2(t.getMonth()+1)+'-'+p2(t.getDate())}
 function wkR(ms){return fDY(ms)+' – '+fDY(addD(ms,6))}
+function wkShort(ms){return fD(ms)+' – '+fD(addD(ms,6))}
 function fmt(n){return '₱'+Number(n).toLocaleString('en-PH',{minimumFractionDigits:0})}
 function sB(s){return '<span class="badge '+(s==='Paid'?'b-paid':'b-pending')+'">'+s+'</span>'}
 function aB(a){if(!a)return '—';if(a.indexOf('Renew')===0)return '<span class="badge b-renewed">'+a+'</span>';if(a==='Remitted')return '<span class="badge b-remitted">Remitted</span>';return a}
 function fB(f){if(!f)return '';return '<span class="badge b-'+f.toLowerCase()+'">'+f+'</span>'}
-function actH(id){return '<button class="abtn edit" onclick="openUpd('+id+')">✏️</button> <button class="abtn del" onclick="openDel('+id+')">🗑️</button>'}
 function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'info')+' show';setTimeout(function(){e.classList.remove('show')},2500)}
 
 /* DUMMY DATA */
@@ -378,34 +388,6 @@ function genDummy(){
 
 function getFL(){var f=document.getElementById('financerFilter').value,q=document.getElementById('searchBox').value.trim().toLowerCase(),r=loans;if(f!=='All')r=r.filter(function(l){return l.financer===f});if(q)r=r.filter(function(l){return l.name.toLowerCase().indexOf(q)>-1});return r}
 
-/* SWIPE LOGIC */
-function initSwipe(){
-  var el=document.getElementById('swipeContainer');
-  el.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;isSwiping=true;document.getElementById('swipeTrack').style.transition='none'},false);
-  el.addEventListener('touchmove',function(e){if(!isSwiping)return;touchDeltaX=e.touches[0].clientX-touchStartX;var base=-curSheet*100;var pct=base+(touchDeltaX/el.offsetWidth)*100;document.getElementById('swipeTrack').style.transform='translateX('+pct+'%)'},{passive:true});
-  el.addEventListener('touchend',function(){
-    if(!isSwiping)return;isSwiping=false;
-    var threshold=el.offsetWidth*0.2;
-    if(touchDeltaX<-threshold&&curSheet<totalSheets-1)curSheet++;
-    else if(touchDeltaX>threshold&&curSheet>0)curSheet--;
-    touchDeltaX=0;
-    var track=document.getElementById('swipeTrack');track.style.transition='transform .3s ease';track.style.transform='translateX('+(-(curSheet*100))+'%)';
-    updateSheetTabs()
-  },false);
-}
-function goSheet(i){
-  curSheet=i;
-  var track=document.getElementById('swipeTrack');track.style.transition='transform .3s ease';track.style.transform='translateX('+(-(curSheet*100))+'%)';
-  updateSheetTabs()
-}
-function updateSheetTabs(){
-  document.querySelectorAll('.stab').forEach(function(t){t.classList.toggle('active',+t.getAttribute('data-sheet')===curSheet)});
-  var names=['Weekly','By Financer','All Loans','History'];
-  document.getElementById('sheetIndicator').textContent=(curSheet>0?'◀ ':'')+(curSheet+1)+'/'+totalSheets+' — '+names[curSheet]+(curSheet<totalSheets-1?' ▶':'');
-  /* Scroll active tab into view */
-  var at=document.querySelector('.stab.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})
-}
-
 /* NAV */
 function switchSec(s){
   document.querySelectorAll('.sec').forEach(function(el){el.classList.remove('active')});
@@ -413,6 +395,7 @@ function switchSec(s){
   document.querySelectorAll('.ni').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-sec')===s)});
   if(s==='due'){document.getElementById('duePicker').value=today();renderDue()}
   if(s==='paid'){document.getElementById('paidPicker').value=today();renderPaid()}
+  if(s==='tables')renderWorkbook()
 }
 
 function openModal(n){
@@ -423,11 +406,6 @@ function closeModal(n){document.getElementById('modal-'+n).classList.remove('sho
 function updDueNote(){var v=document.getElementById('newDate').value;document.getElementById('newDueNote').textContent=v?'📌 Due: '+fDY(addD(v,CD)):'📌 Due: auto'}
 function toggleRenew(){var a=document.getElementById('updAct').value,g=document.getElementById('renewGrp');if(a==='Renew'){g.classList.add('show');var l=loans.find(function(x){return x.id===updId});if(l){document.getElementById('renewDate').value=addD(l.dueDate,1);updRenewNote()}}else g.classList.remove('show')}
 function updRenewNote(){var v=document.getElementById('renewDate').value;document.getElementById('renewNote').textContent=v?'📌 New Due: '+fDY(addD(v,CD)):'📌 New Due: select date'}
-
-function setDueToday(){document.getElementById('duePicker').value=today();renderDue()}
-function shiftDue(n){document.getElementById('duePicker').value=addD(document.getElementById('duePicker').value||today(),n);renderDue()}
-function setPaidToday(){document.getElementById('paidPicker').value=today();renderPaid()}
-function shiftPaid(n){document.getElementById('paidPicker').value=addD(document.getElementById('paidPicker').value||today(),n);renderPaid()}
 
 function addLoan(){
   var nm=document.getElementById('newName').value.trim(),dr=document.getElementById('newDate').value,am=parseFloat(document.getElementById('newAmt').value),rt=parseInt(document.getElementById('newRate').value),fn=document.getElementById('newFin').value;
@@ -464,7 +442,147 @@ function confirmDelete(){
   closeModal('delete');toast('🗑️ Deleted','error');renderAll()
 }
 
+/* Quick mark paid from table */
+function quickPaid(id){
+  var l=loans.find(function(x){return x.id===id});if(!l)return;
+  l.remarks='Paid';toast('✅ '+l.name+' marked Paid','success');renderAll()
+}
+/* Quick renew from table */
+function quickRenew(id){
+  var l=loans.find(function(x){return x.id===id});if(!l||l.remarks!=='Paid')return;
+  l.action='Renewed';
+  var nr=addD(l.dueDate,1),ni=l.amount*(l.rate/100);
+  loans.push({id:nextId++,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer});
+  toast('🔄 '+l.name+' renewed','success');renderAll()
+}
+
+/* ===== WORKBOOK ===== */
+function buildWeeks(){
+  var fl=getFL();var wm={};fl.forEach(function(l){var w=wk(l.dateReleased);if(!wm[w])wm[w]=[];wm[w].push(l)});
+  weekKeys=Object.keys(wm).sort().reverse();
+  return wm
+}
+
+function renderWorkbook(){
+  var wm=buildWeeks();var cw=wk(today()),td=today();
+  if(!weekKeys.length){
+    document.getElementById('wbTrack').innerHTML='<div class="wb-panel"><div class="empty">No loans yet. Tap ＋ New Loan.</div></div>';
+    document.getElementById('wbTabs').innerHTML='';document.getElementById('wbIndicator').innerHTML='';
+    document.getElementById('wbTitle').textContent='📋 No Data';document.getElementById('wbActions').innerHTML='';return
+  }
+  /* Find current week index */
+  var cwIdx=weekKeys.indexOf(cw);if(cwIdx===-1)cwIdx=0;
+  if(curWk>=weekKeys.length)curWk=0;
+
+  /* Build panels */
+  var panels='';
+  weekKeys.forEach(function(w,wi){
+    var wl=wm[w],ta=0,ti=0,tt=0;
+    panels+='<div class="wb-panel" data-wk="'+wi+'"><div class="wb-sheet"><table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll('+wi+',this.checked)" id="sa_'+wi+'"></th><th class="center" style="width:90px">Actions</th><th>#</th><th>Name</th><th>Financer</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';
+    wl.forEach(function(l,i){
+      ta+=l.amount;ti+=l.interest;tt+=l.total;
+      var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');
+      var btns='<div class="xact">';
+      if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')">✅</button>';
+      if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')">🔄</button>';
+      btns+='<button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button>';
+      btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div>';
+      panels+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc_'+wi+'" data-id="'+l.id+'" onchange="updSelCt('+wi+')"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'
+    });
+    panels+='<tr class="xr-totals"><td colspan="7" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table></div></div>'
+  });
+  document.getElementById('wbTrack').innerHTML=panels;
+
+  /* Build tabs */
+  var tabs='';
+  weekKeys.forEach(function(w,wi){
+    var ic=w===cw;
+    tabs+='<div class="wb-tab'+(wi===curWk?' active':'')+'" data-wi="'+wi+'" onclick="goWk('+wi+')"><span class="tab-dot '+(ic?'cur':'past')+'"></span>'+wkShort(w)+'</div>'
+  });
+  document.getElementById('wbTabs').innerHTML=tabs;
+
+  goWk(curWk,true);
+  initWbSwipe()
+}
+
+function goWk(i,noAnim){
+  if(i<0||i>=weekKeys.length)return;
+  curWk=i;
+  var track=document.getElementById('wbTrack');
+  if(noAnim)track.style.transition='none';else track.style.transition='transform .3s ease';
+  track.style.transform='translateX('+(-curWk*100)+'%)';
+  if(noAnim)setTimeout(function(){track.style.transition='transform .3s ease'},50);
+
+  /* Update tabs */
+  document.querySelectorAll('.wb-tab').forEach(function(t){t.classList.toggle('active',+t.getAttribute('data-wi')===curWk)});
+  var at=document.querySelector('.wb-tab.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+
+  /* Update toolbar */
+  var w=weekKeys[curWk],cw=wk(today());
+  document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');
+  document.getElementById('wbIndicator').textContent='Sheet '+(curWk+1)+' of '+weekKeys.length;
+
+  /* Update actions */
+  updateWbActions()
+}
+
+function updateWbActions(){
+  var h='<span class="wb-sel-ct" id="selCt_'+curWk+'">0 selected</span>';
+  h+='<button class="wb-btn paid-all" onclick="batchWkPaid('+curWk+')" id="bpBtn_'+curWk+'" disabled>✅ Paid</button>';
+  h+='<button class="wb-btn renew-all" onclick="batchWkRenew('+curWk+')" id="brBtn_'+curWk+'" disabled>🔄 Renew</button>';
+  document.getElementById('wbActions').innerHTML=h
+}
+
+function togAll(wi,checked){document.querySelectorAll('.wc_'+wi).forEach(function(c){c.checked=checked});updSelCt(wi)}
+function updSelCt(wi){
+  var all=document.querySelectorAll('.wc_'+wi),sel=document.querySelectorAll('.wc_'+wi+':checked');
+  var ct=sel.length;
+  var ctEl=document.getElementById('selCt_'+wi);if(ctEl)ctEl.textContent=ct+' selected';
+  var bp=document.getElementById('bpBtn_'+wi);if(bp)bp.disabled=ct===0;
+  var br=document.getElementById('brBtn_'+wi);if(br)br.disabled=ct===0;
+  var sa=document.getElementById('sa_'+wi);if(sa)sa.checked=all.length>0&&ct===all.length
+}
+
+function batchWkPaid(wi){
+  var ids=[];document.querySelectorAll('.wc_'+wi+':checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+  if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
+  ids.forEach(function(id){var l=loans.find(function(x){return x.id===id});if(l&&l.remarks==='Pending')l.remarks='Paid'});
+  toast('✅ '+ids.length+' marked Paid','success');renderAll()
+}
+function batchWkRenew(wi){
+  var ids=[];document.querySelectorAll('.wc_'+wi+':checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+  var paidIds=ids.filter(function(id){var l=loans.find(function(x){return x.id===id});return l&&l.remarks==='Paid'&&l.action!=='Remitted'});
+  if(!paidIds.length){toast('Select paid loans to renew','error');return}
+  var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
+  if(!confirm('Renew '+paidIds.length+' loan(s)?'))return;
+  paidIds.forEach(function(id){var l=loans.find(function(x){return x.id===id});if(!l)return;l.action='Renewed';
+    var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100);
+    loans.push({id:nextId++,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})});
+  toast('🔄 '+paidIds.length+' renewed','success');renderAll()
+}
+
+function sheetNav(dir){var n=curWk+dir;if(n>=0&&n<weekKeys.length)goWk(n)}
+
+/* SWIPE */
+function initWbSwipe(){
+  var el=document.getElementById('wbSwipe');
+  el.ontouchstart=function(e){touchSX=e.touches[0].clientX;isSw=true;document.getElementById('wbTrack').style.transition='none'};
+  el.ontouchmove=function(e){if(!isSw)return;touchDX=e.touches[0].clientX-touchSX;var base=-curWk*100;var pct=base+(touchDX/el.offsetWidth)*100;document.getElementById('wbTrack').style.transform='translateX('+pct+'%)'};
+  el.ontouchend=function(){
+    if(!isSw)return;isSw=false;
+    var thr=el.offsetWidth*0.2;
+    if(touchDX<-thr&&curWk<weekKeys.length-1)curWk++;
+    else if(touchDX>thr&&curWk>0)curWk--;
+    touchDX=0;goWk(curWk)
+  }
+}
+
 /* DUE */
+function setDueToday(){document.getElementById('duePicker').value=today();renderDue()}
+function shiftDue(n){document.getElementById('duePicker').value=addD(document.getElementById('duePicker').value||today(),n);renderDue()}
+function setPaidToday(){document.getElementById('paidPicker').value=today();renderPaid()}
+function shiftPaid(n){document.getElementById('paidPicker').value=addD(document.getElementById('paidPicker').value||today(),n);renderPaid()}
+
 function renderDue(){
   var sd=document.getElementById('duePicker').value||today(),fl=getFL();
   document.getElementById('dueTodayBtn').className='dpb'+(sd===today()?' ta':'');
@@ -473,21 +591,22 @@ function renderDue(){
   document.getElementById('dueBC').textContent=due.length+' pending';
   if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due!</div>';return}
   var ta=0,ti=0,tt=0;
-  var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchPaid()" id="btnBP" disabled>✅ Mark Paid</button></div>';
+  var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchDuePaid()" id="btnBP" disabled>✅ Mark Paid</button></div>';
   h+='<div class="lcards">';
   due.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-    h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div><input type="checkbox" class="bchk dc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+actH(l.id)+'</div></div>'});
+    h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
   h+='<div class="lc-tot" style="color:var(--red)">⏳ Total: '+fmt(tt)+'</div></div>';
-  h+='<div class="tdesk"><div class="tw"><div class="tw-bd"><table><thead><tr><th style="width:28px"></th><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th></th></tr></thead><tbody>';
+  h+='<div class="tdesk"><div class="workbook" style="border-radius:4px"><div class="wb-sheet"><table class="xt"><thead><tr><th style="width:28px"><input type="checkbox" class="xchk" onchange="togDueAll2(this.checked)"></th><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th></th></tr></thead><tbody>';
   var ta2=0,ti2=0,tt2=0;
-  due.forEach(function(l,i){ta2+=l.amount;ti2+=l.interest;tt2+=l.total;h+='<tr><td><input type="checkbox" class="bchk dc" data-id="'+l.id+'" onchange="updDueCt()"></td><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+actH(l.id)+'</td></tr>'});
-  h+='<tr class="totals-row"><td></td><td colspan="3" style="text-align:right;font-family:system-ui,sans-serif">TOTAL</td><td class="right">'+fmt(ta2)+'</td><td></td><td class="right">'+fmt(ti2)+'</td><td class="right">'+fmt(tt2)+'</td><td></td></tr></tbody></table></div></div></div>';
+  due.forEach(function(l,i){ta2+=l.amount;ti2+=l.interest;tt2+=l.total;h+='<tr><td class="center"><input type="checkbox" class="xchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></td></tr>'});
+  h+='<tr class="xr-totals"><td colspan="4" style="text-align:right">TOTAL</td><td class="right">'+fmt(ta2)+'</td><td></td><td class="right">'+fmt(ti2)+'</td><td class="right">'+fmt(tt2)+'</td><td></td></tr></tbody></table></div></div></div>';
   document.getElementById('dueContent').innerHTML=h
 }
-function togDueAll(){var a=document.getElementById('dueAll').checked;document.querySelectorAll('.dc').forEach(function(c){c.checked=a});updDueCt()}
-function updDueCt(){var c=document.querySelectorAll('.dc:checked').length;document.getElementById('dueSel').textContent=c+' selected';document.getElementById('btnBP').disabled=c===0}
-function batchPaid(){
-  var ids=[];document.querySelectorAll('.dc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+function togDueAll(){var a=document.getElementById('dueAll').checked;document.querySelectorAll('.dcc').forEach(function(c){c.checked=a});updDueCt()}
+function togDueAll2(v){document.querySelectorAll('.dcc').forEach(function(c){c.checked=v});updDueCt()}
+function updDueCt(){var c=document.querySelectorAll('.dcc:checked').length;var el=document.getElementById('dueSel');if(el)el.textContent=c+' selected';var bp=document.getElementById('btnBP');if(bp)bp.disabled=c===0}
+function batchDuePaid(){
+  var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
   if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
   ids.forEach(function(id){var l=loans.find(function(x){return x.id===id});if(l)l.remarks='Paid'});
   toast('✅ '+ids.length+' marked Paid','success');renderAll();renderDue()
@@ -502,27 +621,28 @@ function renderPaid(){
   document.getElementById('paidBC').textContent=paid.length+' paid';
   if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}
   var ta=0,ti=0,tt=0;
-  var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchRenew()" id="btnBR" disabled>🔄 Renew</button></div>';
+  var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchPaidRenew()" id="btnBR" disabled>🔄 Renew</button></div>';
   h+='<div class="lcards">';
   paid.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-    h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div><input type="checkbox" class="bchk pc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act">'+actH(l.id)+'</div></div>'});
+    h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
   h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Paid: '+fmt(tt)+'</div></div>';
-  h+='<div class="tdesk"><div class="tw"><div class="tw-bd"><table><thead><tr><th style="width:28px"></th><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Action</th><th></th></tr></thead><tbody>';
+  h+='<div class="tdesk"><div class="workbook" style="border-radius:4px"><div class="wb-sheet"><table class="xt"><thead><tr><th style="width:28px"><input type="checkbox" class="xchk" onchange="togPaidAll2(this.checked)"></th><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Action</th><th></th></tr></thead><tbody>';
   var pa2=0,pi2=0,pt2=0;
-  paid.forEach(function(l,i){pa2+=l.amount;pi2+=l.interest;pt2+=l.total;h+='<tr><td><input type="checkbox" class="bchk pc" data-id="'+l.id+'" onchange="updPaidCt()"></td><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+aB(l.action)+'</td><td>'+actH(l.id)+'</td></tr>'});
-  h+='<tr class="totals-row"><td></td><td colspan="3" style="text-align:right;font-family:system-ui,sans-serif">TOTAL</td><td class="right">'+fmt(pa2)+'</td><td></td><td class="right">'+fmt(pi2)+'</td><td class="right">'+fmt(pt2)+'</td><td colspan="2"></td></tr></tbody></table></div></div></div>';
+  paid.forEach(function(l,i){pa2+=l.amount;pi2+=l.interest;pt2+=l.total;h+='<tr><td class="center"><input type="checkbox" class="xchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+aB(l.action)+'</td><td><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></td></tr>'});
+  h+='<tr class="xr-totals"><td colspan="4" style="text-align:right">TOTAL</td><td class="right">'+fmt(pa2)+'</td><td></td><td class="right">'+fmt(pi2)+'</td><td class="right">'+fmt(pt2)+'</td><td colspan="2"></td></tr></tbody></table></div></div></div>';
   document.getElementById('paidContent').innerHTML=h
 }
-function togPaidAll(){var a=document.getElementById('paidAll').checked;document.querySelectorAll('.pc').forEach(function(c){c.checked=a});updPaidCt()}
-function updPaidCt(){var c=document.querySelectorAll('.pc:checked').length;document.getElementById('paidSel').textContent=c+' selected';document.getElementById('btnBR').disabled=c===0}
-function batchRenew(){
-  var ids=[];document.querySelectorAll('.pc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+function togPaidAll(){var a=document.getElementById('paidAll').checked;document.querySelectorAll('.pcc').forEach(function(c){c.checked=a});updPaidCt()}
+function togPaidAll2(v){document.querySelectorAll('.pcc').forEach(function(c){c.checked=v});updPaidCt()}
+function updPaidCt(){var c=document.querySelectorAll('.pcc:checked').length;var el=document.getElementById('paidSel');if(el)el.textContent=c+' selected';var br=document.getElementById('btnBR');if(br)br.disabled=c===0}
+function batchPaidRenew(){
+  var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
   if(!ids.length)return;var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
   if(!confirm('Renew '+ids.length+'?'))return;
   ids.forEach(function(id){var l=loans.find(function(x){return x.id===id});if(!l)return;l.action='Renewed';
     var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100);
     loans.push({id:nextId++,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})});
-  toast('✅ '+ids.length+' renewed','success');renderAll();renderPaid()
+  toast('🔄 '+ids.length+' renewed','success');renderAll();renderPaid()
 }
 
 /* DASHBOARD */
@@ -538,102 +658,23 @@ function renderDash(){
     '<div class="dc"><div class="dl">Renewed</div><div class="dv amber">'+rc+'</div></div>';
   var ff=document.getElementById('financerFilter').value;
   if(ff==='All'){
-    var fh='<div class="fg">';
+    var fh='<div class="fgrid">';
     FINS.forEach(function(fn){var fl2=loans.filter(function(l){return l.financer===fn}),fa=0,fi=0,ft=0,fns=[];fl2.forEach(function(l){if(l.remarks==='Pending'){fa+=l.amount;fi+=l.interest;ft+=l.total}if(fns.indexOf(l.name)===-1)fns.push(l.name)});
       fh+='<div class="fc '+fn.toLowerCase()+'"><div class="fn">'+fB(fn)+' '+fn+'</div><div class="fr"><span class="fl">Borrowers</span><span class="fv">'+fns.length+'</span></div><div class="fr"><span class="fl">Lent Out</span><span class="fv">'+fmt(fa)+'</span></div><div class="fr"><span class="fl">Interest</span><span class="fv">'+fmt(fi)+'</span></div><div class="fr"><span class="fl">Collect</span><span class="fv" style="color:var(--red)">'+fmt(ft)+'</span></div></div>'});
     fh+='</div>';document.getElementById('finBreak').innerHTML=fh
   }else document.getElementById('finBreak').innerHTML='';
-  /* Summary */
+  /* Summary cards */
   if(!fl.length){document.getElementById('summaryContent').innerHTML='<div class="empty">No loans yet.</div>';return}
   var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);
   var h='<div class="lcards">';
-  lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' '+actH(l.id)+'</div></div>'});
-  h+='</div><div class="tdesk"><div class="tw"><div class="tw-hd"><h3>All Loans Summary</h3></div><div class="tw-bd"><table><thead><tr><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th>Cycle</th><th></th></tr></thead><tbody>';
-  lv.forEach(function(l){h+='<tr><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td>'+l.cycles+'</td><td>'+actH(l.id)+'</td></tr>'});
+  lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' <button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
+  h+='</div><div class="tdesk"><div class="workbook" style="border-radius:4px"><div class="wb-sheet"><table class="xt"><thead><tr><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th>Cycle</th><th></th></tr></thead><tbody>';
+  lv.forEach(function(l){h+='<tr><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td class="center">'+l.cycles+'</td><td><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></td></tr>'});
   h+='</tbody></table></div></div></div>';document.getElementById('summaryContent').innerHTML=h
 }
 
-/* SHEET: WEEKLY */
-function renderSheetWeekly(){
-  var fl=getFL();if(!fl.length){document.getElementById('sheet-weekly').innerHTML='<div class="empty">No loans yet.</div>';return}
-  var weeks={};fl.forEach(function(l){var w=wk(l.dateReleased);if(!weeks[w])weeks[w]=[];weeks[w].push(l)});
-  var sorted=Object.keys(weeks).sort().reverse(),cw=wk(today()),td=today(),h='';
-  sorted.forEach(function(w){
-    var ic=w===cw,wl=weeks[w],ta=0,ti=0,tt=0;
-    h+='<div class="tw"><div class="tw-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\')"><h3>'+wkR(w)+'</h3><span class="tw-bg '+(ic?'cur':'past')+'">'+(ic?'CURRENT':'WEEK')+'</span></div><div class="tw-bd'+(ic?'':' collapsed')+'">';
-    h+='<div class="lcards" style="padding:8px">';
-    wl.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-      var cls=l.remarks==='Paid'?'paid-c':(l.dueDate===td&&l.remarks==='Pending'?'due-c':'');
-      h+='<div class="lcard '+cls+'"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Released</div><div class="lc-v">'+fD(l.dateReleased)+'</div></div><div><div class="lc-l">Due</div><div class="lc-v">'+fD(l.dueDate)+'</div></div><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div></div><div class="lc-act">'+aB(l.action)+' '+actH(l.id)+'</div></div>'});
-    h+='<div class="lc-tot">Weekly: '+fmt(ta)+' amt · '+fmt(ti)+' int · '+fmt(tt)+' total</div></div>';
-    ta=0;ti=0;tt=0;
-    h+='<div class="tdesk"><table><thead><tr><th>#</th><th>Name</th><th>Financer</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th></th></tr></thead><tbody>';
-    wl.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;var rc=l.remarks==='Paid'?'row-paid':(l.dueDate===td&&l.remarks==='Pending'?'row-due':'');
-      h+='<tr class="'+rc+'"><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td>'+actH(l.id)+'</td></tr>'});
-    h+='<tr class="totals-row"><td colspan="5" style="text-align:right;font-family:system-ui,sans-serif">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="3"></td></tr></tbody></table></div></div></div>'
-  });
-  document.getElementById('sheet-weekly').innerHTML=h
-}
-
-/* SHEET: BY FINANCER */
-function renderSheetFinancer(){
-  var fl=getFL(),td=today(),h='';
-  FINS.forEach(function(fn){
-    var fl2=fl.filter(function(l){return l.financer===fn});
-    if(!fl2.length){h+='<div class="tw"><div class="tw-hd"><h3>'+fn+'</h3><span class="tw-bg past">0 loans</span></div></div>';return}
-    var ta=0,ti=0,tt=0;
-    h+='<div class="tw"><div class="tw-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\')"><h3>'+fB(fn)+' '+fn+'</h3><span class="tw-bg cur">'+fl2.length+' loans</span></div><div class="tw-bd">';
-    h+='<div class="lcards" style="padding:8px">';
-    fl2.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-      var cls=l.remarks==='Paid'?'paid-c':(l.dueDate===td&&l.remarks==='Pending'?'due-c':'');
-      h+='<div class="lcard '+cls+'"><div class="lc-top"><span class="lc-nm">'+l.name+'</span>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Released</div><div class="lc-v">'+fD(l.dateReleased)+'</div></div><div><div class="lc-l">Due</div><div class="lc-v">'+fD(l.dueDate)+'</div></div><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div></div><div class="lc-act">'+aB(l.action)+' '+actH(l.id)+'</div></div>'});
-    h+='<div class="lc-tot">'+fn+': '+fmt(ta)+' amt · '+fmt(ti)+' int · '+fmt(tt)+' total</div></div>';
-    ta=0;ti=0;tt=0;
-    h+='<div class="tdesk"><table><thead><tr><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th></th></tr></thead><tbody>';
-    fl2.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;var rc=l.remarks==='Paid'?'row-paid':(l.dueDate===td&&l.remarks==='Pending'?'row-due':'');
-      h+='<tr class="'+rc+'"><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td>'+actH(l.id)+'</td></tr>'});
-    h+='<tr class="totals-row"><td colspan="4" style="text-align:right;font-family:system-ui,sans-serif">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="3"></td></tr></tbody></table></div></div></div>'
-  });
-  document.getElementById('sheet-financer').innerHTML=h||'<div class="empty">No loans.</div>'
-}
-
-/* SHEET: ALL LOANS */
-function renderSheetAll(){
-  var fl=getFL(),td=today();
-  if(!fl.length){document.getElementById('sheet-all').innerHTML='<div class="empty">No loans.</div>';return}
-  var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);
-  var ta=0,ti=0,tt=0;
-  var h='<div class="lcards">';
-  lv.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-    h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Due</div><div class="lc-v">'+fD(l.dueDate)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' '+actH(l.id)+'</div></div>'});
-  h+='<div class="lc-tot">All: '+fmt(ta)+' amt · '+fmt(ti)+' int · '+fmt(tt)+' total</div></div>';
-  ta=0;ti=0;tt=0;
-  h+='<div class="tdesk"><div class="tw"><div class="tw-hd"><h3>All Loans (Latest per Borrower)</h3></div><div class="tw-bd"><table><thead><tr><th>Name</th><th>Financer</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th>Cycle</th><th></th></tr></thead><tbody>';
-  lv.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;var rc=l.remarks==='Paid'?'row-paid':(l.dueDate===td&&l.remarks==='Pending'?'row-due':'');
-    h+='<tr class="'+rc+'"><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td>'+l.cycles+'</td><td>'+actH(l.id)+'</td></tr>'});
-  h+='<tr class="totals-row"><td colspan="4" style="text-align:right;font-family:system-ui,sans-serif">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="4"></td></tr></tbody></table></div></div></div>';
-  document.getElementById('sheet-all').innerHTML=h
-}
-
-/* SHEET: HISTORY */
-function renderSheetHistory(){
-  var fl=getFL().slice().sort(function(a,b){return b.id-a.id}),td=today();
-  if(!fl.length){document.getElementById('sheet-history').innerHTML='<div class="empty">No history.</div>';return}
-  var h='<div class="lcards">';
-  fl.forEach(function(l){
-    h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Released</div><div class="lc-v">'+fD(l.dateReleased)+'</div></div><div><div class="lc-l">Due</div><div class="lc-v">'+fD(l.dueDate)+'</div></div><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div></div>'});
-  h+='</div>';
-  h+='<div class="tdesk"><div class="tw"><div class="tw-hd"><h3>Full Transaction History</h3></div><div class="tw-bd"><table><thead><tr><th>#</th><th>Name</th><th>Financer</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th>Cycle</th></tr></thead><tbody>';
-  fl.forEach(function(l,i){var rc=l.remarks==='Paid'?'row-paid':(l.dueDate===td&&l.remarks==='Pending'?'row-due':'');
-    h+='<tr class="'+rc+'"><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td>'+l.cycles+'</td></tr>'});
-  h+='</tbody></table></div></div></div>';
-  document.getElementById('sheet-history').innerHTML=h
-}
-
-function renderSheets(){renderSheetWeekly();renderSheetFinancer();renderSheetAll();renderSheetHistory()}
-
 function renderAll(){
-  renderDash();renderSheets();
+  renderDash();renderWorkbook();
   var td2=today(),fl=getFL();
   document.getElementById('dueCount').textContent=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Pending'}).length;
   document.getElementById('paidCount').textContent=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Paid'}).length;
@@ -643,7 +684,7 @@ function renderAll(){
 
 document.getElementById('newDate').addEventListener('change',updDueNote);
 document.getElementById('renewDate').addEventListener('change',updRenewNote);
-genDummy();renderAll();initSwipe();updateSheetTabs()
+genDummy();renderAll()
 </script>
 </body>
 </html>
