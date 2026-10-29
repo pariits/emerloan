@@ -5,303 +5,384 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1e293b">
+<meta name="theme-color" content="#0d9488">
 <title>Due Date Checker</title>
 <style>
-:root{--primary:#2563eb;--primary-dark:#1d4ed8;--danger:#dc2626;--success:#16a34a;--warning:#f59e0b;--purple:#7c3aed;--bg:#f1f5f9;--card:#fff;--border:#e2e8f0;--text:#1e293b;--text2:#64748b;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08)}
+:root{--pri:#0d9488;--red:#dc2626;--grn:#16a34a;--amb:#f59e0b;--pur:#7c3aed;--blue:#2563eb;--bg:#f1f5f9;--card:#fff;--bdr:#e2e8f0;--txt:#1e293b;--txt2:#64748b;--r:12px;--sh:0 1px 3px rgba(0,0,0,.08)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--text);padding:16px;overflow-x:hidden}
+body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--txt);padding-bottom:72px;overflow-x:hidden}
 input,select,button{font-family:inherit}
 
-.login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px}
-.login-overlay.hidden{display:none}
-.login-box{background:var(--card);border-radius:20px;padding:40px 28px;width:100%;max-width:360px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.12)}
-.login-box .logo{font-size:56px;margin-bottom:12px}
-.login-box h1{font-size:22px;font-weight:800;margin-bottom:4px}
-.login-box .sub{font-size:13px;color:var(--text2);margin-bottom:28px}
-.login-box input{width:100%;padding:14px 18px;border:2px solid var(--border);border-radius:var(--radius);font-size:16px;background:#f8fafc;margin-bottom:14px;text-align:center;letter-spacing:2px}
-.login-box input:focus{outline:none;border-color:var(--primary)}
-.login-box button{width:100%;padding:14px;border:none;border-radius:var(--radius);background:var(--primary);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
-.login-box button:active{transform:scale(.97)}
-.login-error{color:var(--danger);font-size:13px;font-weight:600;margin-bottom:12px;display:none}
-.login-box .lock-msg{color:var(--danger);font-size:13px;font-weight:600;margin-bottom:12px;display:none}
-.login-box .hint{font-size:11px;color:#94a3b8;margin-top:16px}
+/* LOGIN */
+.login-wrap{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.login-box{background:var(--card);border-radius:16px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 4px 24px rgba(0,0,0,.1);text-align:center}
+.login-box h1{font-size:28px;margin-bottom:4px}
+.login-box .ls{color:var(--txt2);font-size:12px;margin-bottom:20px}
+.login-box input{width:100%;padding:12px 14px;border:1px solid var(--bdr);border-radius:8px;font-size:15px;margin-bottom:12px}
+.login-box input:focus{outline:none;border-color:var(--pri)}
+.login-box button{width:100%;padding:12px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+.login-box button:active{transform:scale(.98)}
+.login-box button:disabled{background:#94a3b8;cursor:not-allowed}
+.login-err{color:var(--red);font-size:12px;margin-bottom:8px;min-height:18px}
 
-.app{display:none}.app.visible{display:block}
-.app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.app-header h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px}
-.app-header .logout{background:none;border:none;font-size:20px;cursor:pointer;padding:8px}
+.app{display:none;padding:16px 14px 20px}
 
-.conn-bar{border-radius:var(--radius);padding:12px 16px;margin-bottom:12px;font-size:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.conn-bar.setup{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
-.conn-bar.ok{background:#dcfce7;border:1px solid #86efac;color:#166534}
-.conn-bar input{flex:1;min-width:180px;padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-family:monospace}
-.conn-bar button{padding:6px 16px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:#fff}
-.conn-bar.setup button{background:#f59e0b}
-.conn-bar.ok button{background:var(--success)}
-.conn-bar.ok button.disc{background:var(--danger)}
-.conn-bar .sync{font-size:11px;color:var(--text2)}
-.conn-bar.err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;display:none}
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.hdr h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:6px}
+.hdr .refresh-btn{background:none;border:1px solid var(--bdr);border-radius:8px;padding:6px 10px;font-size:14px;cursor:pointer;color:var(--txt2)}
+.hdr .refresh-btn:active{background:#f1f5f9;transform:scale(.95)}
+.sub{color:var(--txt2);font-size:11px;margin-bottom:14px}
 
-.toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.toolbar select{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:var(--card);flex:1;min-width:120px}
+/* DATE PICKER */
+.dp{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.dp input[type="date"]{padding:10px 12px;border:1px solid var(--bdr);border-radius:var(--r);font-size:14px;flex:1;min-width:130px;background:var(--card)}
+.dp input:focus{outline:none;border-color:var(--pri)}
+.dpb{padding:10px 14px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--card);font-size:13px;font-weight:600;cursor:pointer;color:var(--txt);transition:all .12s}
+.dpb:active{background:#f1f5f9;transform:scale(.96)}
+.dpb.ta{background:var(--pri);color:#fff;border-color:var(--pri)}
 
-.dp-row{display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.dp-row input[type="date"]{padding:10px 12px;border:2px solid var(--border);border-radius:var(--radius);font-size:14px;flex:1;min-width:140px}
-.dp-row input:focus{outline:none;border-color:var(--primary)}
-.dp-btn{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);font-size:13px;font-weight:600;cursor:pointer;color:var(--text)}
-.dp-btn:active{background:#f1f5f9}
-.dp-btn.today-active{background:var(--primary);color:#fff;border-color:var(--primary)}
+/* FINANCER PILLS */
+.fin-pills{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+.fin-pills::-webkit-scrollbar{display:none}
+.fp{padding:8px 16px;border:1px solid var(--bdr);border-radius:20px;background:var(--card);font-size:12px;font-weight:600;cursor:pointer;color:var(--txt2);white-space:nowrap;transition:all .12s;flex-shrink:0}
+.fp:active{transform:scale(.95)}
+.fp.active{color:#fff;border-color:transparent}
+.fp.all.active{background:var(--pri)}
+.fp.axl.active{background:var(--red)}
+.fp.fritz.active{background:var(--blue)}
+.fp.axlthea.active{background:var(--pur)}
 
-.banner{border-radius:var(--radius);padding:16px;margin-bottom:12px;text-align:center}
-.banner.due{background:#fef2f2;border:1px solid #fecaca}
-.b-label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--text2)}
-.b-date{font-size:18px;font-weight:800;color:var(--danger);font-family:'SF Mono','Cascadia Code',monospace}
-.b-count{font-size:12px;font-weight:600;margin-top:2px;color:var(--text2)}
+/* BANNER */
+.banner{border-radius:var(--r);padding:14px;margin-bottom:12px;text-align:center}
+.banner.due-b{background:#fef2f2;border:1px solid #fecaca}
+.banner.paid-b{background:#f0fdf4;border:1px solid #bbf7d0}
+.banner.sum-b{background:#eff6ff;border:1px solid #bfdbfe}
+.bl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--txt2)}
+.bd{font-size:18px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
+.bc2{font-size:12px;font-weight:600;margin-top:4px;color:var(--txt2)}
 
-.sum-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
-.sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow)}
-.sum-card .sc-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-weight:600}
-.sum-card .sc-val{font-size:20px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
-.sc-val.red{color:var(--danger)}.sc-val.green{color:var(--success)}
+/* SUMMARY CARDS */
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.sc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 8px;text-align:center;box-shadow:var(--sh)}
+.sc .sl{color:var(--txt2);font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;font-weight:600}
+.sc .sv{font-size:16px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
+.sv.red{color:var(--red)}.sv.green{color:var(--grn)}.sv.amber{color:var(--amb)}.sv.blue{color:var(--blue)}
 
-.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius);padding:14px;margin-bottom:16px;font-size:12px;color:#1e40af;line-height:1.7}
-.info-box strong{font-weight:700}
-
-.tw{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{text-align:left;color:var(--text2);font-weight:600;padding:10px;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;white-space:nowrap}
-td{padding:8px 10px;border-bottom:1px solid #f1f5f9;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px;white-space:nowrap}
-tr.totals-row td{background:#f1f5f9;font-weight:700;border-top:2px solid #cbd5e1}
-.right{text-align:right}
-.section-header{padding:10px 14px;text-align:center;font-size:13px;font-weight:700}
-.section-header.pending{background:#fef3c7;color:#92400e}
-.section-header.paid{background:#dcfce7;color:#166534}
-
-.badge{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
-.b-paid{background:#dcfce7;color:#166534}
-.b-pending{background:#fef3c7;color:#92400e}
-.b-renewed{background:#dbeafe;color:#1e40af}
-.b-remitted{background:#f3e8ff;color:#6b21a8}
-.b-axl{background:#fef2f2;color:#dc2626}
-.b-fritz{background:#eff6ff;color:#2563eb}
-.b-axlthea{background:#f5f3ff;color:#7c3aed}
-
-/* Mobile cards */
-.loan-cards{display:none}
-.loan-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:8px;box-shadow:var(--shadow)}
-.loan-card.pending-card{border-left:4px solid var(--warning)}
-.loan-card.paid-card{border-left:4px solid var(--success)}
+/* LOAN CARDS */
+.lcard{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--sh);transition:all .12s}
+.lcard.due-c{border-left:4px solid var(--amb)}
+.lcard.paid-c{border-left:4px solid var(--grn)}
 .lc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.lc-name{font-size:15px;font-weight:700}
-.lc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px}
-.lc-l{color:var(--text2);font-size:11px}
-.lc-v{font-weight:600;font-family:'SF Mono','Cascadia Code',monospace}
-.lc-total{background:#f1f5f9;border-radius:var(--radius);padding:12px;text-align:center;margin-top:8px;font-size:13px;font-weight:700}
+.lc-nm{font-size:15px;font-weight:700}
+.lc-gr{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px}
+.lc-l{color:var(--txt2);font-size:10px}
+.lc-v{font-weight:600;font-family:'SF Mono','Cascadia Code',monospace;font-size:13px}
 
-.empty{text-align:center;padding:40px 20px;color:var(--text2);font-size:14px}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-20px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:var(--radius);font-size:13px;font-weight:700;z-index:200;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;text-align:center}
+/* TOTALS */
+.tot-bar{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;margin-top:8px;margin-bottom:8px;box-shadow:var(--sh)}
+.tot-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px}
+.tot-row.main{border-top:2px solid var(--bdr);padding-top:8px;margin-top:4px}
+.tot-label{color:var(--txt2);font-weight:600}
+.tot-val{font-weight:800;font-family:'SF Mono','Cascadia Code',monospace;font-size:14px}
+
+/* BADGES */
+.badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
+.b-axl{background:#fef2f2;color:var(--red)}
+.b-fritz{background:#eff6ff;color:var(--blue)}
+.b-axlthea{background:#f5f3ff;color:var(--pur)}
+.b-pending{background:#fef3c7;color:#92400e}
+.b-paid{background:#dcfce7;color:#166534}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bdr);display:flex;z-index:50;padding:4px 0;padding-bottom:max(4px,env(safe-area-inset-bottom))}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 4px;cursor:pointer;color:var(--txt2);font-size:10px;font-weight:600;border:none;background:none;gap:2px;transition:color .15s}
+.ni.active{color:var(--pri)}
+.ni .ic{font-size:20px}
+
+/* SECTIONS */
+.sec{display:none}.sec.active{display:block}
+
+/* INFO */
+.info{background:#f0fdfa;border:1px solid #99f6e4;border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:11px;color:#115e59;line-height:1.6}
+
+.empty{text-align:center;padding:30px 16px;color:var(--txt2);font-size:13px}
+.loading{text-align:center;padding:40px;color:var(--txt2);font-size:14px}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--txt);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:200;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.error{background:var(--danger)}.toast.info{background:var(--primary)}
-.loading{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.8);z-index:90;justify-content:center;align-items:center;font-size:14px;color:var(--text2)}
-.loading.show{display:flex}
-.spinner{width:24px;height:24px;border:3px solid #e2e8f0;border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite;margin-right:10px}
-@keyframes spin{to{transform:rotate(360deg)}}
+.toast.success{background:var(--grn)}.toast.error{background:var(--red)}.toast.info{background:var(--pri)}
+
+/* FINANCER BREAKDOWN */
+.fb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.fbc{background:var(--card);border-radius:var(--r);padding:10px;box-shadow:var(--sh);text-align:center}
+.fbc.axl{border-top:3px solid var(--red)}
+.fbc.fritz{border-top:3px solid var(--blue)}
+.fbc.axlthea{border-top:3px solid var(--pur)}
+.fbc .fbn{font-size:11px;font-weight:700;margin-bottom:4px}
+.fbc .fbv{font-size:14px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace;color:var(--red)}
+.fbc .fbc2{font-size:10px;color:var(--txt2);margin-top:2px}
 
 @media(max-width:640px){
-  .loan-cards{display:block}
-  .table-desktop{display:none}
-  .sum-grid{grid-template-columns:1fr 1fr}
-  body{max-width:100%}
+  .sg{grid-template-columns:repeat(2,1fr)}
+  .fb{grid-template-columns:1fr}
 }
 @media(min-width:641px){
-  .loan-cards{display:none}
-  .table-desktop{display:block}
-  body{max-width:800px;margin:0 auto}
+  body{max-width:600px;margin:0 auto}
 }
 </style>
 </head>
 <body>
 
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-box">
-    <div class="logo">📅</div>
-    <h1>Due Date Checker</h1>
-    <p class="sub">Read-only view for handlers</p>
-    <div class="login-error" id="loginError"></div>
-    <div class="lock-msg" id="lockMsg"></div>
-    <input type="password" id="loginPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')attemptLogin()">
-    <button onclick="attemptLogin()">Unlock</button>
-    <p class="hint">🔒 Authorized users only</p>
-  </div>
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+<div class="login-box">
+  <h1>📅 Due Date</h1>
+  <p class="ls">Emergency Loan — Due Date Checker</p>
+  <div class="login-err" id="loginErr"></div>
+  <input type="password" id="loginPw" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+  <button onclick="doLogin()" id="loginBtn">🔓 Unlock</button>
+</div>
 </div>
 
-<div class="app" id="app">
+<!-- MAIN APP -->
+<div class="app" id="mainApp">
 <div class="toast" id="toast"></div>
-<div class="loading" id="loading"><div><span class="spinner"></span>Loading...</div></div>
 
-<div class="app-header">
-  <h1>📅 Due Checker</h1>
-  <button class="logout" onclick="logout()">🔒</button>
+<div class="hdr">
+  <h1>📅 Due Date</h1>
+  <button class="refresh-btn" onclick="loadData()" title="Refresh">🔄</button>
+</div>
+<p class="sub">Read-only · UTC+8 · Synced with Google Sheets</p>
+
+<div class="dp">
+  <input type="date" id="datePicker" onchange="renderAll()">
+  <button class="dpb" onclick="setToday()" id="todayBtn">Today</button>
+  <button class="dpb" onclick="shift(-1)">◀</button>
+  <button class="dpb" onclick="shift(1)">▶</button>
 </div>
 
-<div class="conn-bar setup" id="setupBar">
-  ⚙️ <strong>Setup:</strong>
-  <input type="text" id="urlInput" placeholder="Paste Google Apps Script URL">
-  <button onclick="saveUrl()">Connect</button>
+<div class="fin-pills">
+  <button class="fp all active" onclick="setFin('All',this)">👤 All</button>
+  <button class="fp axl" onclick="setFin('Axl',this)">🔴 Axl</button>
+  <button class="fp fritz" onclick="setFin('Fritz',this)">🔵 Fritz</button>
+  <button class="fp axlthea" onclick="setFin('Axlthea',this)">🟣 Axlthea</button>
 </div>
-<div class="conn-bar ok" id="okBar" style="display:none">
-  ✅ <strong>Connected</strong> <span class="sync" id="syncStatus"></span>
-  <div style="display:flex;gap:4px">
-    <button onclick="loadLoans()">🔄</button>
-    <button class="disc" onclick="resetUrl()">✕</button>
+
+<!-- DUE TAB -->
+<div class="sec active" id="sec-due">
+  <div class="banner due-b">
+    <div class="bl">Collection Date (UTC+8)</div>
+    <div class="bd" id="dueDateDisp" style="color:var(--red)"></div>
+    <div class="bc2" id="dueCountDisp"></div>
   </div>
-</div>
-<div class="conn-bar err" id="errBar">⚠️ <span id="errMsg"></span></div>
-
-<div class="toolbar">
-  <select id="financerFilter" onchange="render()">
-    <option value="All">👤 All Financers</option>
-    <option value="Axl">Axl</option>
-    <option value="Fritz">Fritz</option>
-    <option value="Axlthea">Axlthea</option>
-  </select>
+  <div class="sg" id="dueSummary"></div>
+  <div class="fb" id="dueFinBreak"></div>
+  <div id="dueContent"></div>
 </div>
 
-<div class="dp-row">
-  <input type="date" id="datePicker" onchange="render()">
-  <button class="dp-btn" onclick="setToday()" id="todayBtn">Today</button>
-  <button class="dp-btn" onclick="shift(-1)">◀</button>
-  <button class="dp-btn" onclick="shift(1)">▶</button>
+<!-- PAID TAB -->
+<div class="sec" id="sec-paid">
+  <div class="banner paid-b">
+    <div class="bl">Paid Loans Due On</div>
+    <div class="bd" id="paidDateDisp" style="color:var(--grn)"></div>
+    <div class="bc2" id="paidCountDisp"></div>
+  </div>
+  <div class="sg" id="paidSummary"></div>
+  <div id="paidContent"></div>
 </div>
 
-<div class="banner due">
-  <div class="b-label">Due Date (UTC+8)</div>
-  <div class="b-date" id="bannerDate"></div>
-  <div class="b-count" id="bannerCount"></div>
+<!-- OVERVIEW TAB -->
+<div class="sec" id="sec-overview">
+  <div class="banner sum-b">
+    <div class="bl">Week Overview</div>
+    <div class="bd" id="ovDateDisp" style="color:var(--blue)"></div>
+    <div class="bc2" id="ovCountDisp"></div>
+  </div>
+  <div class="info"><strong>📌 This Week's Summary:</strong> Shows all loans due within 7 days from the selected date, grouped by day.</div>
+  <div id="overviewContent"></div>
 </div>
 
-<div class="sum-grid" id="sumCards"></div>
-
-<div class="info-box">
-  <strong>📌 Read-only.</strong> Use the main EmerLoan system to make changes. This page auto-refreshes every 30 seconds.
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="ni active" data-sec="due" onclick="switchSec('due')"><span class="ic">📅</span>Due</button>
+  <button class="ni" data-sec="paid" onclick="switchSec('paid')"><span class="ic">💰</span>Paid</button>
+  <button class="ni" data-sec="overview" onclick="switchSec('overview')"><span class="ic">📊</span>Week View</button>
 </div>
-
-<div id="content"></div>
 
 </div>
 
 <script>
-var PH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be',MA=5,LM=5;
-var SK='duedate_s',AK='duedate_a',LK='duedate_l',SD=8*3600000,UO=8;
-var WEB='',loans=[],timer=null;
+var WEB_APP_URL='PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+var PW_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
+var MAX_ATTEMPTS=5,LOCKOUT_MIN=5,UO=8;
+var loans=[],curFin='All';
 
-async function hash(s){var e=new TextEncoder().encode(s);var b=await crypto.subtle.digest('SHA-256',e);return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
-function checkSess(){var s=localStorage.getItem(SK);if(s&&Date.now()-parseInt(s)<SD){unlock();return}document.getElementById('loginOverlay').classList.remove('hidden')}
-async function attemptLogin(){
-  var lu=localStorage.getItem(LK);if(lu&&Date.now()<parseInt(lu)){document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='🔒 Locked. Try later.';return}
-  var h=await hash(document.getElementById('loginPassword').value);
-  if(h===PH){localStorage.setItem(SK,Date.now().toString());localStorage.removeItem(AK);localStorage.removeItem(LK);unlock()}
-  else{var a=parseInt(localStorage.getItem(AK)||'0')+1;localStorage.setItem(AK,a.toString());if(a>=MA){localStorage.setItem(LK,(Date.now()+LM*60000).toString());localStorage.removeItem(AK);document.getElementById('lockMsg').style.display='block';document.getElementById('lockMsg').textContent='🔒 Locked for '+LM+'m.'}else{document.getElementById('loginError').style.display='block';document.getElementById('loginError').textContent='❌ Wrong. '+(MA-a)+' left.'}document.getElementById('loginPassword').value=''}
+/* LOGIN */
+async function hashPw(pw){var enc=new TextEncoder().encode(pw);var buf=await crypto.subtle.digest('SHA-256',enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
+
+function doLogin(){
+  var lo=JSON.parse(localStorage.getItem('emerloan_lockout')||'{}');
+  if(lo.until&&Date.now()<lo.until){var m=Math.ceil((lo.until-Date.now())/60000);document.getElementById('loginErr').textContent='🔒 Locked. Try again in '+m+' min.';return}
+  var pw=document.getElementById('loginPw').value;if(!pw){document.getElementById('loginErr').textContent='Enter password';return}
+  hashPw(pw).then(function(h){
+    if(h===PW_HASH){localStorage.removeItem('emerloan_lockout');document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';loadData()}
+    else{var att=(lo.attempts||0)+1;if(att>=MAX_ATTEMPTS){localStorage.setItem('emerloan_lockout',JSON.stringify({attempts:att,until:Date.now()+LOCKOUT_MIN*60000}));document.getElementById('loginErr').textContent='🔒 Locked for '+LOCKOUT_MIN+' minutes.';document.getElementById('loginBtn').disabled=true;setTimeout(function(){document.getElementById('loginBtn').disabled=false;document.getElementById('loginErr').textContent=''},LOCKOUT_MIN*60000)}else{localStorage.setItem('emerloan_lockout',JSON.stringify({attempts:att}));document.getElementById('loginErr').textContent='❌ Wrong password ('+att+'/'+MAX_ATTEMPTS+')'}}
+  })
 }
-function unlock(){document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('app').classList.add('visible');init()}
-function logout(){localStorage.removeItem(SK);document.getElementById('app').classList.remove('visible');document.getElementById('loginOverlay').classList.remove('hidden');document.getElementById('loginPassword').value='';document.getElementById('loginError').style.display='none';document.getElementById('lockMsg').style.display='none'}
 
+/* UTILS */
 function now8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UO*3600000))}
 function today(){var d=now8();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
 function p2(n){return('0'+n).slice(-2)}
 function addD(ds,n){var p=ds.split('-');var d=new Date(+p[0],+p[1]-1,+p[2],12);d.setDate(d.getDate()+n);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
-function fixD(v){if(!v)return '';var s=String(v);if(s.indexOf('T')>-1){var d=new Date(s);var u=d.getTime()+(d.getTimezoneOffset()*60000);var l=new Date(u+UO*3600000);return l.getFullYear()+'-'+p2(l.getMonth()+1)+'-'+p2(l.getDate())}if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;try{var d2=new Date(s);if(!isNaN(d2)){var u2=d2.getTime()+(d2.getTimezoneOffset()*60000);var l2=new Date(u2+UO*3600000);return l2.getFullYear()+'-'+p2(l2.getMonth()+1)+'-'+p2(l2.getDate())}}catch(e){}return s}
 function fD(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+function fDY(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}
 function fDL(ds){var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'short'})}
+function fDay(ds){var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}
 function fmt(n){return '₱'+Number(n).toLocaleString('en-PH',{minimumFractionDigits:0})}
 function fB(f){if(!f)return '';return '<span class="badge b-'+f.toLowerCase()+'">'+f+'</span>'}
-function aB(a){if(!a)return '—';if(a.indexOf('Renew')===0)return '<span class="badge b-renewed">'+a+'</span>';if(a==='Remitted')return '<span class="badge b-remitted">Remitted</span>';return a}
-function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'info')+' show';setTimeout(function(){e.classList.remove('show')},3000)}
-function showLoad(){document.getElementById('loading').classList.add('show')}
-function hideLoad(){document.getElementById('loading').classList.remove('show')}
+function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'info')+' show';setTimeout(function(){e.classList.remove('show')},2500)}
 
-function init(){WEB=localStorage.getItem('loanAppUrl')||'';updConn();document.getElementById('datePicker').value=today();if(WEB)loadLoans();else render()}
-function saveUrl(){var u=document.getElementById('urlInput').value.trim();if(!u||u.indexOf('script.google.com')===-1){alert('Paste valid URL');return}localStorage.setItem('loanAppUrl',u);WEB=u;document.getElementById('errBar').style.display='none';updConn();loadLoans()}
-function resetUrl(){localStorage.removeItem('loanAppUrl');WEB='';loans=[];document.getElementById('errBar').style.display='none';updConn();render();if(timer)clearInterval(timer)}
-function updConn(){document.getElementById('setupBar').style.display=WEB?'none':'flex';document.getElementById('okBar').style.display=WEB?'flex':'none'}
-
-function api(p,cb){
-  if(!WEB){cb('No URL',null);return}
-  var u=WEB+'?';var ps=[];for(var k in p)ps.push(encodeURIComponent(k)+'='+encodeURIComponent(p[k]));u+=ps.join('&');
-  var done=false;var to=setTimeout(function(){if(!done){done=true;cb('Timeout',null)}},20000);
-  fetch(u,{method:'GET',redirect:'follow'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(function(t){
-    if(done)return;done=true;clearTimeout(to);
-    try{var d=JSON.parse(t);if(d.loans)d.loans.forEach(function(l){l.dateReleased=fixD(l.dateReleased);l.dueDate=fixD(l.dueDate);l.amount=+l.amount||0;l.rate=+l.rate||0;l.interest=+l.interest||0;l.total=+l.total||0;l.cycles=+l.cycles||1;l.action=l.action||'';l.financer=l.financer||''});cb(null,d)}
-    catch(e){cb('Parse error',null)}
-  }).catch(function(e){if(done)return;done=true;clearTimeout(to);cb(e.message,null)})
+/* DATA */
+function loadData(){
+  toast('⏳ Loading...','info');
+  fetch(WEB_APP_URL+'?action=get').then(function(r){return r.json()}).then(function(d){
+    if(d.status==='ok'){
+      loans=d.data.map(function(r){return{name:r.name||'',dateReleased:r.dateReleased||'',dueDate:r.dueDate||'',amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:r.remarks||'Pending',action:r.action||'',cycles:Number(r.cycles)||1,financer:r.financer||''}});
+      document.getElementById('datePicker').value=today();
+      toast('✅ Loaded '+loans.length+' loans','success');
+      renderAll()
+    }else{toast('⚠️ '+d.message,'error')}
+  }).catch(function(){toast('⚠️ Connection error','error')})
 }
 
-function loadLoans(){
-  if(!WEB)return;showLoad();document.getElementById('syncStatus').textContent='Syncing...';
-  api({action:'getAll'},function(e,d){
-    hideLoad();if(e){document.getElementById('errBar').style.display='flex';document.getElementById('errMsg').textContent=e;return}
-    document.getElementById('errBar').style.display='none';loans=d&&d.loans?d.loans:[];render();
-    document.getElementById('syncStatus').textContent=now8().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-    if(timer)clearInterval(timer);timer=setInterval(function(){if(WEB)loadLoans()},30000)
-  })
+function getFiltered(list){
+  if(curFin!=='All')return list.filter(function(l){return l.financer===curFin});
+  return list
 }
 
-function setToday(){document.getElementById('datePicker').value=today();render()}
-function shift(n){var c=document.getElementById('datePicker').value||today();document.getElementById('datePicker').value=addD(c,n);render()}
+/* NAV */
+function switchSec(s){
+  document.querySelectorAll('.sec').forEach(function(el){el.classList.remove('active')});
+  document.getElementById('sec-'+s).classList.add('active');
+  document.querySelectorAll('.ni').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-sec')===s)});
+  renderAll()
+}
+function setToday(){document.getElementById('datePicker').value=today();renderAll()}
+function shift(n){document.getElementById('datePicker').value=addD(document.getElementById('datePicker').value||today(),n);renderAll()}
+function setFin(f,el){curFin=f;document.querySelectorAll('.fp').forEach(function(b){b.classList.remove('active')});el.classList.add('active');renderAll()}
 
-function render(){
+/* RENDER ALL */
+function renderAll(){
   var sd=document.getElementById('datePicker').value||today();
-  var ff=document.getElementById('financerFilter').value;
-  document.getElementById('todayBtn').className='dp-btn'+(sd===today()?' today-active':'');
-  document.getElementById('bannerDate').textContent=fDL(sd);
+  document.getElementById('todayBtn').className='dpb'+(sd===today()?' ta':'');
+  renderDue(sd);renderPaid(sd);renderOverview(sd)
+}
 
-  var fl=loans;if(ff!=='All')fl=fl.filter(function(l){return l.financer===ff});
-  var due=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});
-  var paid=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});
-  document.getElementById('bannerCount').textContent=due.length+' pending · '+paid.length+' paid';
+/* DUE TAB */
+function renderDue(sd){
+  document.getElementById('dueDateDisp').textContent=fDL(sd);
+  var all=loans.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});
+  var due=getFiltered(all);
+  document.getElementById('dueCountDisp').textContent=due.length+' pending'+(curFin!=='All'?' ('+curFin+')':'');
 
-  var da=0,di=0,dt=0,pa=0,pi=0,pt=0;
-  due.forEach(function(l){da+=l.amount;di+=l.interest;dt+=l.total});
-  paid.forEach(function(l){pa+=l.amount;pi+=l.interest;pt+=l.total});
-  document.getElementById('sumCards').innerHTML=
-    '<div class="sum-card"><div class="sc-label">To Collect</div><div class="sc-val red">'+fmt(dt)+'</div></div>'+
-    '<div class="sum-card"><div class="sc-label">Pending</div><div class="sc-val red">'+due.length+'</div></div>'+
-    '<div class="sum-card"><div class="sc-label">Total Paid</div><div class="sc-val green">'+fmt(pt)+'</div></div>'+
-    '<div class="sum-card"><div class="sc-label">Paid</div><div class="sc-val green">'+paid.length+'</div></div>';
+  /* Summary cards */
+  var ta=0,ti=0,tt=0;due.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total});
+  document.getElementById('dueSummary').innerHTML=
+    '<div class="sc"><div class="sl">Borrowers</div><div class="sv amber">'+due.length+'</div></div>'+
+    '<div class="sc"><div class="sl">Amount</div><div class="sv blue">'+fmt(ta)+'</div></div>'+
+    '<div class="sc"><div class="sl">To Collect</div><div class="sv red">'+fmt(tt)+'</div></div>';
+
+  /* Financer breakdown */
+  if(curFin==='All'&&all.length>0){
+    var fh='<div class="fb">';
+    ['Axl','Fritz','Axlthea'].forEach(function(fn){
+      var fl=all.filter(function(l){return l.financer===fn}),ft=0;fl.forEach(function(l){ft+=l.total});
+      fh+='<div class="fbc '+fn.toLowerCase()+'"><div class="fbn">'+fn+'</div><div class="fbv">'+fmt(ft)+'</div><div class="fbc2">'+fl.length+' loan'+(fl.length!==1?'s':'')+'</div></div>'
+    });
+    fh+='</div>';document.getElementById('dueFinBreak').innerHTML=fh
+  }else{document.getElementById('dueFinBreak').innerHTML=''}
+
+  if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due!</div>';return}
 
   var h='';
-  /* PENDING */
-  if(due.length){
-    var ta=0,ti=0,tt=0;
-    /* Mobile */
-    h+='<div class="loan-cards">';
-    due.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-      h+='<div class="loan-card pending-card"><div class="lc-top"><div><span class="lc-name">'+l.name+'</span> '+fB(l.financer)+'</div><span class="badge b-pending">Pending</span></div><div class="lc-grid"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--danger)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div></div>'});
-    h+='<div class="lc-total" style="color:var(--danger)">⏳ Collect: '+fmt(tt)+'</div></div>';
-    /* Desktop */
-    ta=0;ti=0;tt=0;
-    h+='<div class="table-desktop"><div class="tw"><div class="section-header pending">⏳ PENDING — '+fD(sd)+'</div><table><thead><tr><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Cycle</th></tr></thead><tbody>';
-    due.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;h+='<tr><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+l.cycles+'</td></tr>'});
-    h+='<tr class="totals-row"><td></td><td colspan="2" style="text-align:right;font-family:system-ui,sans-serif">TOTAL</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td></td></tr></tbody></table></div></div>'
-  }
-  /* PAID */
-  if(paid.length){
-    var pa2=0,pi2=0,pt2=0;
-    h+='<div class="loan-cards" style="margin-top:16px">';
-    paid.forEach(function(l){pa2+=l.amount;pi2+=l.interest;pt2+=l.total;
-      h+='<div class="loan-card paid-card"><div class="lc-top"><div><span class="lc-name">'+l.name+'</span> '+fB(l.financer)+'</div><span class="badge b-paid">Paid</span></div><div class="lc-grid"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total Paid</div><div class="lc-v" style="color:var(--success)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div></div>'});
-    h+='<div class="lc-total" style="color:var(--success)">✅ Paid: '+fmt(pt2)+'</div></div>';
-    pa2=0;pi2=0;pt2=0;
-    h+='<div class="table-desktop"><div class="tw"><div class="section-header paid">✅ PAID — '+fD(sd)+'</div><table><thead><tr><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Action</th><th>Cycle</th></tr></thead><tbody>';
-    paid.forEach(function(l,i){pa2+=l.amount;pi2+=l.interest;pt2+=l.total;h+='<tr><td>'+(i+1)+'</td><td>'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td>'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+aB(l.action)+'</td><td>'+l.cycles+'</td></tr>'});
-    h+='<tr class="totals-row"><td></td><td colspan="2" style="text-align:right;font-family:system-ui,sans-serif">TOTAL</td><td class="right">'+fmt(pa2)+'</td><td></td><td class="right">'+fmt(pi2)+'</td><td class="right">'+fmt(pt2)+'</td><td colspan="2"></td></tr></tbody></table></div></div>'
-  }
-  if(!due.length&&!paid.length)h='<div class="empty">🎉 No loans due on this date!</div>';
-  document.getElementById('content').innerHTML=h
+  due.forEach(function(l){
+    h+='<div class="lcard due-c"><div class="lc-top"><span class="lc-nm">'+l.name+'</span>'+fB(l.financer)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total Due</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div></div>'
+  });
+
+  h+='<div class="tot-bar"><div class="tot-row"><span class="tot-label">Total Amount</span><span class="tot-val" style="color:var(--blue)">'+fmt(ta)+'</span></div><div class="tot-row"><span class="tot-label">Total Interest</span><span class="tot-val" style="color:var(--grn)">'+fmt(ti)+'</span></div><div class="tot-row main"><span class="tot-label">Grand Total</span><span class="tot-val" style="color:var(--red)">'+fmt(tt)+'</span></div></div>';
+  document.getElementById('dueContent').innerHTML=h
 }
 
-checkSess()
+/* PAID TAB */
+function renderPaid(sd){
+  document.getElementById('paidDateDisp').textContent=fDL(sd);
+  var all=loans.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});
+  var paid=getFiltered(all);
+  document.getElementById('paidCountDisp').textContent=paid.length+' paid'+(curFin!=='All'?' ('+curFin+')':'');
+
+  var ta=0,ti=0,tt=0;paid.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total});
+  document.getElementById('paidSummary').innerHTML=
+    '<div class="sc"><div class="sl">Paid</div><div class="sv green">'+paid.length+'</div></div>'+
+    '<div class="sc"><div class="sl">Amount</div><div class="sv blue">'+fmt(ta)+'</div></div>'+
+    '<div class="sc"><div class="sl">Collected</div><div class="sv green">'+fmt(tt)+'</div></div>';
+
+  if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}
+
+  var h='';
+  paid.forEach(function(l){
+    var actTxt=l.action?('<span class="badge '+(l.action==='Renewed'?'b-paid':'b-pending')+'">'+l.action+'</span>'):'—';
+    h+='<div class="lcard paid-c"><div class="lc-top"><span class="lc-nm">'+l.name+'</span>'+fB(l.financer)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total Paid</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Status</div><div class="lc-v">'+actTxt+'</div></div></div></div>'
+  });
+
+  h+='<div class="tot-bar"><div class="tot-row"><span class="tot-label">Total Amount</span><span class="tot-val" style="color:var(--blue)">'+fmt(ta)+'</span></div><div class="tot-row"><span class="tot-label">Total Interest</span><span class="tot-val" style="color:var(--grn)">'+fmt(ti)+'</span></div><div class="tot-row main"><span class="tot-label">Total Collected</span><span class="tot-val" style="color:var(--grn)">'+fmt(tt)+'</span></div></div>';
+  document.getElementById('paidContent').innerHTML=h
+}
+
+/* OVERVIEW TAB — 7-day lookahead */
+function renderOverview(sd){
+  document.getElementById('ovDateDisp').textContent=fD(sd)+' – '+fD(addD(sd,6));
+
+  var days=[];
+  for(var i=0;i<7;i++){
+    var d=addD(sd,i);
+    var pending=getFiltered(loans.filter(function(l){return l.dueDate===d&&l.remarks==='Pending'}));
+    var paid=getFiltered(loans.filter(function(l){return l.dueDate===d&&l.remarks==='Paid'}));
+    if(pending.length>0||paid.length>0)days.push({date:d,pending:pending,paid:paid})
+  }
+
+  var totalPending=0,totalPaid=0;
+  days.forEach(function(dy){dy.pending.forEach(function(l){totalPending+=l.total});dy.paid.forEach(function(l){totalPaid+=l.total})});
+  document.getElementById('ovCountDisp').textContent='Pending: '+fmt(totalPending)+' · Paid: '+fmt(totalPaid);
+
+  if(!days.length){document.getElementById('overviewContent').innerHTML='<div class="empty">🎉 No loans due this week!</div>';return}
+
+  var h='';
+  days.forEach(function(dy){
+    var isToday=dy.date===today();
+    var pt=0,pdt=0;dy.pending.forEach(function(l){pt+=l.total});dy.paid.forEach(function(l){pdt+=l.total});
+
+    h+='<div style="background:'+(isToday?'#fefce8':'var(--card)')+';border:1px solid '+(isToday?'#fde68a':'var(--bdr)')+';border-radius:var(--r);padding:12px;margin-bottom:10px;box-shadow:var(--sh)">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:13px;font-weight:700">'+(isToday?'⭐ ':'')+''+fDay(dy.date)+'</div><div style="font-size:11px;color:var(--txt2)">'+dy.pending.length+' pending · '+dy.paid.length+' paid</div></div>';
+
+    if(dy.pending.length>0){
+      dy.pending.forEach(function(l){
+        h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(245,158,11,.08);border-radius:6px;margin-bottom:4px;font-size:12px"><div style="font-weight:600">'+l.name+' '+fB(l.financer)+'</div><div style="font-weight:700;font-family:monospace;color:var(--red)">'+fmt(l.total)+'</div></div>'
+      });
+    }
+    if(dy.paid.length>0){
+      dy.paid.forEach(function(l){
+        h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(22,163,74,.08);border-radius:6px;margin-bottom:4px;font-size:12px"><div style="font-weight:600">'+l.name+' '+fB(l.financer)+'</div><div style="font-weight:700;font-family:monospace;color:var(--grn)">'+fmt(l.total)+' ✅</div></div>'
+      });
+    }
+
+    h+='<div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;padding-top:6px;border-top:1px solid var(--bdr);margin-top:4px"><span style="color:var(--txt2)">Day Total</span><span style="color:var(--red)">'+fmt(pt)+'</span></div>';
+    h+='</div>';
+  });
+
+  h+='<div class="tot-bar"><div class="tot-row"><span class="tot-label">Week Pending</span><span class="tot-val" style="color:var(--red)">'+fmt(totalPending)+'</span></div><div class="tot-row"><span class="tot-label">Week Paid</span><span class="tot-val" style="color:var(--grn)">'+fmt(totalPaid)+'</span></div><div class="tot-row main"><span class="tot-label">Week Grand Total</span><span class="tot-val" style="color:var(--blue)">'+fmt(totalPending+totalPaid)+'</span></div></div>';
+  document.getElementById('overviewContent').innerHTML=h
+}
 </script>
 </body>
 </html>
