@@ -8,37 +8,32 @@
 <meta name="theme-color" content="#1e293b">
 <title>EmerLoan — Test</title>
 <style>
-:root{--pri:#2563eb;--pri-dk:#1d4ed8;--red:#dc2626;--grn:#16a34a;--amb:#f59e0b;--pur:#7c3aed;--teal:#0d9488;--bg:#f1f5f9;--card:#fff;--bdr:#e2e8f0;--txt:#1e293b;--txt2:#64748b;--r:12px;--sh:0 1px 3px rgba(0,0,0,.08)}
+:root{--pri:#2563eb;--red:#dc2626;--grn:#16a34a;--amb:#f59e0b;--pur:#7c3aed;--teal:#0d9488;--bg:#f1f5f9;--card:#fff;--bdr:#e2e8f0;--txt:#1e293b;--txt2:#64748b;--r:12px;--sh:0 1px 3px rgba(0,0,0,.08)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--txt);padding-bottom:72px;overflow-x:hidden}
 input,select,button{font-family:inherit}
 .app{padding:16px 14px 20px}
 
-/* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
 .hdr h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:6px}
 .hdr .tag{font-size:10px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:8px;font-weight:700}
 .sub{color:var(--txt2);font-size:11px;margin-bottom:12px}
 
-/* TOOLBAR */
 .toolbar{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .toolbar select,.toolbar input[type="text"]{padding:10px 12px;border:1px solid var(--bdr);border-radius:var(--r);font-size:14px;background:var(--card);flex:1;min-width:100px}
 .toolbar select:focus,.toolbar input:focus{outline:none;border-color:var(--pri)}
 
-/* QUICK ACTIONS */
 .qa{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .qb{padding:12px 10px;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:#fff;transition:all .12s}
 .qb:active{transform:scale(.96)}
 .qb.new{background:var(--pri)}.qb.due{background:var(--teal)}.qb.paid{background:var(--pur)}.qb.dl{background:var(--grn)}
 .qb .ct{background:rgba(255,255,255,.3);padding:1px 7px;border-radius:10px;font-size:10px}
 
-/* BOTTOM NAV */
 .bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bdr);display:flex;z-index:50;padding:4px 0;padding-bottom:max(4px,env(safe-area-inset-bottom))}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 4px;cursor:pointer;color:var(--txt2);font-size:10px;font-weight:600;border:none;background:none;gap:2px;transition:color .15s}
 .ni.active{color:var(--pri)}
 .ni .ic{font-size:20px}
 
-/* SECTIONS */
 .sec{display:none}.sec.active{display:block}
 
 /* DASHBOARD */
@@ -48,7 +43,6 @@ input,select,button{font-family:inherit}
 .dc .dv{font-size:18px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
 .dv.blue{color:var(--pri)}.dv.red{color:var(--red)}.dv.green{color:var(--grn)}.dv.amber{color:var(--amb)}
 
-/* FINANCER CARDS */
 .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .fc{background:var(--card);border-radius:var(--r);padding:12px;box-shadow:var(--sh);border-left:4px solid var(--pri)}
 .fc.axl{border-left-color:var(--red)}.fc.fritz{border-left-color:var(--pri)}.fc.axlthea{border-left-color:var(--pur)}
@@ -69,25 +63,22 @@ input,select,button{font-family:inherit}
 .lc-l{color:var(--txt2);font-size:10px}
 .lc-v{font-weight:600;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px}
 .lc-act{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+.lc-tot{background:#f1f5f9;border-radius:var(--r);padding:10px;text-align:center;margin-bottom:8px;font-size:12px;font-weight:700}
 
-/* ===== EXCEL WORKBOOK STYLE ===== */
+/* WORKBOOK */
 .workbook{background:var(--card);border:1px solid #c0c0c0;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-
-/* Excel toolbar */
 .wb-toolbar{background:#f3f3f3;border-bottom:1px solid #d0d0d0;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .wb-toolbar .wb-title{font-size:12px;font-weight:700;color:#333}
 .wb-actions{display:flex;gap:4px;flex-wrap:wrap}
 .wb-btn{padding:6px 12px;border:1px solid #c0c0c0;border-radius:4px;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#333;transition:all .1s}
 .wb-btn:active{background:#e8e8e8;transform:scale(.97)}
-.wb-btn.sel-all{background:#e8f0fe;color:var(--pri);border-color:#b0c4de}
 .wb-btn.paid-all{background:#e8f5e9;color:var(--grn);border-color:#a5d6a7}
 .wb-btn.renew-all{background:#fff3e0;color:#e65100;border-color:#ffcc80}
 .wb-sel-ct{font-size:11px;color:var(--pri);font-weight:700;padding:0 6px}
 
-/* Excel sheet area */
 .wb-sheet{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:65vh;overflow-y:auto}
 
-/* Excel table */
+/* EXCEL TABLE */
 .xt{width:100%;border-collapse:collapse;font-size:11px}
 .xt th{background:#e8eaed;color:#333;font-weight:600;padding:6px 8px;border:1px solid #c0c0c0;font-size:10px;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;position:sticky;top:0;z-index:2}
 .xt td{padding:5px 8px;border:1px solid #d5d5d5;color:#222;font-family:'SF Mono','Cascadia Code',monospace;font-size:11px;white-space:nowrap;background:#fff}
@@ -95,11 +86,16 @@ input,select,button{font-family:inherit}
 .xt tr:hover td{background:#f0f4ff}
 .xt tr.xr-due td{background:#fff9c3!important;border-color:#e6d98c}
 .xt tr.xr-paid td{background:#e8f5e9!important;border-color:#a5d6a7}
-.xt tr.xr-totals td{background:#e8eaed!important;font-weight:700;border-top:2px solid #999;font-family:system-ui,sans-serif}
+.xt tr.xr-totals td{background:#e8eaed!important;font-weight:700;border-top:2px solid #999;border-bottom:none;font-family:system-ui,sans-serif}
 .xt .right{text-align:right}
 .xt .center{text-align:center}
 
-/* Row action buttons */
+/* Inline edit inputs */
+.xt .xi{border:1px solid #bbb;border-radius:3px;padding:3px 5px;font-size:11px;font-family:'SF Mono','Cascadia Code',monospace;width:80px;background:#fffde7;text-align:center}
+.xt .xi:focus{outline:none;border-color:var(--pri);background:#fff}
+.xt .xi-date{width:110px}
+.xt .xi-amt{width:70px;text-align:right}
+
 .xact{display:flex;gap:3px;align-items:center}
 .xbtn{padding:4px 8px;border:1px solid #ccc;border-radius:3px;font-size:10px;font-weight:700;cursor:pointer;transition:all .1s;white-space:nowrap}
 .xbtn:active{transform:scale(.93)}
@@ -107,13 +103,14 @@ input,select,button{font-family:inherit}
 .xbtn.xrenew{background:#fff3e0;color:#e65100;border-color:#ffcc80}
 .xbtn.xedit{background:#fff8e1;color:#f57f17;border-color:#ffe082}
 .xbtn.xdel{background:#ffebee;color:#c62828;border-color:#ef9a9a}
+.xbtn.xsave{background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7}
 .xchk{width:16px;height:16px;cursor:pointer;accent-color:var(--pri)}
 
-/* Excel sheet tabs */
+/* SHEET TABS */
 .wb-tabs-wrap{background:#e0e0e0;border-top:1px solid #c0c0c0;display:flex;align-items:stretch;overflow:hidden}
 .wb-tabs-scroll{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1}
 .wb-tabs-scroll::-webkit-scrollbar{display:none}
-.wb-tab{padding:8px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border-right:1px solid #c0c0c0;background:#e0e0e0;color:#555;transition:all .12s;flex-shrink:0;position:relative;user-select:none;-webkit-user-select:none}
+.wb-tab{padding:8px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border-right:1px solid #c0c0c0;background:#e0e0e0;color:#555;transition:all .12s;flex-shrink:0;user-select:none;-webkit-user-select:none}
 .wb-tab.active{background:#fff;color:var(--pri);font-weight:700;border-bottom:2px solid var(--pri)}
 .wb-tab:not(.active):active{background:#d0d0d0}
 .wb-tab .tab-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px}
@@ -122,12 +119,6 @@ input,select,button{font-family:inherit}
 .wb-nav{display:flex;align-items:center;border-right:1px solid #c0c0c0}
 .wb-nav button{background:none;border:none;padding:8px 10px;font-size:14px;cursor:pointer;color:#555}
 .wb-nav button:active{background:#d0d0d0}
-.wb-indicator{text-align:center;padding:4px;font-size:10px;color:var(--txt2);background:#f5f5f5;border-top:1px solid #e0e0e0}
-
-/* Swipe container for sheets */
-.wb-swipe{overflow:hidden;position:relative;touch-action:pan-y}
-.wb-track{display:flex;transition:transform .3s ease;will-change:transform}
-.wb-panel{min-width:100%;flex-shrink:0}
 
 /* BADGES */
 .badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
@@ -139,7 +130,6 @@ input,select,button{font-family:inherit}
 .b-fritz{background:#eff6ff;color:var(--pri)}
 .b-axlthea{background:#f5f3ff;color:var(--pur)}
 
-/* LEGEND */
 .legend{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;font-size:11px;color:var(--txt2)}
 .legend-i{display:flex;align-items:center;gap:4px}
 .legend-s{width:12px;height:12px;border-radius:3px;border:1px solid #ccc}
@@ -172,7 +162,6 @@ input,select,button{font-family:inherit}
 .renew-grp{display:none;margin-top:10px;padding:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px}
 .renew-grp.show{display:block}
 
-/* DATE PICKER */
 .dp{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .dp input[type="date"]{padding:9px 10px;border:1px solid var(--bdr);border-radius:8px;font-size:14px;flex:1;min-width:130px}
 .dp input:focus{outline:none;border-color:var(--pri)}
@@ -187,7 +176,6 @@ input,select,button{font-family:inherit}
 .bd{font-size:16px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
 .bc2{font-size:11px;font-weight:600;margin-top:2px;color:var(--txt2)}
 
-/* BATCH */
 .batch{display:flex;align-items:center;gap:8px;padding:8px 0;flex-wrap:wrap;border-bottom:1px solid var(--bdr);margin-bottom:6px}
 .batch label{font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;display:flex;align-items:center;gap:5px}
 .batch .bct{font-size:11px;color:var(--pri);font-weight:700}
@@ -200,8 +188,6 @@ input,select,button{font-family:inherit}
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--txt);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:200;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{background:var(--grn)}.toast.error{background:var(--red)}.toast.info{background:var(--pri)}
-
-.lc-tot{background:#f1f5f9;border-radius:var(--r);padding:10px;text-align:center;margin-bottom:8px;font-size:12px;font-weight:700}
 
 @media(max-width:640px){
   .dg{grid-template-columns:repeat(2,1fr)}
@@ -256,10 +242,7 @@ input,select,button{font-family:inherit}
       <div class="wb-title" id="wbTitle">📋 Week: —</div>
       <div class="wb-actions" id="wbActions"></div>
     </div>
-    <div class="wb-swipe" id="wbSwipe">
-      <div class="wb-track" id="wbTrack"></div>
-    </div>
-    <div class="wb-indicator" id="wbIndicator"></div>
+    <div class="wb-sheet" id="wbSheet"></div>
     <div class="wb-tabs-wrap">
       <div class="wb-nav"><button onclick="sheetNav(-1)">◀</button><button onclick="sheetNav(1)">▶</button></div>
       <div class="wb-tabs-scroll" id="wbTabs"></div>
@@ -349,7 +332,7 @@ input,select,button{font-family:inherit}
 <script>
 var CD=6,UO=8,FINS=['Axl','Fritz','Axlthea'];
 var loans=[],nextId=30,updId=null,delId=null;
-var weekKeys=[],curWk=0,touchSX=0,touchDX=0,isSw=false;
+var weekKeys=[],curWk=0,editingRow=null;
 
 function now8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UO*3600000))}
 function today(){var d=now8();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
@@ -442,57 +425,50 @@ function confirmDelete(){
   closeModal('delete');toast('🗑️ Deleted','error');renderAll()
 }
 
-/* Quick mark paid from table */
-function quickPaid(id){
-  var l=loans.find(function(x){return x.id===id});if(!l)return;
-  l.remarks='Paid';toast('✅ '+l.name+' marked Paid','success');renderAll()
-}
-/* Quick renew from table */
+/* Quick actions */
+function quickPaid(id){var l=loans.find(function(x){return x.id===id});if(!l)return;l.remarks='Paid';toast('✅ '+l.name+' Paid','success');renderAll()}
 function quickRenew(id){
   var l=loans.find(function(x){return x.id===id});if(!l||l.remarks!=='Paid')return;
-  l.action='Renewed';
-  var nr=addD(l.dueDate,1),ni=l.amount*(l.rate/100);
+  l.action='Renewed';var nr=addD(l.dueDate,1),ni=l.amount*(l.rate/100);
   loans.push({id:nextId++,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer});
   toast('🔄 '+l.name+' renewed','success');renderAll()
+}
+
+/* INLINE EDIT — toggle row between view/edit mode */
+function startEdit(id){
+  editingRow=id;renderCurrentSheet()
+}
+function cancelEdit(){editingRow=null;renderCurrentSheet()}
+function saveInlineEdit(id){
+  var l=loans.find(function(x){return x.id===id});if(!l)return;
+  var dateEl=document.getElementById('ie_date_'+id);
+  var amtEl=document.getElementById('ie_amt_'+id);
+  if(dateEl){
+    var nd=dateEl.value;
+    if(nd&&nd!==l.dateReleased){l.dateReleased=nd;l.dueDate=addD(nd,CD)}
+  }
+  if(amtEl){
+    var na=parseFloat(amtEl.value);
+    if(na&&na>0&&na!==l.amount){l.amount=na;l.interest=na*(l.rate/100);l.total=na+l.interest}
+  }
+  editingRow=null;
+  toast('✅ Updated '+l.name,'success');renderAll()
 }
 
 /* ===== WORKBOOK ===== */
 function buildWeeks(){
   var fl=getFL();var wm={};fl.forEach(function(l){var w=wk(l.dateReleased);if(!wm[w])wm[w]=[];wm[w].push(l)});
-  weekKeys=Object.keys(wm).sort().reverse();
-  return wm
+  weekKeys=Object.keys(wm).sort().reverse();return wm
 }
 
 function renderWorkbook(){
-  var wm=buildWeeks();var cw=wk(today()),td=today();
+  var wm=buildWeeks();var cw=wk(today());
   if(!weekKeys.length){
-    document.getElementById('wbTrack').innerHTML='<div class="wb-panel"><div class="empty">No loans yet. Tap ＋ New Loan.</div></div>';
-    document.getElementById('wbTabs').innerHTML='';document.getElementById('wbIndicator').innerHTML='';
+    document.getElementById('wbSheet').innerHTML='<div class="empty">No loans yet. Tap ＋ New Loan.</div>';
+    document.getElementById('wbTabs').innerHTML='';
     document.getElementById('wbTitle').textContent='📋 No Data';document.getElementById('wbActions').innerHTML='';return
   }
-  /* Find current week index */
-  var cwIdx=weekKeys.indexOf(cw);if(cwIdx===-1)cwIdx=0;
   if(curWk>=weekKeys.length)curWk=0;
-
-  /* Build panels */
-  var panels='';
-  weekKeys.forEach(function(w,wi){
-    var wl=wm[w],ta=0,ti=0,tt=0;
-    panels+='<div class="wb-panel" data-wk="'+wi+'"><div class="wb-sheet"><table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll('+wi+',this.checked)" id="sa_'+wi+'"></th><th class="center" style="width:90px">Actions</th><th>#</th><th>Name</th><th>Financer</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';
-    wl.forEach(function(l,i){
-      ta+=l.amount;ti+=l.interest;tt+=l.total;
-      var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');
-      var btns='<div class="xact">';
-      if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')">✅</button>';
-      if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')">🔄</button>';
-      btns+='<button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button>';
-      btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div>';
-      panels+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc_'+wi+'" data-id="'+l.id+'" onchange="updSelCt('+wi+')"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'
-    });
-    panels+='<tr class="xr-totals"><td colspan="7" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table></div></div>'
-  });
-  document.getElementById('wbTrack').innerHTML=panels;
-
   /* Build tabs */
   var tabs='';
   weekKeys.forEach(function(w,wi){
@@ -500,57 +476,83 @@ function renderWorkbook(){
     tabs+='<div class="wb-tab'+(wi===curWk?' active':'')+'" data-wi="'+wi+'" onclick="goWk('+wi+')"><span class="tab-dot '+(ic?'cur':'past')+'"></span>'+wkShort(w)+'</div>'
   });
   document.getElementById('wbTabs').innerHTML=tabs;
-
-  goWk(curWk,true);
-  initWbSwipe()
+  renderCurrentSheet()
 }
 
-function goWk(i,noAnim){
-  if(i<0||i>=weekKeys.length)return;
-  curWk=i;
-  var track=document.getElementById('wbTrack');
-  if(noAnim)track.style.transition='none';else track.style.transition='transform .3s ease';
-  track.style.transform='translateX('+(-curWk*100)+'%)';
-  if(noAnim)setTimeout(function(){track.style.transition='transform .3s ease'},50);
+function renderCurrentSheet(){
+  var wm=buildWeeks();var cw=wk(today()),td=today();
+  if(!weekKeys.length)return;
+  var w=weekKeys[curWk],wl=wm[w];
+  if(!wl){document.getElementById('wbSheet').innerHTML='<div class="empty">No data for this week.</div>';return}
 
-  /* Update tabs */
+  /* Toolbar */
+  document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');
+  var ah='<span class="wb-sel-ct" id="selCt">0 selected</span>';
+  ah+='<button class="wb-btn paid-all" onclick="batchWkPaid()" id="bpBtn" disabled>✅ Paid</button>';
+  ah+='<button class="wb-btn renew-all" onclick="batchWkRenew()" id="brBtn" disabled>🔄 Renew</button>';
+  document.getElementById('wbActions').innerHTML=ah;
+
+  /* Table */
+  var ta=0,ti=0,tt=0;
+  var h='<table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll(this.checked)" id="saAll"></th><th class="center" style="width:110px">Actions</th><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';
+
+  wl.forEach(function(l,i){
+    ta+=l.amount;ti+=l.interest;tt+=l.total;
+    var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');
+    var isEditing=editingRow===l.id;
+
+    /* Action buttons */
+    var btns='<div class="xact">';
+    if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')" title="Mark Paid">✅</button>';
+    if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')" title="Renew">🔄</button>';
+    if(!isEditing){
+      btns+='<button class="xbtn xedit" onclick="startEdit('+l.id+')" title="Edit">✏️</button>';
+    }else{
+      btns+='<button class="xbtn xsave" onclick="saveInlineEdit('+l.id+')" title="Save">💾</button>';
+    }
+    btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')" title="Delete">🗑️</button></div>';
+
+    if(isEditing){
+      h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td>';
+      h+='<td><input type="date" class="xi xi-date" id="ie_date_'+l.id+'" value="'+l.dateReleased+'"></td>';
+      h+='<td>'+fD(l.dueDate)+'</td>';
+      h+='<td class="right"><input type="number" class="xi xi-amt" id="ie_amt_'+l.id+'" value="'+l.amount+'" inputmode="numeric"></td>';
+      h+='<td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>';
+    }else{
+      h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>';
+    }
+  });
+  h+='<tr class="xr-totals"><td colspan="6" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table>';
+  document.getElementById('wbSheet').innerHTML=h
+}
+
+function goWk(i){
+  if(i<0||i>=weekKeys.length)return;
+  curWk=i;editingRow=null;
   document.querySelectorAll('.wb-tab').forEach(function(t){t.classList.toggle('active',+t.getAttribute('data-wi')===curWk)});
   var at=document.querySelector('.wb-tab.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
-
-  /* Update toolbar */
-  var w=weekKeys[curWk],cw=wk(today());
-  document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');
-  document.getElementById('wbIndicator').textContent='Sheet '+(curWk+1)+' of '+weekKeys.length;
-
-  /* Update actions */
-  updateWbActions()
+  renderCurrentSheet()
 }
+function sheetNav(dir){var n=curWk+dir;if(n>=0&&n<weekKeys.length)goWk(n)}
 
-function updateWbActions(){
-  var h='<span class="wb-sel-ct" id="selCt_'+curWk+'">0 selected</span>';
-  h+='<button class="wb-btn paid-all" onclick="batchWkPaid('+curWk+')" id="bpBtn_'+curWk+'" disabled>✅ Paid</button>';
-  h+='<button class="wb-btn renew-all" onclick="batchWkRenew('+curWk+')" id="brBtn_'+curWk+'" disabled>🔄 Renew</button>';
-  document.getElementById('wbActions').innerHTML=h
-}
-
-function togAll(wi,checked){document.querySelectorAll('.wc_'+wi).forEach(function(c){c.checked=checked});updSelCt(wi)}
-function updSelCt(wi){
-  var all=document.querySelectorAll('.wc_'+wi),sel=document.querySelectorAll('.wc_'+wi+':checked');
+function togAll(checked){document.querySelectorAll('.wc').forEach(function(c){c.checked=checked});updSelCt()}
+function updSelCt(){
+  var all=document.querySelectorAll('.wc'),sel=document.querySelectorAll('.wc:checked');
   var ct=sel.length;
-  var ctEl=document.getElementById('selCt_'+wi);if(ctEl)ctEl.textContent=ct+' selected';
-  var bp=document.getElementById('bpBtn_'+wi);if(bp)bp.disabled=ct===0;
-  var br=document.getElementById('brBtn_'+wi);if(br)br.disabled=ct===0;
-  var sa=document.getElementById('sa_'+wi);if(sa)sa.checked=all.length>0&&ct===all.length
+  var ctEl=document.getElementById('selCt');if(ctEl)ctEl.textContent=ct+' selected';
+  var bp=document.getElementById('bpBtn');if(bp)bp.disabled=ct===0;
+  var br=document.getElementById('brBtn');if(br)br.disabled=ct===0;
+  var sa=document.getElementById('saAll');if(sa)sa.checked=all.length>0&&ct===all.length
 }
 
-function batchWkPaid(wi){
-  var ids=[];document.querySelectorAll('.wc_'+wi+':checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+function batchWkPaid(){
+  var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
   if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
   ids.forEach(function(id){var l=loans.find(function(x){return x.id===id});if(l&&l.remarks==='Pending')l.remarks='Paid'});
   toast('✅ '+ids.length+' marked Paid','success');renderAll()
 }
-function batchWkRenew(wi){
-  var ids=[];document.querySelectorAll('.wc_'+wi+':checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+function batchWkRenew(){
+  var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
   var paidIds=ids.filter(function(id){var l=loans.find(function(x){return x.id===id});return l&&l.remarks==='Paid'&&l.action!=='Remitted'});
   if(!paidIds.length){toast('Select paid loans to renew','error');return}
   var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
@@ -559,22 +561,6 @@ function batchWkRenew(wi){
     var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100);
     loans.push({id:nextId++,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})});
   toast('🔄 '+paidIds.length+' renewed','success');renderAll()
-}
-
-function sheetNav(dir){var n=curWk+dir;if(n>=0&&n<weekKeys.length)goWk(n)}
-
-/* SWIPE */
-function initWbSwipe(){
-  var el=document.getElementById('wbSwipe');
-  el.ontouchstart=function(e){touchSX=e.touches[0].clientX;isSw=true;document.getElementById('wbTrack').style.transition='none'};
-  el.ontouchmove=function(e){if(!isSw)return;touchDX=e.touches[0].clientX-touchSX;var base=-curWk*100;var pct=base+(touchDX/el.offsetWidth)*100;document.getElementById('wbTrack').style.transform='translateX('+pct+'%)'};
-  el.ontouchend=function(){
-    if(!isSw)return;isSw=false;
-    var thr=el.offsetWidth*0.2;
-    if(touchDX<-thr&&curWk<weekKeys.length-1)curWk++;
-    else if(touchDX>thr&&curWk>0)curWk--;
-    touchDX=0;goWk(curWk)
-  }
 }
 
 /* DUE */
@@ -594,16 +580,11 @@ function renderDue(){
   var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchDuePaid()" id="btnBP" disabled>✅ Mark Paid</button></div>';
   h+='<div class="lcards">';
   due.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-    h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
+    h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
   h+='<div class="lc-tot" style="color:var(--red)">⏳ Total: '+fmt(tt)+'</div></div>';
-  h+='<div class="tdesk"><div class="workbook" style="border-radius:4px"><div class="wb-sheet"><table class="xt"><thead><tr><th style="width:28px"><input type="checkbox" class="xchk" onchange="togDueAll2(this.checked)"></th><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th></th></tr></thead><tbody>';
-  var ta2=0,ti2=0,tt2=0;
-  due.forEach(function(l,i){ta2+=l.amount;ti2+=l.interest;tt2+=l.total;h+='<tr><td class="center"><input type="checkbox" class="xchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></td></tr>'});
-  h+='<tr class="xr-totals"><td colspan="4" style="text-align:right">TOTAL</td><td class="right">'+fmt(ta2)+'</td><td></td><td class="right">'+fmt(ti2)+'</td><td class="right">'+fmt(tt2)+'</td><td></td></tr></tbody></table></div></div></div>';
   document.getElementById('dueContent').innerHTML=h
 }
 function togDueAll(){var a=document.getElementById('dueAll').checked;document.querySelectorAll('.dcc').forEach(function(c){c.checked=a});updDueCt()}
-function togDueAll2(v){document.querySelectorAll('.dcc').forEach(function(c){c.checked=v});updDueCt()}
 function updDueCt(){var c=document.querySelectorAll('.dcc:checked').length;var el=document.getElementById('dueSel');if(el)el.textContent=c+' selected';var bp=document.getElementById('btnBP');if(bp)bp.disabled=c===0}
 function batchDuePaid(){
   var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
@@ -624,16 +605,11 @@ function renderPaid(){
   var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchPaidRenew()" id="btnBR" disabled>🔄 Renew</button></div>';
   h+='<div class="lcards">';
   paid.forEach(function(l){ta+=l.amount;ti+=l.interest;tt+=l.total;
-    h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
+    h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
   h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Paid: '+fmt(tt)+'</div></div>';
-  h+='<div class="tdesk"><div class="workbook" style="border-radius:4px"><div class="wb-sheet"><table class="xt"><thead><tr><th style="width:28px"><input type="checkbox" class="xchk" onchange="togPaidAll2(this.checked)"></th><th>#</th><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Action</th><th></th></tr></thead><tbody>';
-  var pa2=0,pi2=0,pt2=0;
-  paid.forEach(function(l,i){pa2+=l.amount;pi2+=l.interest;pt2+=l.total;h+='<tr><td class="center"><input type="checkbox" class="xchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td>'+aB(l.action)+'</td><td><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></td></tr>'});
-  h+='<tr class="xr-totals"><td colspan="4" style="text-align:right">TOTAL</td><td class="right">'+fmt(pa2)+'</td><td></td><td class="right">'+fmt(pi2)+'</td><td class="right">'+fmt(pt2)+'</td><td colspan="2"></td></tr></tbody></table></div></div></div>';
   document.getElementById('paidContent').innerHTML=h
 }
 function togPaidAll(){var a=document.getElementById('paidAll').checked;document.querySelectorAll('.pcc').forEach(function(c){c.checked=a});updPaidCt()}
-function togPaidAll2(v){document.querySelectorAll('.pcc').forEach(function(c){c.checked=v});updPaidCt()}
 function updPaidCt(){var c=document.querySelectorAll('.pcc:checked').length;var el=document.getElementById('paidSel');if(el)el.textContent=c+' selected';var br=document.getElementById('btnBR');if(br)br.disabled=c===0}
 function batchPaidRenew(){
   var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
@@ -663,14 +639,11 @@ function renderDash(){
       fh+='<div class="fc '+fn.toLowerCase()+'"><div class="fn">'+fB(fn)+' '+fn+'</div><div class="fr"><span class="fl">Borrowers</span><span class="fv">'+fns.length+'</span></div><div class="fr"><span class="fl">Lent Out</span><span class="fv">'+fmt(fa)+'</span></div><div class="fr"><span class="fl">Interest</span><span class="fv">'+fmt(fi)+'</span></div><div class="fr"><span class="fl">Collect</span><span class="fv" style="color:var(--red)">'+fmt(ft)+'</span></div></div>'});
     fh+='</div>';document.getElementById('finBreak').innerHTML=fh
   }else document.getElementById('finBreak').innerHTML='';
-  /* Summary cards */
   if(!fl.length){document.getElementById('summaryContent').innerHTML='<div class="empty">No loans yet.</div>';return}
   var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);
   var h='<div class="lcards">';
   lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' <button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
-  h+='</div><div class="tdesk"><div class="workbook" style="border-radius:4px"><div class="wb-sheet"><table class="xt"><thead><tr><th>Name</th><th>Financer</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th><th>Cycle</th><th></th></tr></thead><tbody>';
-  lv.forEach(function(l){h+='<tr><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td><td class="center">'+l.cycles+'</td><td><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></td></tr>'});
-  h+='</tbody></table></div></div></div>';document.getElementById('summaryContent').innerHTML=h
+  h+='</div>';document.getElementById('summaryContent').innerHTML=h
 }
 
 function renderAll(){
