@@ -71,11 +71,13 @@ input,select,button{font-family:inherit}
 .workbook{background:var(--card);border:1px solid #c0c0c0;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .wb-toolbar{background:#f3f3f3;border-bottom:1px solid #d0d0d0;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .wb-toolbar .wb-title{font-size:12px;font-weight:700;color:#333}
-.wb-actions{display:flex;gap:4px;flex-wrap:wrap}
+.wb-actions{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
 .wb-btn{padding:6px 12px;border:1px solid #c0c0c0;border-radius:4px;background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:#333;transition:all .1s}
 .wb-btn:active{background:#e8e8e8;transform:scale(.97)}
+.wb-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .wb-btn.paid-all{background:#e8f5e9;color:var(--grn);border-color:#a5d6a7}
 .wb-btn.renew-all{background:#fff3e0;color:#e65100;border-color:#ffcc80}
+.wb-btn.del-all{background:#ffebee;color:#c62828;border-color:#ef9a9a}
 .wb-sel-ct{font-size:11px;color:var(--pri);font-weight:700;padding:0 6px}
 .wb-sheet{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:65vh;overflow-y:auto}
 .xt{width:100%;border-collapse:collapse;font-size:11px}
@@ -182,21 +184,31 @@ input,select,button{font-family:inherit}
 <p class="sub">7-Day Cycle · Due = Release + 6 days · UTC+8</p>
 <div class="toolbar"><select id="financerFilter" onchange="renderAll()"><option value="All">👤 All Financers</option><option value="Axl">Axl</option><option value="Fritz">Fritz</option><option value="Axlthea">Axlthea</option></select><input type="text" id="searchBox" placeholder="🔍 Search..." oninput="renderAll()"></div>
 <div class="qa"><button class="qb new" onclick="openModal('new')">＋ New Loan</button><button class="qb due" onclick="switchSec('due')">📅 Due <span class="ct" id="dueCount">0</span></button><button class="qb paid" onclick="switchSec('paid')">💰 Paid <span class="ct" id="paidCount">0</span></button><button class="qb dl" onclick="downloadCSV()">📥 Download</button><button class="qb undo" onclick="doUndo()" id="undoBtn" disabled>↩ Undo</button></div>
+
 <div class="sec active" id="sec-dash"><div class="dg" id="dashCards"></div><div id="finBreak"></div><div class="info"><strong>📌 Rules:</strong> Due = Release + 6 days · Interest: 10% or 15% · Weeks start Tuesday · UTC+8</div><div id="summaryContent"></div></div>
+
 <div class="sec" id="sec-tables"><div class="legend"><div class="legend-i"><div class="legend-s yellow"></div> Due Today</div><div class="legend-i"><div class="legend-s green"></div> Paid</div></div><div class="workbook" id="workbook"><div class="wb-toolbar" id="wbToolbar"><div class="wb-title" id="wbTitle">📋 Week: —</div><div class="wb-actions" id="wbActions"></div></div><div class="wb-sheet" id="wbSheet"></div><div class="wb-tabs-wrap"><div class="wb-nav"><button onclick="sheetNav(-1)">◀</button><button onclick="sheetNav(1)">▶</button></div><div class="wb-tabs-scroll" id="wbTabs"></div></div></div></div>
+
 <div class="sec" id="sec-due"><div class="dp"><input type="date" id="duePicker" onchange="renderDue()"><button class="dpb" onclick="setDueToday()" id="dueTodayBtn">Today</button><button class="dpb" onclick="shiftDue(-1)">◀</button><button class="dpb" onclick="shiftDue(1)">▶</button></div><div class="banner db"><div class="bl">Collection Date (UTC+8)</div><div class="bd" id="dueBD" style="color:var(--red)"></div><div class="bc2" id="dueBC"></div></div><div id="dueContent"></div></div>
+
 <div class="sec" id="sec-paid"><div class="dp"><input type="date" id="paidPicker" onchange="renderPaid()"><button class="dpb" onclick="setPaidToday()" id="paidTodayBtn">Today</button><button class="dpb" onclick="shiftPaid(-1)">◀</button><button class="dpb" onclick="shiftPaid(1)">▶</button></div><div class="banner pb"><div class="bl">Paid Loans Due On</div><div class="bd" id="paidBD" style="color:var(--grn)"></div><div class="bc2" id="paidBC"></div></div><div id="paidContent"></div></div>
+
 <div class="bnav"><button class="ni active" data-sec="dash" onclick="switchSec('dash')"><span class="ic">📊</span>Dashboard</button><button class="ni" data-sec="tables" onclick="switchSec('tables')"><span class="ic">📋</span>Tables</button><button class="ni" data-sec="due" onclick="switchSec('due')"><span class="ic">📅</span>Due</button><button class="ni" data-sec="paid" onclick="switchSec('paid')"><span class="ic">💰</span>Paid</button></div>
+
 <div class="mo" id="modal-new" onclick="if(event.target===this)closeModal('new')"><div class="ml"><div class="mh"></div><h2>＋ New Loan</h2><div class="fg2"><label>Borrower Name</label><input type="text" id="newName" placeholder="e.g. Maria Santos"></div><div class="fg-row"><div class="fg2"><label>Date Released</label><input type="date" id="newDate"></div><div class="fg2"><label>Financer</label><select id="newFin"><option value="Axl">Axl</option><option value="Fritz">Fritz</option><option value="Axlthea">Axlthea</option></select></div></div><p class="fg-note" id="newDueNote">📌 Due Date: auto-calculated</p><div class="fg-row" style="margin-top:10px"><div class="fg2"><label>Amount (₱)</label><input type="number" id="newAmt" placeholder="e.g. 5000" min="1" inputmode="numeric"></div><div class="fg2"><label>Interest Rate</label><select id="newRate"><option value="10">10%</option><option value="15">15%</option></select></div></div><p class="fg-hint">Interest, Total, and Due Date are auto-calculated.</p><div class="mbtns"><button class="mb mb-c" onclick="closeModal('new')">Cancel</button><button class="mb mb-s" onclick="addLoan()">Add Loan</button></div></div></div>
+
 <div class="mo" id="modal-update" onclick="if(event.target===this)closeModal('update')"><div class="ml"><div class="mh"></div><h2>✏️ Update Loan</h2><div id="updInfo" style="background:#f8fafc;border:1px solid var(--bdr);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px"></div><div class="fg-row"><div class="fg2"><label>Remarks</label><select id="updRem"><option value="Pending">Pending</option><option value="Paid">Paid</option></select></div><div class="fg2"><label>Action</label><select id="updAct" onchange="toggleRenew()"><option value="">— None —</option><option value="Renew">Renew</option><option value="Remitted">Remitted</option></select></div></div><div class="renew-grp" id="renewGrp"><div class="fg-row"><div class="fg2"><label>Renewal Date</label><input type="date" id="renewDate"><p class="fg-note" id="renewNote">📌 New Due: select date</p></div><div class="fg2"><label>New Amount (opt)</label><input type="number" id="updNewAmt" placeholder="Same if blank" inputmode="numeric"></div></div></div><div class="mbtns"><button class="mb mb-c" onclick="closeModal('update')">Cancel</button><button class="mb mb-w" onclick="saveUpdate()">Save</button></div></div></div>
+
 <div class="mo" id="modal-delete" onclick="if(event.target===this)closeModal('delete')"><div class="ml"><div class="mh"></div><h2>🗑️ Delete Loan</h2><div id="delInfo" style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#991b1b"></div><div class="warn">⚠️ This permanently removes the loan. Cannot be undone from Google Sheets.</div><div class="mbtns"><button class="mb mb-c" onclick="closeModal('delete')">Cancel</button><button class="mb mb-d" onclick="confirmDelete()">Delete</button></div></div></div>
 </div>
+
 <script>
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbwNtsmsxFSIS3XA-ftjuYhdCM83qJg-XtMgDg-98TT7UZ1tvw7c6tNV_0TUdzshz8b7/exec';
 var PW_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
 var MAX_ATTEMPTS=5,LOCKOUT_MIN=5,CD=6,UO=8,FINS=['Axl','Fritz','Axlthea'];
 var SESSION_KEY='emerloan_session',SESSION_HOURS=8,TAB_KEY='emerloan_tab';
 var loans=[],updId=null,delId=null,editingRow=null,weekKeys=[],curWk=0,undoStack=[],MAX_UNDO=20,undoTimer=null;
+var processing=false;
 
 function showLoading(m){document.getElementById('loadingText').textContent=m||'Saving...';document.getElementById('loadingOverlay').classList.add('show')}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
@@ -231,17 +243,12 @@ function updateUndoBtn(){var b=document.getElementById('undoBtn');if(undoStack.l
 function showUndoBar(lb){if(!lb){hideUndo();return}clearTimeout(undoTimer);document.getElementById('undoText').textContent=lb;document.getElementById('undoBar').classList.add('show');undoTimer=setTimeout(function(){document.getElementById('undoBar').classList.remove('show')},6000)}
 function hideUndo(){clearTimeout(undoTimer);document.getElementById('undoBar').classList.remove('show')}
 
-/* ===== API — uses 'cmd' NOT 'action' to avoid column conflict ===== */
 function api(params){
   return new Promise(function(resolve,reject){
     var isGet=(params.cmd==='get');
     var url;
-    if(isGet){
-      url=WEB_APP_URL+'?cmd=get&_t='+Date.now();
-    }else{
-      var payloadStr=encodeURIComponent(JSON.stringify(params));
-      url=WEB_APP_URL+'?cmd='+params.cmd+'&payload='+payloadStr+'&_t='+Date.now();
-    }
+    if(isGet){url=WEB_APP_URL+'?cmd=get&_t='+Date.now()}
+    else{var payloadStr=encodeURIComponent(JSON.stringify(params));url=WEB_APP_URL+'?cmd='+params.cmd+'&payload='+payloadStr+'&_t='+Date.now()}
     fetch(url,{redirect:'follow',cache:'no-store'})
     .then(function(r){if(r.redirected)return fetch(r.url,{cache:'no-store'});return r})
     .then(function(r){return r.text()})
@@ -263,91 +270,150 @@ function updDueNote(){var v=document.getElementById('newDate').value;document.ge
 function toggleRenew(){var a=document.getElementById('updAct').value,g=document.getElementById('renewGrp');if(a==='Renew'){g.classList.add('show');var l=loans.find(function(x){return x.id===updId});if(l){document.getElementById('renewDate').value=addD(l.dueDate,1);updRenewNote()}}else g.classList.remove('show')}
 function updRenewNote(){var v=document.getElementById('renewDate').value;document.getElementById('renewNote').textContent=v?'📌 New Due: '+fDY(addD(v,CD)):'📌 New Due: select date'}
 
-/* ===== CRUD — ALL use cmd: instead of action: for API calls ===== */
 function addLoan(){
+  if(processing)return;
   var nm=document.getElementById('newName').value.trim(),dr=document.getElementById('newDate').value,am=parseFloat(document.getElementById('newAmt').value),rt=parseInt(document.getElementById('newRate').value),fn=document.getElementById('newFin').value;
   if(!nm){alert('Enter name');return}if(!dr){alert('Select date');return}if(!am||am<=0){alert('Enter amount');return}
-  closeModal('new');showLoading('Adding '+nm+'...');saveState('Add '+nm);
+  processing=true;closeModal('new');showLoading('Adding '+nm+'...');saveState('Add '+nm);
   var nid=getNextId(),int=am*(rt/100),tot=am+int,due=addD(dr,CD);
   api({cmd:'add',id:nid,name:nm,dateReleased:dr,dueDate:due,amount:am,rate:rt,interest:int,total:tot,remarks:'Pending',action:'',cycles:1,financer:fn})
   .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-  .then(function(){hideLoading();toast('✅ Added '+nm,'success');showUndoBar('Added '+nm)})
-  .catch(function(e){hideLoading();toast('⚠️ Failed: '+e,'error')})
+  .then(function(){hideLoading();processing=false;toast('✅ Added '+nm,'success');showUndoBar('Added '+nm)})
+  .catch(function(e){hideLoading();processing=false;toast('⚠️ Failed: '+e,'error')})
 }
 
 function openUpd(id){var l=loans.find(function(x){return x.id===id});if(!l)return;updId=id;document.getElementById('updInfo').innerHTML='<strong>'+l.name+'</strong> · '+fB(l.financer)+' · '+fmt(l.amount)+' · Due: '+fDY(l.dueDate)+' · #'+l.cycles;document.getElementById('updRem').value=l.remarks;document.getElementById('updAct').value='';document.getElementById('updNewAmt').value='';document.getElementById('renewGrp').classList.remove('show');document.getElementById('renewDate').value='';document.getElementById('modal-update').classList.add('show')}
 
 function saveUpdate(){
+  if(processing)return;
   var l=loans.find(function(x){return x.id===updId});if(!l)return;
   var rem=document.getElementById('updRem').value,act=document.getElementById('updAct').value;
   var actionVal=act==='Renew'?'Renewed':act==='Remitted'?'Remitted':'';
-  closeModal('update');showLoading('Updating '+l.name+'...');saveState('Update '+l.name);
+  processing=true;closeModal('update');showLoading('Updating '+l.name+'...');saveState('Update '+l.name);
   if(act==='Renew'){
     var nr=document.getElementById('renewDate').value;
-    if(!nr){hideLoading();alert('Select renewal date');undoStack.pop();updateUndoBtn();return}
+    if(!nr){hideLoading();processing=false;alert('Select renewal date');undoStack.pop();updateUndoBtn();return}
     var na=document.getElementById('updNewAmt').value,ra=na?parseFloat(na):l.amount,ni=ra*(l.rate/100),nid=getNextId();
-    /* Step 1: Update old loan — remarks + action column */
     api({cmd:'update',id:l.id,remarks:rem,action:actionVal})
-    .then(function(){
-      /* Step 2: Add new renewed loan */
-      return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:ra,rate:l.rate,interest:ni,total:ra+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})
-    })
+    .then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:ra,rate:l.rate,interest:ni,total:ra+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
     .then(function(){return reload()})
-    .then(function(){hideLoading();toast('✅ Renewed '+l.name,'success');showUndoBar('Renewed '+l.name)})
-    .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
+    .then(function(){hideLoading();processing=false;toast('✅ Renewed '+l.name,'success');showUndoBar('Renewed '+l.name)})
+    .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
   }else{
     api({cmd:'update',id:l.id,remarks:rem,action:actionVal})
     .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-    .then(function(){hideLoading();toast('✅ Updated '+l.name,'success');showUndoBar('Updated '+l.name)})
-    .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
+    .then(function(){hideLoading();processing=false;toast('✅ Updated '+l.name,'success');showUndoBar('Updated '+l.name)})
+    .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
   }
 }
 
 function openDel(id){var l=loans.find(function(x){return x.id===id});if(!l)return;delId=id;document.getElementById('delInfo').innerHTML='Delete <strong>'+l.name+'</strong> ('+fB(l.financer)+') — '+fmt(l.amount)+'?';document.getElementById('modal-delete').classList.add('show')}
-function confirmDelete(){var l=loans.find(function(x){return x.id===delId});closeModal('delete');showLoading('Deleting...');saveState('Delete '+(l?l.name:'loan'));api({cmd:'delete',id:delId}).then(function(d){if(d.status==='ok')return reload();else throw d.message}).then(function(){hideLoading();toast('🗑️ Deleted','error');showUndoBar('Deleted '+(l?l.name:'loan'))}).catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})}
 
-/* quickPaid: sends cmd:'update' + remarks:'Paid' — NO action field conflict */
-function quickPaid(id){
-  var l=loans.find(function(x){return x.id===id});if(!l)return;
-  showLoading('Marking '+l.name+' as Paid...');saveState('Paid '+l.name);
-  api({cmd:'update',id:l.id,remarks:'Paid'})
+function confirmDelete(){
+  if(processing)return;
+  var l=loans.find(function(x){return x.id===delId});
+  processing=true;closeModal('delete');showLoading('Deleting...');saveState('Delete '+(l?l.name:'loan'));
+  api({cmd:'delete',id:delId})
   .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-  .then(function(){hideLoading();toast('✅ '+l.name+' Paid','success');showUndoBar(l.name+' → Paid')})
-  .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
+  .then(function(){hideLoading();processing=false;toast('🗑️ Deleted','error');showUndoBar('Deleted '+(l?l.name:'loan'))})
+  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
 }
 
-/* quickRenew: sends cmd:'update' then cmd:'add' — action column gets 'Renewed' correctly */
+function quickPaid(id){
+  if(processing)return;
+  var l=loans.find(function(x){return x.id===id});if(!l)return;
+  processing=true;showLoading('Marking '+l.name+' as Paid...');saveState('Paid '+l.name);
+  api({cmd:'update',id:l.id,remarks:'Paid'})
+  .then(function(d){if(d.status==='ok')return reload();else throw d.message})
+  .then(function(){hideLoading();processing=false;toast('✅ '+l.name+' Paid','success');showUndoBar(l.name+' → Paid')})
+  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+}
+
 function quickRenew(id){
+  if(processing)return;
   var l=loans.find(function(x){return x.id===id});if(!l||l.remarks!=='Paid')return;
-  showLoading('Renewing '+l.name+'...');saveState('Renew '+l.name);
+  processing=true;showLoading('Renewing '+l.name+'...');saveState('Renew '+l.name);
   var nr=addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();
-  /* Step 1: Mark old loan action as 'Renewed' */
   api({cmd:'update',id:l.id,action:'Renewed'})
-  .then(function(){
-    /* Step 2: Create new loan row */
-    return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})
-  })
+  .then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
   .then(function(){return reload()})
-  .then(function(){hideLoading();toast('🔄 '+l.name+' renewed','success');showUndoBar(l.name+' → Renewed')})
-  .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
+  .then(function(){hideLoading();processing=false;toast('🔄 '+l.name+' renewed','success');showUndoBar(l.name+' → Renewed')})
+  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
 }
 
 function startEdit(id){editingRow=id;renderCurrentSheet()}
-function saveInlineEdit(id){var l=loans.find(function(x){return x.id===id});if(!l)return;var dateEl=document.getElementById('ie_date_'+id),amtEl=document.getElementById('ie_amt_'+id);var changed=false;saveState('Edit '+l.name);var params={cmd:'update',id:l.id};if(dateEl){var nd=dateEl.value;if(nd&&nd!==l.dateReleased){params.dateReleased=nd;params.dueDate=addD(nd,CD);changed=true}}if(amtEl){var na=parseFloat(amtEl.value);if(na&&na>0&&na!==l.amount){params.amount=na;params.interest=na*(l.rate/100);params.total=na+na*(l.rate/100);changed=true}}if(!changed){undoStack.pop();updateUndoBtn();editingRow=null;renderAll();return}editingRow=null;showLoading('Saving edit...');api(params).then(function(d){if(d.status==='ok')return reload();else throw d.message}).then(function(){hideLoading();toast('✅ Updated '+l.name,'success');showUndoBar('Edited '+l.name)}).catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})}
+function saveInlineEdit(id){
+  if(processing)return;
+  var l=loans.find(function(x){return x.id===id});if(!l)return;
+  var dateEl=document.getElementById('ie_date_'+id),amtEl=document.getElementById('ie_amt_'+id);
+  var changed=false;saveState('Edit '+l.name);
+  var params={cmd:'update',id:l.id};
+  if(dateEl){var nd=dateEl.value;if(nd&&nd!==l.dateReleased){params.dateReleased=nd;params.dueDate=addD(nd,CD);changed=true}}
+  if(amtEl){var na=parseFloat(amtEl.value);if(na&&na>0&&na!==l.amount){params.amount=na;params.interest=na*(l.rate/100);params.total=na+na*(l.rate/100);changed=true}}
+  if(!changed){undoStack.pop();updateUndoBtn();editingRow=null;renderAll();return}
+  editingRow=null;processing=true;showLoading('Saving edit...');
+  api(params).then(function(d){if(d.status==='ok')return reload();else throw d.message})
+  .then(function(){hideLoading();processing=false;toast('✅ Updated '+l.name,'success');showUndoBar('Edited '+l.name)})
+  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+}
 
-function batchWkPaid(){var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Paid ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l&&l.remarks==='Pending')return api({cmd:'update',id:l.id,remarks:'Paid'})})});chain.then(function(){return reload()}).then(function(){hideLoading();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})}
+function batchWkPaid(){
+  if(processing)return;
+  var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+  if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
+  processing=true;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Paid ('+ids.length+')');
+  var chain=Promise.resolve();
+  ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l&&l.remarks==='Pending')return api({cmd:'update',id:l.id,remarks:'Paid'})})});
+  chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})
+}
 
-function batchWkRenew(){var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});var paidIds=ids.filter(function(id){var l=loans.find(function(x){return x.id===id});return l&&l.remarks==='Paid'&&l.action!=='Remitted'});if(!paidIds.length){toast('Select paid loans to renew','error');return}var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';if(!confirm('Renew '+paidIds.length+' loan(s)?'))return;showLoading('Renewing '+paidIds.length+' loans...');saveState('Batch Renew ('+paidIds.length+')');var chain=Promise.resolve();paidIds.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});chain.then(function(){return reload()}).then(function(){hideLoading();toast('🔄 '+paidIds.length+' renewed','success');showUndoBar(paidIds.length+' renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})}
+function batchWkRenew(){
+  if(processing)return;
+  var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+  var paidIds=ids.filter(function(id){var l=loans.find(function(x){return x.id===id});return l&&l.remarks==='Paid'&&l.action!=='Remitted'});
+  if(!paidIds.length){toast('Select paid loans to renew','error');return}
+  var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
+  if(!confirm('Renew '+paidIds.length+' loan(s)?'))return;
+  processing=true;showLoading('Renewing '+paidIds.length+' loans...');saveState('Batch Renew ('+paidIds.length+')');
+  var chain=Promise.resolve();
+  paidIds.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});
+  chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('🔄 '+paidIds.length+' renewed','success');showUndoBar(paidIds.length+' renewed')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})
+}
+
+function batchWkDelete(){
+  if(processing)return;
+  var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
+  if(!ids.length){toast('Select loans to delete','error');return}
+  var names=ids.map(function(id){var l=loans.find(function(x){return x.id===id});return l?l.name:'?'}).join(', ');
+  if(!confirm('⚠️ Delete '+ids.length+' loan(s)?\n\n'+names+'\n\nThis cannot be undone from Google Sheets.'))return;
+  processing=true;showLoading('Deleting '+ids.length+' loans...');saveState('Batch Delete ('+ids.length+')');
+  var chain=Promise.resolve();
+  ids.forEach(function(id){chain=chain.then(function(){return api({cmd:'delete',id:id})})});
+  chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('🗑️ '+ids.length+' deleted','error');showUndoBar(ids.length+' deleted')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})
+}
 
 function downloadCSV(){var fl=getFL();if(!fl.length){toast('No data','error');return}var csv='Name,Date Released,Due Date,Amount,Rate,Interest,Total,Remarks,Action,Cycles,Financer\n';fl.forEach(function(l){csv+='"'+l.name+'",'+l.dateReleased+','+l.dueDate+','+l.amount+','+l.rate+'%,'+l.interest+','+l.total+','+l.remarks+','+l.action+','+l.cycles+','+l.financer+'\n'});var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EmerLoan_'+today()+'.csv';a.click();toast('📥 Downloaded','success')}
 
 function buildWeeks(){var fl=getFL();var wm={};fl.forEach(function(l){var w=wk(l.dateReleased);if(!wm[w])wm[w]=[];wm[w].push(l)});Object.keys(wm).forEach(function(w){wm[w].sort(function(a,b){return a.dateReleased<b.dateReleased?-1:a.dateReleased>b.dateReleased?1:a.name.localeCompare(b.name)})});weekKeys=Object.keys(wm).sort().reverse();return wm}
+
 function renderWorkbook(){var wm=buildWeeks();var cw=wk(today());if(!weekKeys.length){document.getElementById('wbSheet').innerHTML='<div class="empty">No loans yet.</div>';document.getElementById('wbTabs').innerHTML='';document.getElementById('wbTitle').textContent='📋 No Data';document.getElementById('wbActions').innerHTML='';return}if(curWk>=weekKeys.length)curWk=0;var tabs='';weekKeys.forEach(function(w,wi){var ic=w===cw;tabs+='<div class="wb-tab'+(wi===curWk?' active':'')+'" data-wi="'+wi+'" onclick="goWk('+wi+')"><span class="tab-dot '+(ic?'cur':'past')+'"></span>'+wkShort(w)+'</div>'});document.getElementById('wbTabs').innerHTML=tabs;renderCurrentSheet()}
-function renderCurrentSheet(){var wm=buildWeeks();var cw=wk(today()),td=today();if(!weekKeys.length)return;var w=weekKeys[curWk],wl=wm[w];if(!wl){document.getElementById('wbSheet').innerHTML='<div class="empty">No data.</div>';return}document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');document.getElementById('wbActions').innerHTML='<span class="wb-sel-ct" id="selCt">0 selected</span><button class="wb-btn paid-all" onclick="batchWkPaid()" id="bpBtn" disabled>✅ Paid</button><button class="wb-btn renew-all" onclick="batchWkRenew()" id="brBtn" disabled>🔄 Renew</button>';var ta=0,ti=0,tt=0;var h='<table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll(this.checked)" id="saAll"></th><th class="center" style="width:110px">Actions</th><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';wl.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');var isEd=editingRow===l.id;var btns='<div class="xact">';if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')">✅</button>';if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')">🔄</button>';if(!isEd)btns+='<button class="xbtn xedit" onclick="startEdit('+l.id+')">✏️</button>';else btns+='<button class="xbtn xsave" onclick="saveInlineEdit('+l.id+')">💾</button>';btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div>';if(isEd){h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td><input type="date" class="xi xi-date" id="ie_date_'+l.id+'" value="'+l.dateReleased+'"></td><td>'+fD(l.dueDate)+'</td><td class="right"><input type="number" class="xi xi-amt" id="ie_amt_'+l.id+'" value="'+l.amount+'" inputmode="numeric"></td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'}else{h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'}});h+='<tr class="xr-totals"><td colspan="6" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table>';document.getElementById('wbSheet').innerHTML=h}
+
+function renderCurrentSheet(){var wm=buildWeeks();var cw=wk(today()),td=today();if(!weekKeys.length)return;var w=weekKeys[curWk],wl=wm[w];if(!wl){document.getElementById('wbSheet').innerHTML='<div class="empty">No data.</div>';return}
+document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');
+document.getElementById('wbActions').innerHTML='<span class="wb-sel-ct" id="selCt">0 selected</span><button class="wb-btn paid-all" onclick="batchWkPaid()" id="bpBtn" disabled>✅ Paid</button><button class="wb-btn renew-all" onclick="batchWkRenew()" id="brBtn" disabled>🔄 Renew</button><button class="wb-btn del-all" onclick="batchWkDelete()" id="bdBtn" disabled>🗑️ Delete</button>';
+var ta=0,ti=0,tt=0;
+var h='<table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll(this.checked)" id="saAll"></th><th class="center" style="width:110px">Actions</th><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';
+wl.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');var isEd=editingRow===l.id;var btns='<div class="xact">';if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')">✅</button>';if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')">🔄</button>';if(!isEd)btns+='<button class="xbtn xedit" onclick="startEdit('+l.id+')">✏️</button>';else btns+='<button class="xbtn xsave" onclick="saveInlineEdit('+l.id+')">💾</button>';btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div>';
+if(isEd){h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td><input type="date" class="xi xi-date" id="ie_date_'+l.id+'" value="'+l.dateReleased+'"></td><td>'+fD(l.dueDate)+'</td><td class="right"><input type="number" class="xi xi-amt" id="ie_amt_'+l.id+'" value="'+l.amount+'" inputmode="numeric"></td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'}
+else{h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'}});
+h+='<tr class="xr-totals"><td colspan="6" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table>';
+document.getElementById('wbSheet').innerHTML=h}
+
 function goWk(i){if(i<0||i>=weekKeys.length)return;curWk=i;editingRow=null;document.querySelectorAll('.wb-tab').forEach(function(t){t.classList.toggle('active',+t.getAttribute('data-wi')===curWk)});var at=document.querySelector('.wb-tab.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});renderCurrentSheet()}
 function sheetNav(dir){var n=curWk+dir;if(n>=0&&n<weekKeys.length)goWk(n)}
 function togAll(c){document.querySelectorAll('.wc').forEach(function(x){x.checked=c});updSelCt()}
-function updSelCt(){var all=document.querySelectorAll('.wc'),sel=document.querySelectorAll('.wc:checked');var ct=sel.length;var e=document.getElementById('selCt');if(e)e.textContent=ct+' selected';var bp=document.getElementById('bpBtn');if(bp)bp.disabled=ct===0;var br=document.getElementById('brBtn');if(br)br.disabled=ct===0;var sa=document.getElementById('saAll');if(sa)sa.checked=all.length>0&&ct===all.length}
+function updSelCt(){var all=document.querySelectorAll('.wc'),sel=document.querySelectorAll('.wc:checked');var ct=sel.length;var e=document.getElementById('selCt');if(e)e.textContent=ct+' selected';var bp=document.getElementById('bpBtn');if(bp)bp.disabled=ct===0;var br=document.getElementById('brBtn');if(br)br.disabled=ct===0;var bd=document.getElementById('bdBtn');if(bd)bd.disabled=ct===0;var sa=document.getElementById('saAll');if(sa)sa.checked=all.length>0&&ct===all.length}
+
 function setDueToday(){document.getElementById('duePicker').value=today();renderDue()}
 function shiftDue(n){document.getElementById('duePicker').value=addD(document.getElementById('duePicker').value||today(),n);renderDue()}
 function setPaidToday(){document.getElementById('paidPicker').value=today();renderPaid()}
@@ -356,12 +422,12 @@ function shiftPaid(n){document.getElementById('paidPicker').value=addD(document.
 function renderDue(){var sd=document.getElementById('duePicker').value||today(),fl=getFL();document.getElementById('dueTodayBtn').className='dpb'+(sd===today()?' ta':'');document.getElementById('dueBD').textContent=fDL(sd);var due=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});document.getElementById('dueBC').textContent=due.length+' pending';if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due!</div>';return}var tt=0;var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchDuePaid()" id="btnBP" disabled>✅ Mark Paid</button></div><div class="lcards">';due.forEach(function(l){tt+=l.total;h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='<div class="lc-tot" style="color:var(--red)">⏳ Total: '+fmt(tt)+'</div></div>';document.getElementById('dueContent').innerHTML=h}
 function togDueAll(){var a=document.getElementById('dueAll').checked;document.querySelectorAll('.dcc').forEach(function(c){c.checked=a});updDueCt()}
 function updDueCt(){var c=document.querySelectorAll('.dcc:checked').length;var e=document.getElementById('dueSel');if(e)e.textContent=c+' selected';var bp=document.getElementById('btnBP');if(bp)bp.disabled=c===0}
-function batchDuePaid(){var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Due Paid ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l)return api({cmd:'update',id:l.id,remarks:'Paid'})})});chain.then(function(){return reload()}).then(function(){hideLoading();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})}
+function batchDuePaid(){if(processing)return;var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;processing=true;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Due Paid ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l)return api({cmd:'update',id:l.id,remarks:'Paid'})})});chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})}
 
 function renderPaid(){var sd=document.getElementById('paidPicker').value||today(),fl=getFL();document.getElementById('paidTodayBtn').className='dpb'+(sd===today()?' ta':'');document.getElementById('paidBD').textContent=fDL(sd);var paid=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});document.getElementById('paidBC').textContent=paid.length+' paid';if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}var tt=0;var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchPaidRenew()" id="btnBR" disabled>🔄 Renew</button></div><div class="lcards">';paid.forEach(function(l){tt+=l.total;h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Paid: '+fmt(tt)+'</div></div>';document.getElementById('paidContent').innerHTML=h}
 function togPaidAll(){var a=document.getElementById('paidAll').checked;document.querySelectorAll('.pcc').forEach(function(c){c.checked=a});updPaidCt()}
 function updPaidCt(){var c=document.querySelectorAll('.pcc:checked').length;var e=document.getElementById('paidSel');if(e)e.textContent=c+' selected';var br=document.getElementById('btnBR');if(br)br.disabled=c===0}
-function batchPaidRenew(){var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length)return;var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';if(!confirm('Renew '+ids.length+'?'))return;showLoading('Renewing '+ids.length+' loans...');saveState('Batch Renew ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});chain.then(function(){return reload()}).then(function(){hideLoading();toast('🔄 '+ids.length+' renewed','success');showUndoBar(ids.length+' renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})}
+function batchPaidRenew(){if(processing)return;var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length)return;var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';if(!confirm('Renew '+ids.length+'?'))return;processing=true;showLoading('Renewing '+ids.length+' loans...');saveState('Batch Renew ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('🔄 '+ids.length+' renewed','success');showUndoBar(ids.length+' renewed')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})}
 
 function renderDash(){var fl=getFL(),names=[],pa=0,pi=0,pt=0,pc=0,rc=0;fl.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name);if(l.remarks==='Pending'){pa+=l.amount;pi+=l.interest;pt+=l.total}if(l.remarks==='Paid'||l.action==='Remitted')pc++;if(l.action==='Renewed')rc++});document.getElementById('dashCards').innerHTML='<div class="dc"><div class="dl">Borrowers</div><div class="dv blue">'+names.length+'</div></div><div class="dc"><div class="dl">Lent Out</div><div class="dv amber">'+fmt(pa)+'</div></div><div class="dc"><div class="dl">Interest</div><div class="dv green">'+fmt(pi)+'</div></div><div class="dc"><div class="dl">To Collect</div><div class="dv red">'+fmt(pt)+'</div></div><div class="dc"><div class="dl">Paid</div><div class="dv green">'+pc+'</div></div><div class="dc"><div class="dl">Renewed</div><div class="dv amber">'+rc+'</div></div>';var ff=document.getElementById('financerFilter').value;if(ff==='All'){var fh='<div class="fgrid">';FINS.forEach(function(fn){var fl2=loans.filter(function(l){return l.financer===fn}),fa=0,fi=0,ft=0,fns=[];fl2.forEach(function(l){if(l.remarks==='Pending'){fa+=l.amount;fi+=l.interest;ft+=l.total}if(fns.indexOf(l.name)===-1)fns.push(l.name)});fh+='<div class="fc '+fn.toLowerCase()+'"><div class="fn">'+fB(fn)+' '+fn+'</div><div class="fr"><span class="fl">Borrowers</span><span class="fv">'+fns.length+'</span></div><div class="fr"><span class="fl">Lent Out</span><span class="fv">'+fmt(fa)+'</span></div><div class="fr"><span class="fl">Interest</span><span class="fv">'+fmt(fi)+'</span></div><div class="fr"><span class="fl">Collect</span><span class="fv" style="color:var(--red)">'+fmt(ft)+'</span></div></div>'});fh+='</div>';document.getElementById('finBreak').innerHTML=fh}else document.getElementById('finBreak').innerHTML='';if(!fl.length){document.getElementById('summaryContent').innerHTML='<div class="empty">No loans yet.</div>';return}var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);var h='<div class="lcards">';lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' <button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='</div>';document.getElementById('summaryContent').innerHTML=h}
 
