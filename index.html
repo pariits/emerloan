@@ -430,8 +430,13 @@ function loadData(){
     if(d.status==='ok'){
       loans=[];
       d.data.forEach(function(r){
-        loans.push({id:Number(r.id)||0,name:r.name||'',dateReleased:r.dateReleased||'',dueDate:r.dueDate||'',amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:r.remarks||'Pending',action:r.action||'',cycles:Number(r.cycles)||1,financer:r.financer||''})
+        var dr=String(r.dateReleased||'').trim().substring(0,10);
+        var dd=String(r.dueDate||'').trim().substring(0,10);
+        var rem=String(r.remarks||'Pending').trim();
+        var act=String(r.action||'').trim();
+        loans.push({id:Number(r.id)||0,name:String(r.name||'').trim(),dateReleased:dr,dueDate:dd,amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:rem,action:act,cycles:Number(r.cycles)||1,financer:String(r.financer||'').trim()})
       });
+
       renderAll()
     }else{toast('⚠️ '+d.message,'error')}
   })
