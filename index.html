@@ -12,14 +12,11 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--txt);padding-bottom:72px;overflow-x:hidden}
 input,select,button{font-family:inherit}
-
-/* LOADING OVERLAY */
 .loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,.6);z-index:999;justify-content:center;align-items:center;flex-direction:column;gap:12px}
 .loading-overlay.show{display:flex}
 .lo-spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,.3);border-top:4px solid #fff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .lo-text{color:#fff;font-size:14px;font-weight:700;text-align:center;max-width:80%}
-
 .login-wrap{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
 .login-box{background:var(--card);border-radius:16px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 4px 24px rgba(0,0,0,.1);text-align:center}
 .login-box h1{font-size:28px;margin-bottom:4px}
@@ -30,17 +27,13 @@ input,select,button{font-family:inherit}
 .login-box button:active{transform:scale(.98)}
 .login-box button:disabled{background:#94a3b8;cursor:not-allowed}
 .login-err{color:var(--red);font-size:12px;margin-bottom:8px;min-height:18px}
-
 .app{display:none;padding:16px 14px 20px}
-
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
 .hdr h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:6px}
 .sub{color:var(--txt2);font-size:11px;margin-bottom:12px}
-
 .toolbar{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .toolbar select,.toolbar input[type="text"]{padding:10px 12px;border:1px solid var(--bdr);border-radius:var(--r);font-size:14px;background:var(--card);flex:1;min-width:100px}
 .toolbar select:focus,.toolbar input:focus{outline:none;border-color:var(--pri)}
-
 .qa{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px}
 .qb{padding:12px 10px;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:#fff;transition:all .12s}
 .qb:active{transform:scale(.96)}
@@ -48,29 +41,23 @@ input,select,button{font-family:inherit}
 .qb .ct{background:rgba(255,255,255,.3);padding:1px 7px;border-radius:10px;font-size:10px}
 .qb.undo{background:#64748b}
 .qb.undo:disabled{background:#cbd5e1;color:#94a3b8;cursor:not-allowed;transform:none}
-
 .bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bdr);display:flex;z-index:50;padding:4px 0;padding-bottom:max(4px,env(safe-area-inset-bottom))}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 4px;cursor:pointer;color:var(--txt2);font-size:10px;font-weight:600;border:none;background:none;gap:2px;transition:color .15s}
 .ni.active{color:var(--pri)}
 .ni .ic{font-size:20px}
-
 .sec{display:none}.sec.active{display:block}
-
 .dg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .dc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 10px;text-align:center;box-shadow:var(--sh)}
 .dc .dl{color:var(--txt2);font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;font-weight:600}
 .dc .dv{font-size:18px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
 .dv.blue{color:var(--pri)}.dv.red{color:var(--red)}.dv.green{color:var(--grn)}.dv.amber{color:var(--amb)}
-
 .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .fc{background:var(--card);border-radius:var(--r);padding:12px;box-shadow:var(--sh);border-left:4px solid var(--pri)}
 .fc.axl{border-left-color:var(--red)}.fc.fritz{border-left-color:var(--pri)}.fc.axlthea{border-left-color:var(--pur)}
 .fc .fn{font-size:12px;font-weight:700;margin-bottom:6px}
 .fc .fr{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
 .fc .fl{color:var(--txt2)}.fc .fv{font-weight:700;font-family:'SF Mono','Cascadia Code',monospace}
-
 .info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:11px;color:#1e40af;line-height:1.6}
-
 .lcards{display:none}
 .lcard{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;margin-bottom:8px;box-shadow:var(--sh)}
 .lcard.due-c{border-left:4px solid var(--amb)}
@@ -82,7 +69,6 @@ input,select,button{font-family:inherit}
 .lc-v{font-weight:600;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px}
 .lc-act{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
 .lc-tot{background:#f1f5f9;border-radius:var(--r);padding:10px;text-align:center;margin-bottom:8px;font-size:12px;font-weight:700}
-
 .workbook{background:var(--card);border:1px solid #c0c0c0;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .wb-toolbar{background:#f3f3f3;border-bottom:1px solid #d0d0d0;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .wb-toolbar .wb-title{font-size:12px;font-weight:700;color:#333}
@@ -92,9 +78,7 @@ input,select,button{font-family:inherit}
 .wb-btn.paid-all{background:#e8f5e9;color:var(--grn);border-color:#a5d6a7}
 .wb-btn.renew-all{background:#fff3e0;color:#e65100;border-color:#ffcc80}
 .wb-sel-ct{font-size:11px;color:var(--pri);font-weight:700;padding:0 6px}
-
 .wb-sheet{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:65vh;overflow-y:auto}
-
 .xt{width:100%;border-collapse:collapse;font-size:11px}
 .xt th{background:#e8eaed;color:#333;font-weight:600;padding:6px 8px;border:1px solid #c0c0c0;font-size:10px;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;position:sticky;top:0;z-index:2}
 .xt td{padding:5px 8px;border:1px solid #d5d5d5;color:#222;font-family:'SF Mono','Cascadia Code',monospace;font-size:11px;white-space:nowrap;background:#fff}
@@ -109,7 +93,6 @@ input,select,button{font-family:inherit}
 .xt .xi:focus{outline:none;border-color:var(--pri);background:#fff}
 .xt .xi-date{width:110px}
 .xt .xi-amt{width:70px;text-align:right}
-
 .xact{display:flex;gap:3px;align-items:center}
 .xbtn{padding:4px 8px;border:1px solid #ccc;border-radius:3px;font-size:10px;font-weight:700;cursor:pointer;transition:all .1s;white-space:nowrap}
 .xbtn:active{transform:scale(.93)}
@@ -119,7 +102,6 @@ input,select,button{font-family:inherit}
 .xbtn.xdel{background:#ffebee;color:#c62828;border-color:#ef9a9a}
 .xbtn.xsave{background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7}
 .xchk{width:16px;height:16px;cursor:pointer;accent-color:var(--pri)}
-
 .wb-tabs-wrap{background:#e0e0e0;border-top:1px solid #c0c0c0;display:flex;align-items:stretch;overflow:hidden}
 .wb-tabs-scroll{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1}
 .wb-tabs-scroll::-webkit-scrollbar{display:none}
@@ -131,16 +113,13 @@ input,select,button{font-family:inherit}
 .wb-nav{display:flex;align-items:center;border-right:1px solid #c0c0c0}
 .wb-nav button{background:none;border:none;padding:8px 10px;font-size:14px;cursor:pointer;color:#555}
 .wb-nav button:active{background:#d0d0d0}
-
 .badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
 .b-paid{background:#dcfce7;color:#166534}.b-pending{background:#fef3c7;color:#92400e}.b-renewed{background:#dbeafe;color:#1e40af}.b-remitted{background:#f3e8ff;color:#6b21a8}
 .b-axl{background:#fef2f2;color:var(--red)}.b-fritz{background:#eff6ff;color:var(--pri)}.b-axlthea{background:#f5f3ff;color:var(--pur)}
-
 .legend{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;font-size:11px;color:var(--txt2)}
 .legend-i{display:flex;align-items:center;gap:4px}
 .legend-s{width:12px;height:12px;border-radius:3px;border:1px solid #ccc}
 .legend-s.yellow{background:#fff9c3}.legend-s.green{background:#e8f5e9}
-
 .mo{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100}
 .mo.show{display:flex;justify-content:center;align-items:flex-end}
 .ml{background:var(--card);border-radius:16px 16px 0 0;padding:20px 18px;padding-bottom:max(20px,env(safe-area-inset-bottom));width:100%;max-width:560px;max-height:88vh;overflow-y:auto;animation:su .2s ease}
@@ -159,67 +138,43 @@ input,select,button{font-family:inherit}
 .mbtns .mb{flex:1;padding:12px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
 .mbtns .mb:active{transform:scale(.97)}
 .mb-c{background:#f1f5f9;color:#333}.mb-s{background:var(--pri);color:#fff}.mb-w{background:var(--amb);color:#fff}.mb-d{background:var(--red);color:#fff}
-
 .renew-grp{display:none;margin-top:10px;padding:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px}
 .renew-grp.show{display:block}
-
 .dp{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .dp input[type="date"]{padding:9px 10px;border:1px solid var(--bdr);border-radius:8px;font-size:14px;flex:1;min-width:130px;background:var(--card)}
 .dp input:focus{outline:none;border-color:var(--pri)}
 .dpb{padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;background:var(--card);font-size:12px;font-weight:600;cursor:pointer;color:var(--txt)}
 .dpb:active{background:#f1f5f9}
 .dpb.ta{background:var(--pri);color:#fff;border-color:var(--pri)}
-
 .banner{border-radius:var(--r);padding:12px;margin-bottom:10px;text-align:center}
 .banner.db{background:#fef2f2;border:1px solid #fecaca}
 .banner.pb{background:#f0fdf4;border:1px solid #bbf7d0}
 .bl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--txt2)}
 .bd{font-size:16px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
 .bc2{font-size:11px;font-weight:600;margin-top:2px;color:var(--txt2)}
-
 .batch{display:flex;align-items:center;gap:8px;padding:8px 0;flex-wrap:wrap;border-bottom:1px solid var(--bdr);margin-bottom:6px}
 .batch label{font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;display:flex;align-items:center;gap:5px}
 .batch .bct{font-size:11px;color:var(--pri);font-weight:700}
 .bchk{width:18px;height:18px;cursor:pointer;accent-color:var(--pri)}
 .bbtn{padding:6px 12px;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:#fff}
 .bbtn:active{transform:scale(.95)}
-
 .warn{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px;margin-bottom:10px;font-size:12px;color:#991b1b}
 .empty{text-align:center;padding:30px 16px;color:var(--txt2);font-size:13px}
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--txt);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:200;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.success{background:var(--grn)}.toast.error{background:var(--red)}.toast.info{background:var(--pri)}
-
 .undo-bar{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;z-index:200;opacity:0;transition:all .3s;pointer-events:none;max-width:92%;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
 .undo-bar.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
 .undo-bar .ub-text{flex:1}
 .undo-bar .ub-btn{background:var(--pri);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}
 .undo-bar .ub-btn:active{transform:scale(.95)}
 .undo-bar .ub-x{background:none;border:none;color:#94a3b8;font-size:16px;cursor:pointer;padding:0 4px}
-
-@media(max-width:640px){
-  .dg{grid-template-columns:repeat(2,1fr)}
-  .fgrid{grid-template-columns:1fr}
-  .lcards{display:block}
-  .tdesk{display:none}
-  .fg-row{grid-template-columns:1fr}
-  .qa{grid-template-columns:1fr 1fr}
-  .qa .undo{grid-column:span 2}
-}
-@media(min-width:641px){
-  .lcards{display:none}
-  .tdesk{display:block}
-  body{max-width:960px;margin:0 auto}
-}
+@media(max-width:640px){.dg{grid-template-columns:repeat(2,1fr)}.fgrid{grid-template-columns:1fr}.lcards{display:block}.tdesk{display:none}.fg-row{grid-template-columns:1fr}.qa{grid-template-columns:1fr 1fr}.qa .undo{grid-column:span 2}}
+@media(min-width:641px){.lcards{display:none}.tdesk{display:block}body{max-width:960px;margin:0 auto}}
 </style>
 </head>
 <body>
-
-<!-- LOADING OVERLAY -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="lo-spinner"></div>
-  <div class="lo-text" id="loadingText">Saving...</div>
-</div>
+<div class="loading-overlay" id="loadingOverlay"><div class="lo-spinner"></div><div class="lo-text" id="loadingText">Saving...</div></div>
 
 <div class="login-wrap" id="loginWrap">
 <div class="login-box">
@@ -251,12 +206,7 @@ input,select,button{font-family:inherit}
   <button class="qb undo" onclick="doUndo()" id="undoBtn" disabled>↩ Undo</button>
 </div>
 
-<div class="sec active" id="sec-dash">
-  <div class="dg" id="dashCards"></div>
-  <div id="finBreak"></div>
-  <div class="info"><strong>📌 Rules:</strong> Due = Release + 6 days · Interest: 10% or 15% · Weeks start Tuesday · UTC+8</div>
-  <div id="summaryContent"></div>
-</div>
+<div class="sec active" id="sec-dash"><div class="dg" id="dashCards"></div><div id="finBreak"></div><div class="info"><strong>📌 Rules:</strong> Due = Release + 6 days · Interest: 10% or 15% · Weeks start Tuesday · UTC+8</div><div id="summaryContent"></div></div>
 
 <div class="sec" id="sec-tables">
   <div class="legend"><div class="legend-i"><div class="legend-s yellow"></div> Due Today</div><div class="legend-i"><div class="legend-s green"></div> Paid</div></div>
@@ -294,7 +244,7 @@ input,select,button{font-family:inherit}
   <p class="fg-note" id="newDueNote">📌 Due Date: auto-calculated</p>
   <div class="fg-row" style="margin-top:10px"><div class="fg2"><label>Amount (₱)</label><input type="number" id="newAmt" placeholder="e.g. 5000" min="1" inputmode="numeric"></div><div class="fg2"><label>Interest Rate</label><select id="newRate"><option value="10">10%</option><option value="15">15%</option></select></div></div>
   <p class="fg-hint">Interest, Total, and Due Date are auto-calculated.</p>
-  <div class="mbtns"><button class="mb mb-c" onclick="closeModal('new')">Cancel</button><button class="mb mb-s" id="btnAdd" onclick="addLoan()">Add Loan</button></div>
+  <div class="mbtns"><button class="mb mb-c" onclick="closeModal('new')">Cancel</button><button class="mb mb-s" onclick="addLoan()">Add Loan</button></div>
 </div></div>
 
 <div class="mo" id="modal-update" onclick="if(event.target===this)closeModal('update')">
@@ -303,7 +253,7 @@ input,select,button{font-family:inherit}
   <div id="updInfo" style="background:#f8fafc;border:1px solid var(--bdr);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px"></div>
   <div class="fg-row"><div class="fg2"><label>Remarks</label><select id="updRem"><option value="Pending">Pending</option><option value="Paid">Paid</option></select></div><div class="fg2"><label>Action</label><select id="updAct" onchange="toggleRenew()"><option value="">— None —</option><option value="Renew">Renew</option><option value="Remitted">Remitted</option></select></div></div>
   <div class="renew-grp" id="renewGrp"><div class="fg-row"><div class="fg2"><label>Renewal Date</label><input type="date" id="renewDate"><p class="fg-note" id="renewNote">📌 New Due: select date</p></div><div class="fg2"><label>New Amount (opt)</label><input type="number" id="updNewAmt" placeholder="Same if blank" inputmode="numeric"></div></div></div>
-  <div class="mbtns"><button class="mb mb-c" onclick="closeModal('update')">Cancel</button><button class="mb mb-w" id="btnUpd" onclick="saveUpdate()">Save</button></div>
+  <div class="mbtns"><button class="mb mb-c" onclick="closeModal('update')">Cancel</button><button class="mb mb-w" onclick="saveUpdate()">Save</button></div>
 </div></div>
 
 <div class="mo" id="modal-delete" onclick="if(event.target===this)closeModal('delete')">
@@ -311,50 +261,31 @@ input,select,button{font-family:inherit}
   <h2>🗑️ Delete Loan</h2>
   <div id="delInfo" style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#991b1b"></div>
   <div class="warn">⚠️ This permanently removes the loan. Cannot be undone from Google Sheets.</div>
-  <div class="mbtns"><button class="mb mb-c" onclick="closeModal('delete')">Cancel</button><button class="mb mb-d" id="btnDel" onclick="confirmDelete()">Delete</button></div>
+  <div class="mbtns"><button class="mb mb-c" onclick="closeModal('delete')">Cancel</button><button class="mb mb-d" onclick="confirmDelete()">Delete</button></div>
 </div></div>
-
 </div>
 
 <script>
-/* ===== CONFIG ===== */
-var WEB_APP_URL='https://script.google.com/macros/s/AKfycbxAHv0Px3xdfQ06vKPQUUsY-rXpYMM306p8l_N6_Qfkl1CziTFIEeDXrzqswfBtAMgJ/exec';
+var WEB_APP_URL='https://script.google.com/macros/s/AKfycbyoQNs38JUm6_oykOEZcvI2VtPibgeG94tN81WJmBVPGbf9OY1uTntGX3urvireH8q5/exec';
 var PW_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
 var MAX_ATTEMPTS=5,LOCKOUT_MIN=5,CD=6,UO=8,FINS=['Axl','Fritz','Axlthea'];
 var SESSION_KEY='emerloan_session',SESSION_HOURS=8,TAB_KEY='emerloan_tab';
+var loans=[],updId=null,delId=null,editingRow=null,weekKeys=[],curWk=0,undoStack=[],MAX_UNDO=20,undoTimer=null;
 
-var loans=[],updId=null,delId=null,editingRow=null;
-var weekKeys=[],curWk=0;
-var undoStack=[],MAX_UNDO=20,undoTimer=null;
-
-/* ===== LOADING OVERLAY ===== */
-function showLoading(msg){document.getElementById('loadingText').textContent=msg||'Saving...';document.getElementById('loadingOverlay').classList.add('show')}
+function showLoading(m){document.getElementById('loadingText').textContent=m||'Saving...';document.getElementById('loadingOverlay').classList.add('show')}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
 
-/* ===== LOGIN ===== */
-async function hashPw(pw){var enc=new TextEncoder().encode(pw);var buf=await crypto.subtle.digest('SHA-256',enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
+async function hashPw(pw){var e=new TextEncoder().encode(pw);var b=await crypto.subtle.digest('SHA-256',e);return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
 function checkSession(){var s=localStorage.getItem(SESSION_KEY);if(!s)return false;try{var d=JSON.parse(s);if(d.hash===PW_HASH&&Date.now()<d.expires)return true}catch(e){}localStorage.removeItem(SESSION_KEY);return false}
 function saveSession(){localStorage.setItem(SESSION_KEY,JSON.stringify({hash:PW_HASH,expires:Date.now()+(SESSION_HOURS*3600000)}))}
-
 function initApp(){if(checkSession()){document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';loadData()}}
+function doLogin(){var lo=JSON.parse(localStorage.getItem('emerloan_lockout')||'{}');if(lo.until&&Date.now()<lo.until){document.getElementById('loginErr').textContent='🔒 Locked. Try again in '+Math.ceil((lo.until-Date.now())/60000)+' min.';return}var pw=document.getElementById('loginPw').value;if(!pw){document.getElementById('loginErr').textContent='Enter password';return}hashPw(pw).then(function(h){if(h===PW_HASH){localStorage.removeItem('emerloan_lockout');saveSession();document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';loadData()}else{var att=(lo.attempts||0)+1;if(att>=MAX_ATTEMPTS){localStorage.setItem('emerloan_lockout',JSON.stringify({attempts:att,until:Date.now()+LOCKOUT_MIN*60000}));document.getElementById('loginErr').textContent='🔒 Locked for '+LOCKOUT_MIN+' minutes.';document.getElementById('loginBtn').disabled=true;setTimeout(function(){document.getElementById('loginBtn').disabled=false;document.getElementById('loginErr').textContent=''},LOCKOUT_MIN*60000)}else{localStorage.setItem('emerloan_lockout',JSON.stringify({attempts:att}));document.getElementById('loginErr').textContent='❌ Wrong password ('+att+'/'+MAX_ATTEMPTS+')'}}})}
 
-function doLogin(){
-  var lo=JSON.parse(localStorage.getItem('emerloan_lockout')||'{}');
-  if(lo.until&&Date.now()<lo.until){var m=Math.ceil((lo.until-Date.now())/60000);document.getElementById('loginErr').textContent='🔒 Locked. Try again in '+m+' min.';return}
-  var pw=document.getElementById('loginPw').value;
-  if(!pw){document.getElementById('loginErr').textContent='Enter password';return}
-  hashPw(pw).then(function(h){
-    if(h===PW_HASH){localStorage.removeItem('emerloan_lockout');saveSession();document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';loadData()}
-    else{var att=(lo.attempts||0)+1;if(att>=MAX_ATTEMPTS){localStorage.setItem('emerloan_lockout',JSON.stringify({attempts:att,until:Date.now()+LOCKOUT_MIN*60000}));document.getElementById('loginErr').textContent='🔒 Locked for '+LOCKOUT_MIN+' minutes.';document.getElementById('loginBtn').disabled=true;setTimeout(function(){document.getElementById('loginBtn').disabled=false;document.getElementById('loginErr').textContent=''},LOCKOUT_MIN*60000)}else{localStorage.setItem('emerloan_lockout',JSON.stringify({attempts:att}));document.getElementById('loginErr').textContent='❌ Wrong password ('+att+'/'+MAX_ATTEMPTS+')'}}
-  })
-}
-
-/* ===== UTILS ===== */
 function now8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UO*3600000))}
 function today(){var d=now8();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
 function p2(n){return('0'+n).slice(-2)}
 function addD(ds,n){var p=ds.split('-');var d=new Date(+p[0],+p[1]-1,+p[2],12);d.setDate(d.getDate()+n);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
-function normDate(v){if(!v)return '';var s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.substring(0,10);var d=new Date(s);if(!isNaN(d.getTime())){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}return s}
+function normDate(v){if(!v)return '';var s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.substring(0,10);var d=new Date(s);if(!isNaN(d.getTime()))return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());return s}
 function fD(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 function fDY(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}
 function fDL(ds){var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'short'})}
@@ -370,152 +301,136 @@ function getFL(){var f=document.getElementById('financerFilter').value,q=documen
 function saveTab(s){localStorage.setItem(TAB_KEY,s)}
 function getSavedTab(){return localStorage.getItem(TAB_KEY)||'dash'}
 
-/* ===== UNDO ===== */
-function saveState(label){undoStack.push({label:label,loans:JSON.parse(JSON.stringify(loans))});if(undoStack.length>MAX_UNDO)undoStack.shift();updateUndoBtn()}
-function doUndo(){if(!undoStack.length)return;var state=undoStack.pop();loans=state.loans;editingRow=null;renderAll();toast('↩ Undone: '+state.label,'info');showUndoBar(null);updateUndoBtn()}
-function updateUndoBtn(){var btn=document.getElementById('undoBtn');if(undoStack.length>0){btn.disabled=false;btn.textContent='↩ Undo ('+undoStack.length+')'}else{btn.disabled=true;btn.textContent='↩ Undo'}}
-function showUndoBar(label){if(!label){hideUndo();return}clearTimeout(undoTimer);var bar=document.getElementById('undoBar');document.getElementById('undoText').textContent=label;bar.classList.add('show');undoTimer=setTimeout(function(){bar.classList.remove('show')},6000)}
+function saveState(lb){undoStack.push({label:lb,loans:JSON.parse(JSON.stringify(loans))});if(undoStack.length>MAX_UNDO)undoStack.shift();updateUndoBtn()}
+function doUndo(){if(!undoStack.length)return;var s=undoStack.pop();loans=s.loans;editingRow=null;renderAll();toast('↩ Undone: '+s.label,'info');showUndoBar(null);updateUndoBtn()}
+function updateUndoBtn(){var b=document.getElementById('undoBtn');if(undoStack.length>0){b.disabled=false;b.textContent='↩ Undo ('+undoStack.length+')'}else{b.disabled=true;b.textContent='↩ Undo'}}
+function showUndoBar(lb){if(!lb){hideUndo();return}clearTimeout(undoTimer);document.getElementById('undoText').textContent=lb;document.getElementById('undoBar').classList.add('show');undoTimer=setTimeout(function(){document.getElementById('undoBar').classList.remove('show')},6000)}
 function hideUndo(){clearTimeout(undoTimer);document.getElementById('undoBar').classList.remove('show')}
 
-/* ===== API — PROMISE-BASED ===== */
+/* ===== API — PAYLOAD METHOD (ALL DATA IN ONE PARAM) ===== */
 function api(params){
   return new Promise(function(resolve,reject){
-    params._t=Date.now();
-    var url=WEB_APP_URL+'?'+Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k])}).join('&');
-    fetch(url,{redirect:'follow',cache:'no-store'}).then(function(r){
+    /* For GET (read), use simple params. For writes, pack into payload */
+    var isGet=params.action==='get';
+    var url;
+    if(isGet){
+      url=WEB_APP_URL+'?action=get&_t='+Date.now();
+    }else{
+      /* Pack ALL params into a single 'payload' URL param */
+      var payloadStr=encodeURIComponent(JSON.stringify(params));
+      url=WEB_APP_URL+'?action='+params.action+'&payload='+payloadStr+'&_t='+Date.now();
+    }
+    
+    fetch(url,{redirect:'follow',cache:'no-store'})
+    .then(function(r){
+      /* Handle Google's redirect */
       if(r.redirected)return fetch(r.url,{cache:'no-store'});
-      return r
-    }).then(function(r){return r.text()}).then(function(txt){
-      try{var d=JSON.parse(txt);resolve(d)}
-      catch(e){reject('Parse error: '+txt.substring(0,100))}
-    }).catch(function(e){reject(e)})
+      return r;
+    })
+    .then(function(r){return r.text()})
+    .then(function(txt){
+      try{resolve(JSON.parse(txt))}
+      catch(e){
+        console.error('Raw:',txt.substring(0,200));
+        reject('Parse error')
+      }
+    })
+    .catch(function(e){reject(e)})
   })
 }
+
+function parseRow(r){return{id:Number(r.id)||0,name:String(r.name||'').trim(),dateReleased:normDate(r.dateReleased),dueDate:normDate(r.dueDate),amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:String(r.remarks||'Pending').trim(),action:String(r.action||'').trim(),cycles:Number(r.cycles)||1,financer:String(r.financer||'').trim()}}
 
 function loadData(){
   showLoading('Loading data...');
   api({action:'get'}).then(function(d){
     hideLoading();
-    if(d.status==='ok'){
-      loans=[];
-      d.data.forEach(function(r){
-        loans.push({id:Number(r.id)||0,name:String(r.name||'').trim(),dateReleased:normDate(r.dateReleased),dueDate:normDate(r.dueDate),amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:String(r.remarks||'Pending').trim(),action:String(r.action||'').trim(),cycles:Number(r.cycles)||1,financer:String(r.financer||'').trim()})
-      });
-      var st=getSavedTab();switchSec(st);renderAll()
-    }else{toast('⚠️ '+d.message,'error')}
+    if(d.status==='ok'){loans=d.data.map(parseRow);switchSec(getSavedTab());renderAll()}
+    else toast('⚠️ '+d.message,'error')
   }).catch(function(e){hideLoading();toast('⚠️ Connection error','error');console.error(e)})
 }
 
-function reloadFromSheet(){
+function reload(){
   return api({action:'get'}).then(function(d){
-    if(d.status==='ok'){
-      loans=[];
-      d.data.forEach(function(r){
-        loans.push({id:Number(r.id)||0,name:String(r.name||'').trim(),dateReleased:normDate(r.dateReleased),dueDate:normDate(r.dueDate),amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:String(r.remarks||'Pending').trim(),action:String(r.action||'').trim(),cycles:Number(r.cycles)||1,financer:String(r.financer||'').trim()})
-      });
-      renderAll()
-    }
+    if(d.status==='ok'){loans=d.data.map(parseRow);renderAll()}
   })
 }
 
 function getNextId(){var mx=0;loans.forEach(function(l){if(l.id>mx)mx=l.id});return mx+1}
 
-/* ===== NAV ===== */
-function switchSec(s){
-  document.querySelectorAll('.sec').forEach(function(el){el.classList.remove('active')});
-  document.getElementById('sec-'+s).classList.add('active');
-  document.querySelectorAll('.ni').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-sec')===s)});
-  saveTab(s);
-  if(s==='due'){document.getElementById('duePicker').value=today();renderDue()}
-  if(s==='paid'){document.getElementById('paidPicker').value=today();renderPaid()}
-  if(s==='tables')renderWorkbook()
-}
-function openModal(n){
-  if(n==='new'){document.getElementById('newName').value='';document.getElementById('newDate').value=today();document.getElementById('newAmt').value='';document.getElementById('newRate').value='10';document.getElementById('newFin').value='Axl';updDueNote()}
-  document.getElementById('modal-'+n).classList.add('show')
-}
+function switchSec(s){document.querySelectorAll('.sec').forEach(function(el){el.classList.remove('active')});document.getElementById('sec-'+s).classList.add('active');document.querySelectorAll('.ni').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-sec')===s)});saveTab(s);if(s==='due'){document.getElementById('duePicker').value=today();renderDue()}if(s==='paid'){document.getElementById('paidPicker').value=today();renderPaid()}if(s==='tables')renderWorkbook()}
+function openModal(n){if(n==='new'){document.getElementById('newName').value='';document.getElementById('newDate').value=today();document.getElementById('newAmt').value='';document.getElementById('newRate').value='10';document.getElementById('newFin').value='Axl';updDueNote()}document.getElementById('modal-'+n).classList.add('show')}
 function closeModal(n){document.getElementById('modal-'+n).classList.remove('show')}
 function updDueNote(){var v=document.getElementById('newDate').value;document.getElementById('newDueNote').textContent=v?'📌 Due: '+fDY(addD(v,CD)):'📌 Due: auto'}
 function toggleRenew(){var a=document.getElementById('updAct').value,g=document.getElementById('renewGrp');if(a==='Renew'){g.classList.add('show');var l=loans.find(function(x){return x.id===updId});if(l){document.getElementById('renewDate').value=addD(l.dueDate,1);updRenewNote()}}else g.classList.remove('show')}
 function updRenewNote(){var v=document.getElementById('renewDate').value;document.getElementById('renewNote').textContent=v?'📌 New Due: '+fDY(addD(v,CD)):'📌 New Due: select date'}
 
-/* ===== CRUD — SHOW LOADING → SAVE → RELOAD → HIDE LOADING ===== */
+/* ===== CRUD ===== */
 function addLoan(){
   var nm=document.getElementById('newName').value.trim(),dr=document.getElementById('newDate').value,am=parseFloat(document.getElementById('newAmt').value),rt=parseInt(document.getElementById('newRate').value),fn=document.getElementById('newFin').value;
   if(!nm){alert('Enter name');return}if(!dr){alert('Select date');return}if(!am||am<=0){alert('Enter amount');return}
-  closeModal('new');showLoading('Adding '+nm+'...');
-  saveState('Add '+nm);
+  closeModal('new');showLoading('Adding '+nm+'...');saveState('Add '+nm);
   var nid=getNextId(),int=am*(rt/100),tot=am+int,due=addD(dr,CD);
-  api({action:'add',id:nid,name:nm,dateReleased:dr,dueDate:due,amount:am,rate:rt,interest:int,total:tot,remarks:'Pending',action:'',cycles:1,financer:fn}).then(function(d){
-    if(d.status==='ok'){return reloadFromSheet().then(function(){hideLoading();toast('✅ Added '+nm,'success');showUndoBar('Added '+nm)})}
-    else{hideLoading();toast('⚠️ Failed: '+d.message,'error')}
-  }).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  api({action:'add',id:nid,name:nm,dateReleased:dr,dueDate:due,amount:am,rate:rt,interest:int,total:tot,remarks:'Pending',action:'',cycles:1,financer:fn})
+  .then(function(d){if(d.status==='ok')return reload();else throw d.message})
+  .then(function(){hideLoading();toast('✅ Added '+nm,'success');showUndoBar('Added '+nm)})
+  .catch(function(e){hideLoading();toast('⚠️ Failed: '+e,'error')})
 }
 
-function openUpd(id){
-  var l=loans.find(function(x){return x.id===id});if(!l)return;updId=id;
-  document.getElementById('updInfo').innerHTML='<strong>'+l.name+'</strong> · '+fB(l.financer)+' · '+fmt(l.amount)+' · Due: '+fDY(l.dueDate)+' · #'+l.cycles;
-  document.getElementById('updRem').value=l.remarks;document.getElementById('updAct').value='';document.getElementById('updNewAmt').value='';
-  document.getElementById('renewGrp').classList.remove('show');document.getElementById('renewDate').value='';
-  document.getElementById('modal-update').classList.add('show')
-}
+function openUpd(id){var l=loans.find(function(x){return x.id===id});if(!l)return;updId=id;document.getElementById('updInfo').innerHTML='<strong>'+l.name+'</strong> · '+fB(l.financer)+' · '+fmt(l.amount)+' · Due: '+fDY(l.dueDate)+' · #'+l.cycles;document.getElementById('updRem').value=l.remarks;document.getElementById('updAct').value='';document.getElementById('updNewAmt').value='';document.getElementById('renewGrp').classList.remove('show');document.getElementById('renewDate').value='';document.getElementById('modal-update').classList.add('show')}
 
 function saveUpdate(){
   var l=loans.find(function(x){return x.id===updId});if(!l)return;
   var rem=document.getElementById('updRem').value,act=document.getElementById('updAct').value;
   var actionVal=act==='Renew'?'Renewed':act==='Remitted'?'Remitted':'';
-  closeModal('update');showLoading('Updating '+l.name+'...');
-  saveState('Update '+l.name);
+  closeModal('update');showLoading('Updating '+l.name+'...');saveState('Update '+l.name);
 
   if(act==='Renew'){
     var nr=document.getElementById('renewDate').value;
     if(!nr){hideLoading();alert('Select renewal date');undoStack.pop();updateUndoBtn();return}
     var na=document.getElementById('updNewAmt').value,ra=na?parseFloat(na):l.amount,ni=ra*(l.rate/100),nid=getNextId();
-    api({action:'update',id:l.id,remarks:rem,action:actionVal}).then(function(){
-      return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:ra,rate:l.rate,interest:ni,total:ra+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})
-    }).then(function(){return reloadFromSheet()}).then(function(){hideLoading();toast('✅ Renewed '+l.name,'success');showUndoBar('Renewed '+l.name)}).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+    api({action:'update',id:l.id,remarks:rem,action:actionVal})
+    .then(function(){return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:ra,rate:l.rate,interest:ni,total:ra+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
+    .then(function(){return reload()})
+    .then(function(){hideLoading();toast('✅ Renewed '+l.name,'success');showUndoBar('Renewed '+l.name)})
+    .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
   }else{
-    api({action:'update',id:l.id,remarks:rem,action:actionVal}).then(function(d){
-      if(d.status==='ok'){return reloadFromSheet().then(function(){hideLoading();toast('✅ Updated '+l.name,'success');showUndoBar('Updated '+l.name)})}
-      else{hideLoading();toast('⚠️ Failed: '+d.message,'error')}
-    }).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+    api({action:'update',id:l.id,remarks:rem,action:actionVal})
+    .then(function(d){if(d.status==='ok')return reload();else throw d.message})
+    .then(function(){hideLoading();toast('✅ Updated '+l.name,'success');showUndoBar('Updated '+l.name)})
+    .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
   }
 }
 
-function openDel(id){
-  var l=loans.find(function(x){return x.id===id});if(!l)return;delId=id;
-  document.getElementById('delInfo').innerHTML='Delete <strong>'+l.name+'</strong> ('+fB(l.financer)+') — '+fmt(l.amount)+'?';
-  document.getElementById('modal-delete').classList.add('show')
-}
+function openDel(id){var l=loans.find(function(x){return x.id===id});if(!l)return;delId=id;document.getElementById('delInfo').innerHTML='Delete <strong>'+l.name+'</strong> ('+fB(l.financer)+') — '+fmt(l.amount)+'?';document.getElementById('modal-delete').classList.add('show')}
 
 function confirmDelete(){
   var l=loans.find(function(x){return x.id===delId});
-  closeModal('delete');showLoading('Deleting...');
-  saveState('Delete '+(l?l.name:'loan'));
-  api({action:'delete',id:delId}).then(function(d){
-    if(d.status==='ok'){return reloadFromSheet().then(function(){hideLoading();toast('🗑️ Deleted','error');showUndoBar('Deleted '+(l?l.name:'loan'))})}
-    else{hideLoading();toast('⚠️ Failed','error')}
-  }).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  closeModal('delete');showLoading('Deleting...');saveState('Delete '+(l?l.name:'loan'));
+  api({action:'delete',id:delId})
+  .then(function(d){if(d.status==='ok')return reload();else throw d.message})
+  .then(function(){hideLoading();toast('🗑️ Deleted','error');showUndoBar('Deleted '+(l?l.name:'loan'))})
+  .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
 }
 
 function quickPaid(id){
   var l=loans.find(function(x){return x.id===id});if(!l)return;
-  showLoading('Marking '+l.name+' as Paid...');
-  saveState('Paid '+l.name);
-  api({action:'update',id:l.id,remarks:'Paid'}).then(function(d){
-    if(d.status==='ok'){return reloadFromSheet().then(function(){hideLoading();toast('✅ '+l.name+' Paid','success');showUndoBar(l.name+' → Paid')})}
-    else{hideLoading();toast('⚠️ Failed: '+d.message,'error')}
-  }).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  showLoading('Marking '+l.name+' as Paid...');saveState('Paid '+l.name);
+  api({action:'update',id:l.id,remarks:'Paid'})
+  .then(function(d){if(d.status==='ok')return reload();else throw d.message})
+  .then(function(){hideLoading();toast('✅ '+l.name+' Paid','success');showUndoBar(l.name+' → Paid')})
+  .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
 }
 
 function quickRenew(id){
   var l=loans.find(function(x){return x.id===id});if(!l||l.remarks!=='Paid')return;
-  showLoading('Renewing '+l.name+'...');
-  saveState('Renew '+l.name);
+  showLoading('Renewing '+l.name+'...');saveState('Renew '+l.name);
   var nr=addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();
-  api({action:'update',id:l.id,action:'Renewed'}).then(function(){
-    return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})
-  }).then(function(){return reloadFromSheet()}).then(function(){hideLoading();toast('🔄 '+l.name+' renewed','success');showUndoBar(l.name+' → Renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  api({action:'update',id:l.id,action:'Renewed'})
+  .then(function(){return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
+  .then(function(){return reload()})
+  .then(function(){hideLoading();toast('🔄 '+l.name+' renewed','success');showUndoBar(l.name+' → Renewed')})
+  .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
 }
 
 function startEdit(id){editingRow=id;renderCurrentSheet()}
@@ -528,20 +443,18 @@ function saveInlineEdit(id){
   if(amtEl){var na=parseFloat(amtEl.value);if(na&&na>0&&na!==l.amount){params.amount=na;params.interest=na*(l.rate/100);params.total=na+na*(l.rate/100);changed=true}}
   if(!changed){undoStack.pop();updateUndoBtn();editingRow=null;renderAll();return}
   editingRow=null;showLoading('Saving edit...');
-  api(params).then(function(d){
-    if(d.status==='ok'){return reloadFromSheet().then(function(){hideLoading();toast('✅ Updated '+l.name,'success');showUndoBar('Edited '+l.name)})}
-    else{hideLoading();toast('⚠️ Failed','error')}
-  }).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  api(params).then(function(d){if(d.status==='ok')return reload();else throw d.message})
+  .then(function(){hideLoading();toast('✅ Updated '+l.name,'success');showUndoBar('Edited '+l.name)})
+  .catch(function(e){hideLoading();toast('⚠️ Error: '+e,'error')})
 }
 
 function batchWkPaid(){
   var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
   if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
-  showLoading('Marking '+ids.length+' as Paid...');
-  saveState('Batch Paid ('+ids.length+')');
+  showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Paid ('+ids.length+')');
   var chain=Promise.resolve();
   ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l&&l.remarks==='Pending')return api({action:'update',id:l.id,remarks:'Paid'})})});
-  chain.then(function(){return reloadFromSheet()}).then(function(){hideLoading();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  chain.then(function(){return reload()}).then(function(){hideLoading();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})
 }
 
 function batchWkRenew(){
@@ -550,156 +463,47 @@ function batchWkRenew(){
   if(!paidIds.length){toast('Select paid loans to renew','error');return}
   var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
   if(!confirm('Renew '+paidIds.length+' loan(s)?'))return;
-  showLoading('Renewing '+paidIds.length+' loans...');
-  saveState('Batch Renew ('+paidIds.length+')');
+  showLoading('Renewing '+paidIds.length+' loans...');saveState('Batch Renew ('+paidIds.length+')');
   var chain=Promise.resolve();
   paidIds.forEach(function(id){chain=chain.then(function(){
     var l=loans.find(function(x){return x.id===id});if(!l)return;
     var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();
-    return api({action:'update',id:l.id,action:'Renewed'}).then(function(){
-      return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})
-    })
+    return api({action:'update',id:l.id,action:'Renewed'}).then(function(){return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
   })});
-  chain.then(function(){return reloadFromSheet()}).then(function(){hideLoading();toast('🔄 '+paidIds.length+' renewed','success');showUndoBar(paidIds.length+' renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
+  chain.then(function(){return reload()}).then(function(){hideLoading();toast('🔄 '+paidIds.length+' renewed','success');showUndoBar(paidIds.length+' renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})
 }
 
-function downloadCSV(){
-  var fl=getFL();if(!fl.length){toast('No data to download','error');return}
-  var csv='Name,Date Released,Due Date,Amount,Rate,Interest,Total,Remarks,Action,Cycles,Financer\n';
-  fl.forEach(function(l){csv+='"'+l.name+'",'+l.dateReleased+','+l.dueDate+','+l.amount+','+l.rate+'%,'+l.interest+','+l.total+','+l.remarks+','+l.action+','+l.cycles+','+l.financer+'\n'});
-  var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EmerLoan_'+today()+'.csv';a.click();toast('📥 Downloaded','success')
-}
+function downloadCSV(){var fl=getFL();if(!fl.length){toast('No data','error');return}var csv='Name,Date Released,Due Date,Amount,Rate,Interest,Total,Remarks,Action,Cycles,Financer\n';fl.forEach(function(l){csv+='"'+l.name+'",'+l.dateReleased+','+l.dueDate+','+l.amount+','+l.rate+'%,'+l.interest+','+l.total+','+l.remarks+','+l.action+','+l.cycles+','+l.financer+'\n'});var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EmerLoan_'+today()+'.csv';a.click();toast('📥 Downloaded','success')}
 
-/* ===== WORKBOOK — SORTED BY DATE RELEASED ===== */
-function buildWeeks(){
-  var fl=getFL();var wm={};
-  fl.forEach(function(l){var w=wk(l.dateReleased);if(!wm[w])wm[w]=[];wm[w].push(l)});
-  Object.keys(wm).forEach(function(w){wm[w].sort(function(a,b){return a.dateReleased<b.dateReleased?-1:a.dateReleased>b.dateReleased?1:a.name.localeCompare(b.name)})});
-  weekKeys=Object.keys(wm).sort().reverse();return wm
-}
+function buildWeeks(){var fl=getFL();var wm={};fl.forEach(function(l){var w=wk(l.dateReleased);if(!wm[w])wm[w]=[];wm[w].push(l)});Object.keys(wm).forEach(function(w){wm[w].sort(function(a,b){return a.dateReleased<b.dateReleased?-1:a.dateReleased>b.dateReleased?1:a.name.localeCompare(b.name)})});weekKeys=Object.keys(wm).sort().reverse();return wm}
 
-function renderWorkbook(){
-  var wm=buildWeeks();var cw=wk(today());
-  if(!weekKeys.length){document.getElementById('wbSheet').innerHTML='<div class="empty">No loans yet. Tap ＋ New Loan.</div>';document.getElementById('wbTabs').innerHTML='';document.getElementById('wbTitle').textContent='📋 No Data';document.getElementById('wbActions').innerHTML='';return}
-  if(curWk>=weekKeys.length)curWk=0;
-  var tabs='';weekKeys.forEach(function(w,wi){var ic=w===cw;tabs+='<div class="wb-tab'+(wi===curWk?' active':'')+'" data-wi="'+wi+'" onclick="goWk('+wi+')"><span class="tab-dot '+(ic?'cur':'past')+'"></span>'+wkShort(w)+'</div>'});
-  document.getElementById('wbTabs').innerHTML=tabs;renderCurrentSheet()
-}
+function renderWorkbook(){var wm=buildWeeks();var cw=wk(today());if(!weekKeys.length){document.getElementById('wbSheet').innerHTML='<div class="empty">No loans yet.</div>';document.getElementById('wbTabs').innerHTML='';document.getElementById('wbTitle').textContent='📋 No Data';document.getElementById('wbActions').innerHTML='';return}if(curWk>=weekKeys.length)curWk=0;var tabs='';weekKeys.forEach(function(w,wi){var ic=w===cw;tabs+='<div class="wb-tab'+(wi===curWk?' active':'')+'" data-wi="'+wi+'" onclick="goWk('+wi+')"><span class="tab-dot '+(ic?'cur':'past')+'"></span>'+wkShort(w)+'</div>'});document.getElementById('wbTabs').innerHTML=tabs;renderCurrentSheet()}
 
-function renderCurrentSheet(){
-  var wm=buildWeeks();var cw=wk(today()),td=today();
-  if(!weekKeys.length)return;var w=weekKeys[curWk],wl=wm[w];
-  if(!wl){document.getElementById('wbSheet').innerHTML='<div class="empty">No data.</div>';return}
-  document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');
-  document.getElementById('wbActions').innerHTML='<span class="wb-sel-ct" id="selCt">0 selected</span><button class="wb-btn paid-all" onclick="batchWkPaid()" id="bpBtn" disabled>✅ Paid</button><button class="wb-btn renew-all" onclick="batchWkRenew()" id="brBtn" disabled>🔄 Renew</button>';
-  var ta=0,ti=0,tt=0;
-  var h='<table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll(this.checked)" id="saAll"></th><th class="center" style="width:110px">Actions</th><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';
-  wl.forEach(function(l,i){
-    ta+=l.amount;ti+=l.interest;tt+=l.total;
-    var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');
-    var isEd=editingRow===l.id;
-    var btns='<div class="xact">';
-    if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')">✅</button>';
-    if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')">🔄</button>';
-    if(!isEd)btns+='<button class="xbtn xedit" onclick="startEdit('+l.id+')">✏️</button>';
-    else btns+='<button class="xbtn xsave" onclick="saveInlineEdit('+l.id+')">💾</button>';
-    btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div>';
-    if(isEd){
-      h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td><input type="date" class="xi xi-date" id="ie_date_'+l.id+'" value="'+l.dateReleased+'"></td><td>'+fD(l.dueDate)+'</td><td class="right"><input type="number" class="xi xi-amt" id="ie_amt_'+l.id+'" value="'+l.amount+'" inputmode="numeric"></td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'
-    }else{
-      h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'
-    }
-  });
-  h+='<tr class="xr-totals"><td colspan="6" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table>';
-  document.getElementById('wbSheet').innerHTML=h
-}
+function renderCurrentSheet(){var wm=buildWeeks();var cw=wk(today()),td=today();if(!weekKeys.length)return;var w=weekKeys[curWk],wl=wm[w];if(!wl){document.getElementById('wbSheet').innerHTML='<div class="empty">No data.</div>';return}document.getElementById('wbTitle').textContent='📋 '+wkR(w)+(w===cw?' (Current)':'');document.getElementById('wbActions').innerHTML='<span class="wb-sel-ct" id="selCt">0 selected</span><button class="wb-btn paid-all" onclick="batchWkPaid()" id="bpBtn" disabled>✅ Paid</button><button class="wb-btn renew-all" onclick="batchWkRenew()" id="brBtn" disabled>🔄 Renew</button>';var ta=0,ti=0,tt=0;var h='<table class="xt"><thead><tr><th class="center" style="width:30px"><input type="checkbox" class="xchk" onchange="togAll(this.checked)" id="saAll"></th><th class="center" style="width:110px">Actions</th><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Amount</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Remarks</th><th>Action</th></tr></thead><tbody>';wl.forEach(function(l,i){ta+=l.amount;ti+=l.interest;tt+=l.total;var rc=l.remarks==='Paid'?'xr-paid':(l.dueDate===td&&l.remarks==='Pending'?'xr-due':'');var isEd=editingRow===l.id;var btns='<div class="xact">';if(l.remarks==='Pending')btns+='<button class="xbtn xpaid" onclick="quickPaid('+l.id+')">✅</button>';if(l.remarks==='Paid'&&l.action!=='Remitted')btns+='<button class="xbtn xrenew" onclick="quickRenew('+l.id+')">🔄</button>';if(!isEd)btns+='<button class="xbtn xedit" onclick="startEdit('+l.id+')">✏️</button>';else btns+='<button class="xbtn xsave" onclick="saveInlineEdit('+l.id+')">💾</button>';btns+='<button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div>';if(isEd){h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td><input type="date" class="xi xi-date" id="ie_date_'+l.id+'" value="'+l.dateReleased+'"></td><td>'+fD(l.dueDate)+'</td><td class="right"><input type="number" class="xi xi-amt" id="ie_amt_'+l.id+'" value="'+l.amount+'" inputmode="numeric"></td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'}else{h+='<tr class="'+rc+'"><td class="center"><input type="checkbox" class="xchk wc" data-id="'+l.id+'" onchange="updSelCt()"></td><td>'+btns+'</td><td>'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">'+sB(l.remarks)+'</td><td>'+aB(l.action)+'</td></tr>'}});h+='<tr class="xr-totals"><td colspan="6" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td colspan="2"></td></tr></tbody></table>';document.getElementById('wbSheet').innerHTML=h}
 
 function goWk(i){if(i<0||i>=weekKeys.length)return;curWk=i;editingRow=null;document.querySelectorAll('.wb-tab').forEach(function(t){t.classList.toggle('active',+t.getAttribute('data-wi')===curWk)});var at=document.querySelector('.wb-tab.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});renderCurrentSheet()}
 function sheetNav(dir){var n=curWk+dir;if(n>=0&&n<weekKeys.length)goWk(n)}
-function togAll(checked){document.querySelectorAll('.wc').forEach(function(c){c.checked=checked});updSelCt()}
-function updSelCt(){var all=document.querySelectorAll('.wc'),sel=document.querySelectorAll('.wc:checked');var ct=sel.length;var ctEl=document.getElementById('selCt');if(ctEl)ctEl.textContent=ct+' selected';var bp=document.getElementById('bpBtn');if(bp)bp.disabled=ct===0;var br=document.getElementById('brBtn');if(br)br.disabled=ct===0;var sa=document.getElementById('saAll');if(sa)sa.checked=all.length>0&&ct===all.length}
+function togAll(c){document.querySelectorAll('.wc').forEach(function(x){x.checked=c});updSelCt()}
+function updSelCt(){var all=document.querySelectorAll('.wc'),sel=document.querySelectorAll('.wc:checked');var ct=sel.length;var e=document.getElementById('selCt');if(e)e.textContent=ct+' selected';var bp=document.getElementById('bpBtn');if(bp)bp.disabled=ct===0;var br=document.getElementById('brBtn');if(br)br.disabled=ct===0;var sa=document.getElementById('saAll');if(sa)sa.checked=all.length>0&&ct===all.length}
 
 function setDueToday(){document.getElementById('duePicker').value=today();renderDue()}
 function shiftDue(n){document.getElementById('duePicker').value=addD(document.getElementById('duePicker').value||today(),n);renderDue()}
 function setPaidToday(){document.getElementById('paidPicker').value=today();renderPaid()}
 function shiftPaid(n){document.getElementById('paidPicker').value=addD(document.getElementById('paidPicker').value||today(),n);renderPaid()}
 
-function renderDue(){
-  var sd=document.getElementById('duePicker').value||today(),fl=getFL();
-  document.getElementById('dueTodayBtn').className='dpb'+(sd===today()?' ta':'');
-  document.getElementById('dueBD').textContent=fDL(sd);
-  var due=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});
-  document.getElementById('dueBC').textContent=due.length+' pending';
-  if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due!</div>';return}
-  var tt=0;
-  var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchDuePaid()" id="btnBP" disabled>✅ Mark Paid</button></div><div class="lcards">';
-  due.forEach(function(l){tt+=l.total;h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
-  h+='<div class="lc-tot" style="color:var(--red)">⏳ Total: '+fmt(tt)+'</div></div>';
-  document.getElementById('dueContent').innerHTML=h
-}
+function renderDue(){var sd=document.getElementById('duePicker').value||today(),fl=getFL();document.getElementById('dueTodayBtn').className='dpb'+(sd===today()?' ta':'');document.getElementById('dueBD').textContent=fDL(sd);var due=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});document.getElementById('dueBC').textContent=due.length+' pending';if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due!</div>';return}var tt=0;var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchDuePaid()" id="btnBP" disabled>✅ Mark Paid</button></div><div class="lcards">';due.forEach(function(l){tt+=l.total;h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='<div class="lc-tot" style="color:var(--red)">⏳ Total: '+fmt(tt)+'</div></div>';document.getElementById('dueContent').innerHTML=h}
 function togDueAll(){var a=document.getElementById('dueAll').checked;document.querySelectorAll('.dcc').forEach(function(c){c.checked=a});updDueCt()}
-function updDueCt(){var c=document.querySelectorAll('.dcc:checked').length;var el=document.getElementById('dueSel');if(el)el.textContent=c+' selected';var bp=document.getElementById('btnBP');if(bp)bp.disabled=c===0}
-function batchDuePaid(){
-  var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
-  if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
-  showLoading('Marking '+ids.length+' as Paid...');
-  saveState('Batch Due Paid ('+ids.length+')');
-  var chain=Promise.resolve();
-  ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l)return api({action:'update',id:l.id,remarks:'Paid'})})});
-  chain.then(function(){return reloadFromSheet()}).then(function(){hideLoading();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
-}
+function updDueCt(){var c=document.querySelectorAll('.dcc:checked').length;var e=document.getElementById('dueSel');if(e)e.textContent=c+' selected';var bp=document.getElementById('btnBP');if(bp)bp.disabled=c===0}
+function batchDuePaid(){var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Due Paid ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l)return api({action:'update',id:l.id,remarks:'Paid'})})});chain.then(function(){return reload()}).then(function(){hideLoading();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})}
 
-function renderPaid(){
-  var sd=document.getElementById('paidPicker').value||today(),fl=getFL();
-  document.getElementById('paidTodayBtn').className='dpb'+(sd===today()?' ta':'');
-  document.getElementById('paidBD').textContent=fDL(sd);
-  var paid=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});
-  document.getElementById('paidBC').textContent=paid.length+' paid';
-  if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}
-  var tt=0;
-  var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchPaidRenew()" id="btnBR" disabled>🔄 Renew</button></div><div class="lcards">';
-  paid.forEach(function(l){tt+=l.total;h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
-  h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Paid: '+fmt(tt)+'</div></div>';
-  document.getElementById('paidContent').innerHTML=h
-}
+function renderPaid(){var sd=document.getElementById('paidPicker').value||today(),fl=getFL();document.getElementById('paidTodayBtn').className='dpb'+(sd===today()?' ta':'');document.getElementById('paidBD').textContent=fDL(sd);var paid=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});document.getElementById('paidBC').textContent=paid.length+' paid';if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}var tt=0;var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchPaidRenew()" id="btnBR" disabled>🔄 Renew</button></div><div class="lcards">';paid.forEach(function(l){tt+=l.total;h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Paid: '+fmt(tt)+'</div></div>';document.getElementById('paidContent').innerHTML=h}
 function togPaidAll(){var a=document.getElementById('paidAll').checked;document.querySelectorAll('.pcc').forEach(function(c){c.checked=a});updPaidCt()}
-function updPaidCt(){var c=document.querySelectorAll('.pcc:checked').length;var el=document.getElementById('paidSel');if(el)el.textContent=c+' selected';var br=document.getElementById('btnBR');if(br)br.disabled=c===0}
-function batchPaidRenew(){
-  var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
-  if(!ids.length)return;var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
-  if(!confirm('Renew '+ids.length+'?'))return;
-  showLoading('Renewing '+ids.length+' loans...');
-  saveState('Batch Renew ('+ids.length+')');
-  var chain=Promise.resolve();
-  ids.forEach(function(id){chain=chain.then(function(){
-    var l=loans.find(function(x){return x.id===id});if(!l)return;
-    var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();
-    return api({action:'update',id:l.id,action:'Renewed'}).then(function(){
-      return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})
-    })
-  })});
-  chain.then(function(){return reloadFromSheet()}).then(function(){hideLoading();toast('🔄 '+ids.length+' renewed','success');showUndoBar(ids.length+' renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error');console.error(e)})
-}
+function updPaidCt(){var c=document.querySelectorAll('.pcc:checked').length;var e=document.getElementById('paidSel');if(e)e.textContent=c+' selected';var br=document.getElementById('btnBR');if(br)br.disabled=c===0}
+function batchPaidRenew(){var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length)return;var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';if(!confirm('Renew '+ids.length+'?'))return;showLoading('Renewing '+ids.length+' loans...');saveState('Batch Renew ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({action:'update',id:l.id,action:'Renewed'}).then(function(){return api({action:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});chain.then(function(){return reload()}).then(function(){hideLoading();toast('🔄 '+ids.length+' renewed','success');showUndoBar(ids.length+' renewed')}).catch(function(e){hideLoading();toast('⚠️ Error','error')})}
 
-function renderDash(){
-  var fl=getFL(),names=[],pa=0,pi=0,pt=0,pc=0,rc=0;
-  fl.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name);if(l.remarks==='Pending'){pa+=l.amount;pi+=l.interest;pt+=l.total}if(l.remarks==='Paid'||l.action==='Remitted')pc++;if(l.action==='Renewed')rc++});
-  document.getElementById('dashCards').innerHTML='<div class="dc"><div class="dl">Borrowers</div><div class="dv blue">'+names.length+'</div></div><div class="dc"><div class="dl">Lent Out</div><div class="dv amber">'+fmt(pa)+'</div></div><div class="dc"><div class="dl">Interest</div><div class="dv green">'+fmt(pi)+'</div></div><div class="dc"><div class="dl">To Collect</div><div class="dv red">'+fmt(pt)+'</div></div><div class="dc"><div class="dl">Paid</div><div class="dv green">'+pc+'</div></div><div class="dc"><div class="dl">Renewed</div><div class="dv amber">'+rc+'</div></div>';
-  var ff=document.getElementById('financerFilter').value;
-  if(ff==='All'){var fh='<div class="fgrid">';FINS.forEach(function(fn){var fl2=loans.filter(function(l){return l.financer===fn}),fa=0,fi=0,ft=0,fns=[];fl2.forEach(function(l){if(l.remarks==='Pending'){fa+=l.amount;fi+=l.interest;ft+=l.total}if(fns.indexOf(l.name)===-1)fns.push(l.name)});fh+='<div class="fc '+fn.toLowerCase()+'"><div class="fn">'+fB(fn)+' '+fn+'</div><div class="fr"><span class="fl">Borrowers</span><span class="fv">'+fns.length+'</span></div><div class="fr"><span class="fl">Lent Out</span><span class="fv">'+fmt(fa)+'</span></div><div class="fr"><span class="fl">Interest</span><span class="fv">'+fmt(fi)+'</span></div><div class="fr"><span class="fl">Collect</span><span class="fv" style="color:var(--red)">'+fmt(ft)+'</span></div></div>'});fh+='</div>';document.getElementById('finBreak').innerHTML=fh}else document.getElementById('finBreak').innerHTML='';
-  if(!fl.length){document.getElementById('summaryContent').innerHTML='<div class="empty">No loans yet.</div>';return}
-  var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);
-  var h='<div class="lcards">';lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' <button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});
-  h+='</div>';document.getElementById('summaryContent').innerHTML=h
-}
+function renderDash(){var fl=getFL(),names=[],pa=0,pi=0,pt=0,pc=0,rc=0;fl.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name);if(l.remarks==='Pending'){pa+=l.amount;pi+=l.interest;pt+=l.total}if(l.remarks==='Paid'||l.action==='Remitted')pc++;if(l.action==='Renewed')rc++});document.getElementById('dashCards').innerHTML='<div class="dc"><div class="dl">Borrowers</div><div class="dv blue">'+names.length+'</div></div><div class="dc"><div class="dl">Lent Out</div><div class="dv amber">'+fmt(pa)+'</div></div><div class="dc"><div class="dl">Interest</div><div class="dv green">'+fmt(pi)+'</div></div><div class="dc"><div class="dl">To Collect</div><div class="dv red">'+fmt(pt)+'</div></div><div class="dc"><div class="dl">Paid</div><div class="dv green">'+pc+'</div></div><div class="dc"><div class="dl">Renewed</div><div class="dv amber">'+rc+'</div></div>';var ff=document.getElementById('financerFilter').value;if(ff==='All'){var fh='<div class="fgrid">';FINS.forEach(function(fn){var fl2=loans.filter(function(l){return l.financer===fn}),fa=0,fi=0,ft=0,fns=[];fl2.forEach(function(l){if(l.remarks==='Pending'){fa+=l.amount;fi+=l.interest;ft+=l.total}if(fns.indexOf(l.name)===-1)fns.push(l.name)});fh+='<div class="fc '+fn.toLowerCase()+'"><div class="fn">'+fB(fn)+' '+fn+'</div><div class="fr"><span class="fl">Borrowers</span><span class="fv">'+fns.length+'</span></div><div class="fr"><span class="fl">Lent Out</span><span class="fv">'+fmt(fa)+'</span></div><div class="fr"><span class="fl">Interest</span><span class="fv">'+fmt(fi)+'</span></div><div class="fr"><span class="fl">Collect</span><span class="fv" style="color:var(--red)">'+fmt(ft)+'</span></div></div>'});fh+='</div>';document.getElementById('finBreak').innerHTML=fh}else document.getElementById('finBreak').innerHTML='';if(!fl.length){document.getElementById('summaryContent').innerHTML='<div class="empty">No loans yet.</div>';return}var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);var h='<div class="lcards">';lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' <button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='</div>';document.getElementById('summaryContent').innerHTML=h}
 
-function renderAll(){
-  renderDash();renderWorkbook();
-  var td2=today(),fl=getFL();
-  document.getElementById('dueCount').textContent=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Pending'}).length;
-  document.getElementById('paidCount').textContent=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Paid'}).length;
-  var as=document.querySelector('.ni.active');if(as){var s=as.getAttribute('data-sec');if(s==='due')renderDue();if(s==='paid')renderPaid()}
-}
+function renderAll(){renderDash();renderWorkbook();var td2=today(),fl=getFL();document.getElementById('dueCount').textContent=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Pending'}).length;document.getElementById('paidCount').textContent=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Paid'}).length;var as=document.querySelector('.ni.active');if(as){var s=as.getAttribute('data-sec');if(s==='due')renderDue();if(s==='paid')renderPaid()}}
 
 document.getElementById('newDate').addEventListener('change',updDueNote);
 document.getElementById('renewDate').addEventListener('change',updRenewNote);
