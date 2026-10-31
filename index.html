@@ -387,15 +387,13 @@ function apiGet(params,cb){
 }
 
 function apiPost(params,cb){
-  fetch(WEB_APP_URL,{
-    method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify(params)
-  }).then(function(r){return r.json()}).then(function(d){
+  var url=WEB_APP_URL+'?'+Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k])}).join('&');
+  fetch(url,{redirect:'follow'}).then(function(r){return r.json()}).then(function(d){
     if(d.status==='ok'){if(cb)cb(d)}
     else{toast('⚠️ '+d.message,'error');console.error('API error:',d);if(cb)cb(d)}
   }).catch(function(e){toast('⚠️ Save error','error');console.error(e);if(cb)cb({status:'error'})})
 }
+
 
 function loadData(){
   document.getElementById('wbSheet').innerHTML='<div class="loading">⏳ Loading data...</div>';
