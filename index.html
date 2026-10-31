@@ -196,7 +196,7 @@ input,select,button{font-family:inherit}
 
 <div class="bnav"><button class="ni active" data-sec="dash" onclick="switchSec('dash')"><span class="ic">📊</span>Dashboard</button><button class="ni" data-sec="tables" onclick="switchSec('tables')"><span class="ic">📋</span>Tables</button><button class="ni" data-sec="due" onclick="switchSec('due')"><span class="ic">📅</span>Due</button><button class="ni" data-sec="paid" onclick="switchSec('paid')"><span class="ic">💰</span>Paid</button></div>
 
-<div class="mo" id="modal-new" onclick="if(event.target===this)closeModal('new')"><div class="ml"><div class="mh"></div><h2>＋ New Loan</h2><div class="fg2"><label>Borrower Name</label><input type="text" id="newName" placeholder="e.g. Maria Santos"></div><div class="fg-row"><div class="fg2"><label>Date Released</label><input type="date" id="newDate"></div><div class="fg2"><label>Financer</label><select id="newFin"><option value="Axl">Axl</option><option value="Fritz">Fritz</option><option value="Axlthea">Axlthea</option></select></div></div><p class="fg-note" id="newDueNote">📌 Due Date: auto-calculated</p><div class="fg-row" style="margin-top:10px"><div class="fg2"><label>Amount (₱)</label><input type="number" id="newAmt" placeholder="e.g. 5000" min="1" inputmode="numeric"></div><div class="fg2"><label>Interest Rate</label><select id="newRate"><option value="10">10%</option><option value="15">15%</option></select></div></div><p class="fg-hint">Interest, Total, and Due Date are auto-calculated.</p><div class="mbtns"><button class="mb mb-c" onclick="closeModal('new')">Cancel</button><button class="mb mb-s" onclick="addLoan()">Add Loan</button></div></div></div>
+<div class="mo" id="modal-new" onclick="if(event.target===this)closeModal('new')"><div class="ml"><div class="mh"></div><h2>＋ New Loan</h2><div class="fg2"><label>Borrower Name</label><input type="text" id="newName" placeholder="e.g. Maria Santos"></div><div class="fg-row"><div class="fg2"><label>Date Released</label><input type="date" id="newDate"></div><div class="fg2"><label>Financer</label><select id="newFin"><option value="Axl">Axl</option><option value="Fritz">Fritz</option><option value="Axlthea">Axlthea</option></select></div></div><p class="fg-note" id="newDueNote">📌 Due Date: auto-calculated</p><div class="fg-row" style="margin-top:10px"><div class="fg2"><label>Amount (₱)</label><input type="number" id="newAmt" placeholder="e.g. 5000" min="1" inputmode="numeric"></div><div class="fg2"><label>Interest Rate</label><select id="newRate"><option value="10">10%</option><option value="15">15%</option></select></div></div><p class="fg-hint">Interest, Total, and Due Date are auto-calculated.</p><div class="mbtns"><button class="mb mb-c" onclick="closeModal('new')">Cancel</button><button class="mb mb-s" id="addBtn" onclick="addLoan()">Add Loan</button></div></div></div>
 
 <div class="mo" id="modal-update" onclick="if(event.target===this)closeModal('update')"><div class="ml"><div class="mh"></div><h2>✏️ Update Loan</h2><div id="updInfo" style="background:#f8fafc;border:1px solid var(--bdr);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px"></div><div class="fg-row"><div class="fg2"><label>Remarks</label><select id="updRem"><option value="Pending">Pending</option><option value="Paid">Paid</option></select></div><div class="fg2"><label>Action</label><select id="updAct" onchange="toggleRenew()"><option value="">— None —</option><option value="Renew">Renew</option><option value="Remitted">Remitted</option></select></div></div><div class="renew-grp" id="renewGrp"><div class="fg-row"><div class="fg2"><label>Renewal Date</label><input type="date" id="renewDate"><p class="fg-note" id="renewNote">📌 New Due: select date</p></div><div class="fg2"><label>New Amount (opt)</label><input type="number" id="updNewAmt" placeholder="Same if blank" inputmode="numeric"></div></div></div><div class="mbtns"><button class="mb mb-c" onclick="closeModal('update')">Cancel</button><button class="mb mb-w" onclick="saveUpdate()">Save</button></div></div></div>
 
@@ -204,12 +204,16 @@ input,select,button{font-family:inherit}
 </div>
 
 <script>
-var WEB_APP_URL='https://script.google.com/macros/s/AKfycbwNtsmsxFSIS3XA-ftjuYhdCM83qJg-XtMgDg-98TT7UZ1tvw7c6tNV_0TUdzshz8b7/exec';
+var WEB_APP_URL='https://script.google.com/macros/s/AKfycbxGXMXIcoHSPtPNGOqZA81bMZyX-6LpUwIRfgmPzD5-oNUtHh49YOdO4iRRQ76RqN3F/exec';
 var PW_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
 var MAX_ATTEMPTS=5,LOCKOUT_MIN=5,CD=6,UO=8,FINS=['Axl','Fritz','Axlthea'];
 var SESSION_KEY='emerloan_session',SESSION_HOURS=8,TAB_KEY='emerloan_tab';
-var loans=[],updId=null,delId=null,editingRow=null,weekKeys=[],curWk=0,undoStack=[],MAX_UNDO=20,undoTimer=null;
-var processing=false;
+var loans=[],updId=null,delId=null,editingRow=null,weekKeys=[],curWk=0;
+var undoStack=[],MAX_UNDO=20,undoTimer=null;
+var actionLock=false;
+
+function lock(){if(actionLock)return false;actionLock=true;return true}
+function unlock(){actionLock=false}
 
 function showLoading(m){document.getElementById('loadingText').textContent=m||'Saving...';document.getElementById('loadingOverlay').classList.add('show')}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
@@ -223,7 +227,7 @@ function now8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffse
 function today(){var d=now8();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
 function p2(n){return('0'+n).slice(-2)}
 function addD(ds,n){var p=ds.split('-');var d=new Date(+p[0],+p[1]-1,+p[2],12);d.setDate(d.getDate()+n);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
-function normDate(v){if(!v)return '';var s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.substring(0,10);var d=new Date(s);if(!isNaN(d.getTime()))return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());return s}
+function normDate(v){if(!v)return '';var s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.substring(0,10);var d=new Date(s);if(!isNaN(d.getTime())){var u=new Date(d.getTime()+(d.getTimezoneOffset()*60000)+(UO*3600000));return u.getFullYear()+'-'+p2(u.getMonth()+1)+'-'+p2(u.getDate())}return s}
 function fD(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 function fDY(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}
 function fDL(ds){var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'short'})}
@@ -238,23 +242,39 @@ function wkShort(ms){return fD(ms)+' – '+fD(addD(ms,6))}
 function getFL(){var f=document.getElementById('financerFilter').value,q=document.getElementById('searchBox').value.trim().toLowerCase(),r=loans;if(f!=='All')r=r.filter(function(l){return l.financer===f});if(q)r=r.filter(function(l){return l.name.toLowerCase().indexOf(q)>-1});return r}
 function saveTab(s){localStorage.setItem(TAB_KEY,s)}
 function getSavedTab(){return localStorage.getItem(TAB_KEY)||'dash'}
-function saveState(lb){undoStack.push({label:lb,loans:JSON.parse(JSON.stringify(loans))});if(undoStack.length>MAX_UNDO)undoStack.shift();updateUndoBtn()}
-function doUndo(){if(!undoStack.length)return;var s=undoStack.pop();loans=s.loans;editingRow=null;renderAll();toast('↩ Undone: '+s.label,'info');showUndoBar(null);updateUndoBtn()}
+
+/* UNDO: saves snapshot of all loan IDs and their data for full sheet restore */
+function saveState(lb){undoStack.push({label:lb,snapshot:JSON.parse(JSON.stringify(loans))});if(undoStack.length>MAX_UNDO)undoStack.shift();updateUndoBtn()}
+function doUndo(){
+  if(!undoStack.length||!lock())return;
+  var s=undoStack.pop();
+  showLoading('↩ Undoing: '+s.label+'...');
+  /* Sync undo to Google Sheets by sending full replace */
+  api({cmd:'replaceAll',rows:s.snapshot})
+  .then(function(d){if(d.status==='ok'){loans=s.snapshot;renderAll();toast('↩ Undone: '+s.label,'info')}else{toast('⚠️ Undo failed: '+d.message,'error')}})
+  .catch(function(e){toast('⚠️ Undo failed','error')})
+  .then(function(){hideLoading();unlock();hideUndo();updateUndoBtn()})
+}
 function updateUndoBtn(){var b=document.getElementById('undoBtn');if(undoStack.length>0){b.disabled=false;b.textContent='↩ Undo ('+undoStack.length+')'}else{b.disabled=true;b.textContent='↩ Undo'}}
 function showUndoBar(lb){if(!lb){hideUndo();return}clearTimeout(undoTimer);document.getElementById('undoText').textContent=lb;document.getElementById('undoBar').classList.add('show');undoTimer=setTimeout(function(){document.getElementById('undoBar').classList.remove('show')},6000)}
 function hideUndo(){clearTimeout(undoTimer);document.getElementById('undoBar').classList.remove('show')}
 
 function api(params){
   return new Promise(function(resolve,reject){
-    var isGet=(params.cmd==='get');
-    var url;
-    if(isGet){url=WEB_APP_URL+'?cmd=get&_t='+Date.now()}
-    else{var payloadStr=encodeURIComponent(JSON.stringify(params));url=WEB_APP_URL+'?cmd='+params.cmd+'&payload='+payloadStr+'&_t='+Date.now()}
-    fetch(url,{redirect:'follow',cache:'no-store'})
-    .then(function(r){if(r.redirected)return fetch(r.url,{cache:'no-store'});return r})
-    .then(function(r){return r.text()})
-    .then(function(txt){try{resolve(JSON.parse(txt))}catch(e){console.error('Raw:',txt.substring(0,200));reject('Parse error')}})
-    .catch(function(e){reject(e)})
+    if(params.cmd==='get'){
+      fetch(WEB_APP_URL+'?cmd=get&_t='+Date.now(),{redirect:'follow',cache:'no-store'})
+      .then(function(r){if(r.redirected)return fetch(r.url,{cache:'no-store'});return r})
+      .then(function(r){return r.text()})
+      .then(function(txt){try{resolve(JSON.parse(txt))}catch(e){reject('Parse error')}})
+      .catch(function(e){reject(e)})
+    }else{
+      /* POST for all write operations — no URL length limits, no duplicates */
+      fetch(WEB_APP_URL,{method:'POST',redirect:'follow',cache:'no-store',headers:{'Content-Type':'text/plain'},body:JSON.stringify(params)})
+      .then(function(r){if(r.redirected)return fetch(r.url,{cache:'no-store'});return r})
+      .then(function(r){return r.text()})
+      .then(function(txt){try{resolve(JSON.parse(txt))}catch(e){reject('Parse error')}})
+      .catch(function(e){reject(e)})
+    }
   })
 }
 
@@ -262,137 +282,138 @@ function parseRow(r){return{id:Number(r.id)||0,name:String(r.name||'').trim(),da
 
 function loadData(){showLoading('Loading data...');api({cmd:'get'}).then(function(d){hideLoading();if(d.status==='ok'){loans=d.data.map(parseRow);switchSec(getSavedTab());renderAll()}else toast('⚠️ '+d.message,'error')}).catch(function(e){hideLoading();toast('⚠️ Connection error','error');console.error(e)})}
 function reload(){return api({cmd:'get'}).then(function(d){if(d.status==='ok'){loans=d.data.map(parseRow);renderAll()}})}
-
-/* Timestamp-based ID to prevent duplicates on double-tap */
 function getNextId(){var mx=0;loans.forEach(function(l){if(l.id>mx)mx=l.id});var ts=Date.now();return ts>mx?ts:mx+1}
 
 function switchSec(s){document.querySelectorAll('.sec').forEach(function(el){el.classList.remove('active')});document.getElementById('sec-'+s).classList.add('active');document.querySelectorAll('.ni').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-sec')===s)});saveTab(s);if(s==='due'){document.getElementById('duePicker').value=today();renderDue()}if(s==='paid'){document.getElementById('paidPicker').value=today();renderPaid()}if(s==='tables')renderWorkbook()}
-function openModal(n){if(n==='new'){document.getElementById('newName').value='';document.getElementById('newDate').value=today();document.getElementById('newAmt').value='';document.getElementById('newRate').value='10';document.getElementById('newFin').value='Axl';updDueNote()}document.getElementById('modal-'+n).classList.add('show')}
+function openModal(n){if(n==='new'){document.getElementById('newName').value='';document.getElementById('newDate').value=today();document.getElementById('newAmt').value='';document.getElementById('newRate').value='10';document.getElementById('newFin').value='Axl';updDueNote();var ab=document.getElementById('addBtn');if(ab)ab.disabled=false}document.getElementById('modal-'+n).classList.add('show')}
 function closeModal(n){document.getElementById('modal-'+n).classList.remove('show')}
 function updDueNote(){var v=document.getElementById('newDate').value;document.getElementById('newDueNote').textContent=v?'📌 Due: '+fDY(addD(v,CD)):'📌 Due: auto'}
 function toggleRenew(){var a=document.getElementById('updAct').value,g=document.getElementById('renewGrp');if(a==='Renew'){g.classList.add('show');var l=loans.find(function(x){return x.id===updId});if(l){document.getElementById('renewDate').value=addD(l.dueDate,1);updRenewNote()}}else g.classList.remove('show')}
 function updRenewNote(){var v=document.getElementById('renewDate').value;document.getElementById('renewNote').textContent=v?'📌 New Due: '+fDY(addD(v,CD)):'📌 New Due: select date'}
 
 function addLoan(){
-  if(processing)return;
+  if(!lock())return;
+  var ab=document.getElementById('addBtn');if(ab)ab.disabled=true;
   var nm=document.getElementById('newName').value.trim(),dr=document.getElementById('newDate').value,am=parseFloat(document.getElementById('newAmt').value),rt=parseInt(document.getElementById('newRate').value),fn=document.getElementById('newFin').value;
-  if(!nm){alert('Enter name');return}if(!dr){alert('Select date');return}if(!am||am<=0){alert('Enter amount');return}
-  processing=true;closeModal('new');showLoading('Adding '+nm+'...');saveState('Add '+nm);
+  if(!nm){alert('Enter name');if(ab)ab.disabled=false;unlock();return}
+  if(!dr){alert('Select date');if(ab)ab.disabled=false;unlock();return}
+  if(!am||am<=0){alert('Enter amount');if(ab)ab.disabled=false;unlock();return}
+  closeModal('new');showLoading('Adding '+nm+'...');saveState('Add '+nm);
   var nid=getNextId(),int=am*(rt/100),tot=am+int,due=addD(dr,CD);
   api({cmd:'add',id:nid,name:nm,dateReleased:dr,dueDate:due,amount:am,rate:rt,interest:int,total:tot,remarks:'Pending',action:'',cycles:1,financer:fn})
   .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-  .then(function(){hideLoading();processing=false;toast('✅ Added '+nm,'success');showUndoBar('Added '+nm)})
-  .catch(function(e){hideLoading();processing=false;toast('⚠️ Failed: '+e,'error')})
+  .then(function(){hideLoading();unlock();toast('✅ Added '+nm,'success');showUndoBar('Added '+nm)})
+  .catch(function(e){hideLoading();unlock();toast('⚠️ Failed: '+e,'error')})
 }
 
 function openUpd(id){var l=loans.find(function(x){return x.id===id});if(!l)return;updId=id;document.getElementById('updInfo').innerHTML='<strong>'+l.name+'</strong> · '+fB(l.financer)+' · '+fmt(l.amount)+' · Due: '+fDY(l.dueDate)+' · #'+l.cycles;document.getElementById('updRem').value=l.remarks;document.getElementById('updAct').value='';document.getElementById('updNewAmt').value='';document.getElementById('renewGrp').classList.remove('show');document.getElementById('renewDate').value='';document.getElementById('modal-update').classList.add('show')}
 
 function saveUpdate(){
-  if(processing)return;
-  var l=loans.find(function(x){return x.id===updId});if(!l)return;
+  if(!lock())return;
+  var l=loans.find(function(x){return x.id===updId});if(!l){unlock();return}
   var rem=document.getElementById('updRem').value,act=document.getElementById('updAct').value;
   var actionVal=act==='Renew'?'Renewed':act==='Remitted'?'Remitted':'';
-  processing=true;closeModal('update');showLoading('Updating '+l.name+'...');saveState('Update '+l.name);
+  closeModal('update');showLoading('Updating '+l.name+'...');saveState('Update '+l.name);
   if(act==='Renew'){
     var nr=document.getElementById('renewDate').value;
-    if(!nr){hideLoading();processing=false;alert('Select renewal date');undoStack.pop();updateUndoBtn();return}
+    if(!nr){hideLoading();unlock();alert('Select renewal date');undoStack.pop();updateUndoBtn();return}
     var na=document.getElementById('updNewAmt').value,ra=na?parseFloat(na):l.amount,ni=ra*(l.rate/100),nid=getNextId();
     api({cmd:'update',id:l.id,remarks:rem,action:actionVal})
     .then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:ra,rate:l.rate,interest:ni,total:ra+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
     .then(function(){return reload()})
-    .then(function(){hideLoading();processing=false;toast('✅ Renewed '+l.name,'success');showUndoBar('Renewed '+l.name)})
-    .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+    .then(function(){hideLoading();unlock();toast('✅ Renewed '+l.name,'success');showUndoBar('Renewed '+l.name)})
+    .catch(function(e){hideLoading();unlock();toast('⚠️ Error: '+e,'error')})
   }else{
     api({cmd:'update',id:l.id,remarks:rem,action:actionVal})
     .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-    .then(function(){hideLoading();processing=false;toast('✅ Updated '+l.name,'success');showUndoBar('Updated '+l.name)})
-    .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+    .then(function(){hideLoading();unlock();toast('✅ Updated '+l.name,'success');showUndoBar('Updated '+l.name)})
+    .catch(function(e){hideLoading();unlock();toast('⚠️ Error: '+e,'error')})
   }
 }
 
 function openDel(id){var l=loans.find(function(x){return x.id===id});if(!l)return;delId=id;document.getElementById('delInfo').innerHTML='Delete <strong>'+l.name+'</strong> ('+fB(l.financer)+') — '+fmt(l.amount)+'?';document.getElementById('modal-delete').classList.add('show')}
 
 function confirmDelete(){
-  if(processing)return;
+  if(!lock())return;
   var l=loans.find(function(x){return x.id===delId});
-  processing=true;closeModal('delete');showLoading('Deleting...');saveState('Delete '+(l?l.name:'loan'));
+  closeModal('delete');showLoading('Deleting...');saveState('Delete '+(l?l.name:'loan'));
   api({cmd:'delete',id:delId})
   .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-  .then(function(){hideLoading();processing=false;toast('🗑️ Deleted','error');showUndoBar('Deleted '+(l?l.name:'loan'))})
-  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+  .then(function(){hideLoading();unlock();toast('🗑️ Deleted','error');showUndoBar('Deleted '+(l?l.name:'loan'))})
+  .catch(function(e){hideLoading();unlock();toast('⚠️ Error: '+e,'error')})
 }
 
 function quickPaid(id){
-  if(processing)return;
-  var l=loans.find(function(x){return x.id===id});if(!l)return;
-  processing=true;showLoading('Marking '+l.name+' as Paid...');saveState('Paid '+l.name);
+  if(!lock())return;
+  var l=loans.find(function(x){return x.id===id});if(!l){unlock();return}
+  showLoading('Marking '+l.name+' as Paid...');saveState('Paid '+l.name);
   api({cmd:'update',id:l.id,remarks:'Paid'})
   .then(function(d){if(d.status==='ok')return reload();else throw d.message})
-  .then(function(){hideLoading();processing=false;toast('✅ '+l.name+' Paid','success');showUndoBar(l.name+' → Paid')})
-  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+  .then(function(){hideLoading();unlock();toast('✅ '+l.name+' Paid','success');showUndoBar(l.name+' → Paid')})
+  .catch(function(e){hideLoading();unlock();toast('⚠️ Error: '+e,'error')})
 }
 
 function quickRenew(id){
-  if(processing)return;
-  var l=loans.find(function(x){return x.id===id});if(!l||l.remarks!=='Paid')return;
-  processing=true;showLoading('Renewing '+l.name+'...');saveState('Renew '+l.name);
+  if(!lock())return;
+  var l=loans.find(function(x){return x.id===id});if(!l||l.remarks!=='Paid'){unlock();return}
+  showLoading('Renewing '+l.name+'...');saveState('Renew '+l.name);
   var nr=addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();
   api({cmd:'update',id:l.id,action:'Renewed'})
   .then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})
   .then(function(){return reload()})
-  .then(function(){hideLoading();processing=false;toast('🔄 '+l.name+' renewed','success');showUndoBar(l.name+' → Renewed')})
-  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+  .then(function(){hideLoading();unlock();toast('🔄 '+l.name+' renewed','success');showUndoBar(l.name+' → Renewed')})
+  .catch(function(e){hideLoading();unlock();toast('⚠️ Error: '+e,'error')})
 }
 
 function startEdit(id){editingRow=id;renderCurrentSheet()}
 function saveInlineEdit(id){
-  if(processing)return;
-  var l=loans.find(function(x){return x.id===id});if(!l)return;
+  if(!lock())return;
+  var l=loans.find(function(x){return x.id===id});if(!l){unlock();return}
   var dateEl=document.getElementById('ie_date_'+id),amtEl=document.getElementById('ie_amt_'+id);
   var changed=false;saveState('Edit '+l.name);
   var params={cmd:'update',id:l.id};
   if(dateEl){var nd=dateEl.value;if(nd&&nd!==l.dateReleased){params.dateReleased=nd;params.dueDate=addD(nd,CD);changed=true}}
   if(amtEl){var na=parseFloat(amtEl.value);if(na&&na>0&&na!==l.amount){params.amount=na;params.interest=na*(l.rate/100);params.total=na+na*(l.rate/100);changed=true}}
-  if(!changed){undoStack.pop();updateUndoBtn();editingRow=null;renderAll();return}
-  editingRow=null;processing=true;showLoading('Saving edit...');
+  if(!changed){undoStack.pop();updateUndoBtn();editingRow=null;renderAll();unlock();return}
+  editingRow=null;showLoading('Saving edit...');
   api(params).then(function(d){if(d.status==='ok')return reload();else throw d.message})
-  .then(function(){hideLoading();processing=false;toast('✅ Updated '+l.name,'success');showUndoBar('Edited '+l.name)})
-  .catch(function(e){hideLoading();processing=false;toast('⚠️ Error: '+e,'error')})
+  .then(function(){hideLoading();unlock();toast('✅ Updated '+l.name,'success');showUndoBar('Edited '+l.name)})
+  .catch(function(e){hideLoading();unlock();toast('⚠️ Error: '+e,'error')})
 }
 
 function batchWkPaid(){
-  if(processing)return;
+  if(!lock())return;
   var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
-  if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;
-  processing=true;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Paid ('+ids.length+')');
+  if(!ids.length){unlock();return}if(!confirm('Mark '+ids.length+' as Paid?')){unlock();return}
+  showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Paid ('+ids.length+')');
   var chain=Promise.resolve();
   ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l&&l.remarks==='Pending')return api({cmd:'update',id:l.id,remarks:'Paid'})})});
-  chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})
+  chain.then(function(){return reload()}).then(function(){hideLoading();unlock();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();unlock();toast('⚠️ Error','error')})
 }
 
 function batchWkRenew(){
-  if(processing)return;
+  if(!lock())return;
   var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
   var paidIds=ids.filter(function(id){var l=loans.find(function(x){return x.id===id});return l&&l.remarks==='Paid'&&l.action!=='Remitted'});
-  if(!paidIds.length){toast('Select paid loans to renew','error');return}
+  if(!paidIds.length){toast('Select paid loans to renew','error');unlock();return}
   var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';
-  if(!confirm('Renew '+paidIds.length+' loan(s)?'))return;
-  processing=true;showLoading('Renewing '+paidIds.length+' loans...');saveState('Batch Renew ('+paidIds.length+')');
+  if(!confirm('Renew '+paidIds.length+' loan(s)?')){unlock();return}
+  showLoading('Renewing '+paidIds.length+' loans...');saveState('Batch Renew ('+paidIds.length+')');
   var chain=Promise.resolve();
   paidIds.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});
-  chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('🔄 '+paidIds.length+' renewed','success');showUndoBar(paidIds.length+' renewed')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})
+  chain.then(function(){return reload()}).then(function(){hideLoading();unlock();toast('🔄 '+paidIds.length+' renewed','success');showUndoBar(paidIds.length+' renewed')}).catch(function(e){hideLoading();unlock();toast('⚠️ Error','error')})
 }
 
 function batchWkDelete(){
-  if(processing)return;
+  if(!lock())return;
   var ids=[];document.querySelectorAll('.wc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});
-  if(!ids.length){toast('Select loans to delete','error');return}
+  if(!ids.length){unlock();return}
   var names=ids.map(function(id){var l=loans.find(function(x){return x.id===id});return l?l.name:'?'}).join(', ');
-  if(!confirm('⚠️ Delete '+ids.length+' loan(s)?\n\n'+names+'\n\nThis cannot be undone from Google Sheets.'))return;
-  processing=true;showLoading('Deleting '+ids.length+' loans...');saveState('Batch Delete ('+ids.length+')');
+  if(!confirm('⚠️ Delete '+ids.length+' loan(s)?\n\n'+names+'\n\nThis cannot be undone from Google Sheets.')){unlock();return}
+  showLoading('Deleting '+ids.length+' loans...');saveState('Batch Delete ('+ids.length+')');
   var chain=Promise.resolve();
   ids.forEach(function(id){chain=chain.then(function(){return api({cmd:'delete',id:id})})});
-  chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('🗑️ '+ids.length+' deleted','error');showUndoBar(ids.length+' deleted')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})
+  chain.then(function(){return reload()}).then(function(){hideLoading();unlock();toast('🗑️ '+ids.length+' deleted','error');showUndoBar(ids.length+' deleted')}).catch(function(e){hideLoading();unlock();toast('⚠️ Error','error')})
 }
 
 function downloadCSV(){var fl=getFL();if(!fl.length){toast('No data','error');return}var csv='Name,Date Released,Due Date,Amount,Rate,Interest,Total,Remarks,Action,Cycles,Financer\n';fl.forEach(function(l){csv+='"'+l.name+'",'+l.dateReleased+','+l.dueDate+','+l.amount+','+l.rate+'%,'+l.interest+','+l.total+','+l.remarks+','+l.action+','+l.cycles+','+l.financer+'\n'});var blob=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EmerLoan_'+today()+'.csv';a.click();toast('📥 Downloaded','success')}
@@ -425,12 +446,12 @@ function shiftPaid(n){document.getElementById('paidPicker').value=addD(document.
 function renderDue(){var sd=document.getElementById('duePicker').value||today(),fl=getFL();document.getElementById('dueTodayBtn').className='dpb'+(sd===today()?' ta':'');document.getElementById('dueBD').textContent=fDL(sd);var due=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});document.getElementById('dueBC').textContent=due.length+' pending';if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due!</div>';return}var tt=0;var h='<div class="batch"><label><input type="checkbox" class="bchk" id="dueAll" onchange="togDueAll()"> Select All</label><span class="bct" id="dueSel">0 selected</span><button class="bbtn" style="background:var(--grn)" onclick="batchDuePaid()" id="btnBP" disabled>✅ Mark Paid</button></div><div class="lcards">';due.forEach(function(l){tt+=l.total;h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk dcc" data-id="'+l.id+'" onchange="updDueCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='<div class="lc-tot" style="color:var(--red)">⏳ Total: '+fmt(tt)+'</div></div>';document.getElementById('dueContent').innerHTML=h}
 function togDueAll(){var a=document.getElementById('dueAll').checked;document.querySelectorAll('.dcc').forEach(function(c){c.checked=a});updDueCt()}
 function updDueCt(){var c=document.querySelectorAll('.dcc:checked').length;var e=document.getElementById('dueSel');if(e)e.textContent=c+' selected';var bp=document.getElementById('btnBP');if(bp)bp.disabled=c===0}
-function batchDuePaid(){if(processing)return;var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length||!confirm('Mark '+ids.length+' as Paid?'))return;processing=true;showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Due Paid ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l)return api({cmd:'update',id:l.id,remarks:'Paid'})})});chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})}
+function batchDuePaid(){if(!lock())return;var ids=[];document.querySelectorAll('.dcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length||!confirm('Mark '+ids.length+' as Paid?')){unlock();return}showLoading('Marking '+ids.length+' as Paid...');saveState('Batch Due Paid ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(l)return api({cmd:'update',id:l.id,remarks:'Paid'})})});chain.then(function(){return reload()}).then(function(){hideLoading();unlock();toast('✅ '+ids.length+' marked Paid','success');showUndoBar(ids.length+' marked Paid')}).catch(function(e){hideLoading();unlock();toast('⚠️ Error','error')})}
 
 function renderPaid(){var sd=document.getElementById('paidPicker').value||today(),fl=getFL();document.getElementById('paidTodayBtn').className='dpb'+(sd===today()?' ta':'');document.getElementById('paidBD').textContent=fDL(sd);var paid=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});document.getElementById('paidBC').textContent=paid.length+' paid';if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}var tt=0;var h='<div class="batch"><label><input type="checkbox" class="bchk" id="paidAll" onchange="togPaidAll()"> Select All</label><span class="bct" id="paidSel">0 selected</span><button class="bbtn" style="background:var(--pri)" onclick="batchPaidRenew()" id="btnBR" disabled>🔄 Renew</button></div><div class="lcards">';paid.forEach(function(l){tt+=l.total;h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span></div><input type="checkbox" class="bchk pcc" data-id="'+l.id+'" onchange="updPaidCt()"></div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div></div><div class="lc-act"><button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button><button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Paid: '+fmt(tt)+'</div></div>';document.getElementById('paidContent').innerHTML=h}
 function togPaidAll(){var a=document.getElementById('paidAll').checked;document.querySelectorAll('.pcc').forEach(function(c){c.checked=a});updPaidCt()}
 function updPaidCt(){var c=document.querySelectorAll('.pcc:checked').length;var e=document.getElementById('paidSel');if(e)e.textContent=c+' selected';var br=document.getElementById('btnBR');if(br)br.disabled=c===0}
-function batchPaidRenew(){if(processing)return;var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length)return;var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';if(!confirm('Renew '+ids.length+'?'))return;processing=true;showLoading('Renewing '+ids.length+' loans...');saveState('Batch Renew ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});chain.then(function(){return reload()}).then(function(){hideLoading();processing=false;toast('🔄 '+ids.length+' renewed','success');showUndoBar(ids.length+' renewed')}).catch(function(e){hideLoading();processing=false;toast('⚠️ Error','error')})}
+function batchPaidRenew(){if(!lock())return;var ids=[];document.querySelectorAll('.pcc:checked').forEach(function(c){ids.push(+c.getAttribute('data-id'))});if(!ids.length){unlock();return}var rd=prompt('Renewal date (YYYY-MM-DD):\nBlank = day after due.','')||'';if(!confirm('Renew '+ids.length+'?')){unlock();return}showLoading('Renewing '+ids.length+' loans...');saveState('Batch Renew ('+ids.length+')');var chain=Promise.resolve();ids.forEach(function(id){chain=chain.then(function(){var l=loans.find(function(x){return x.id===id});if(!l)return;var nr=rd||addD(l.dueDate,1),ni=l.amount*(l.rate/100),nid=getNextId();return api({cmd:'update',id:l.id,action:'Renewed'}).then(function(){return api({cmd:'add',id:nid,name:l.name,dateReleased:nr,dueDate:addD(nr,CD),amount:l.amount,rate:l.rate,interest:ni,total:l.amount+ni,remarks:'Pending',action:'',cycles:l.cycles+1,financer:l.financer})})})});chain.then(function(){return reload()}).then(function(){hideLoading();unlock();toast('🔄 '+ids.length+' renewed','success');showUndoBar(ids.length+' renewed')}).catch(function(e){hideLoading();unlock();toast('⚠️ Error','error')})}
 
 function renderDash(){var fl=getFL(),names=[],pa=0,pi=0,pt=0,pc=0,rc=0;fl.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name);if(l.remarks==='Pending'){pa+=l.amount;pi+=l.interest;pt+=l.total}if(l.remarks==='Paid'||l.action==='Remitted')pc++;if(l.action==='Renewed')rc++});document.getElementById('dashCards').innerHTML='<div class="dc"><div class="dl">Borrowers</div><div class="dv blue">'+names.length+'</div></div><div class="dc"><div class="dl">Lent Out</div><div class="dv amber">'+fmt(pa)+'</div></div><div class="dc"><div class="dl">Interest</div><div class="dv green">'+fmt(pi)+'</div></div><div class="dc"><div class="dl">To Collect</div><div class="dv red">'+fmt(pt)+'</div></div><div class="dc"><div class="dl">Paid</div><div class="dv green">'+pc+'</div></div><div class="dc"><div class="dl">Renewed</div><div class="dv amber">'+rc+'</div></div>';var ff=document.getElementById('financerFilter').value;if(ff==='All'){var fh='<div class="fgrid">';FINS.forEach(function(fn){var fl2=loans.filter(function(l){return l.financer===fn}),fa=0,fi=0,ft=0,fns=[];fl2.forEach(function(l){if(l.remarks==='Pending'){fa+=l.amount;fi+=l.interest;ft+=l.total}if(fns.indexOf(l.name)===-1)fns.push(l.name)});fh+='<div class="fc '+fn.toLowerCase()+'"><div class="fn">'+fB(fn)+' '+fn+'</div><div class="fr"><span class="fl">Borrowers</span><span class="fv">'+fns.length+'</span></div><div class="fr"><span class="fl">Lent Out</span><span class="fv">'+fmt(fa)+'</span></div><div class="fr"><span class="fl">Interest</span><span class="fv">'+fmt(fi)+'</span></div><div class="fr"><span class="fl">Collect</span><span class="fv" style="color:var(--red)">'+fmt(ft)+'</span></div></div>'});fh+='</div>';document.getElementById('finBreak').innerHTML=fh}else document.getElementById('finBreak').innerHTML='';if(!fl.length){document.getElementById('summaryContent').innerHTML='<div class="empty">No loans yet.</div>';return}var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);var h='<div class="lcards">';lv.forEach(function(l){h+='<div class="lcard"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Rate</div><div class="lc-v">'+l.rate+'%</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div><div class="lc-act">'+aB(l.action)+' <button class="xbtn xedit" onclick="openUpd('+l.id+')">✏️</button> <button class="xbtn xdel" onclick="openDel('+l.id+')">🗑️</button></div></div>'});h+='</div>';document.getElementById('summaryContent').innerHTML=h}
 
