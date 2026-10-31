@@ -235,20 +235,19 @@ function getSavedTab(){return localStorage.getItem(TAB_KEY)||'dash'}
 
 function api(params){
   return new Promise(function(resolve,reject){
-    if(params.cmd==='get'){
-      fetch(WEB_APP_URL+'?cmd=get&_t='+Date.now(),{redirect:'follow',cache:'no-store'})
-      .then(function(r){if(r.redirected)return fetch(r.url,{cache:'no-store'});return r})
-      .then(function(r){return r.text()})
-      .then(function(txt){try{resolve(JSON.parse(txt))}catch(e){reject('Parse error')}})
-      .catch(function(e){reject(e)})
-    }else{
-      fetch(WEB_APP_URL,{method:'POST',redirect:'follow',cache:'no-store',headers:{'Content-Type':'text/plain'},body:JSON.stringify(params)})
-      .then(function(r){if(r.redirected)return fetch(r.url,{cache:'no-store'});return r})
-      .then(function(r){return r.text()})
-      .then(function(txt){try{resolve(JSON.parse(txt))}catch(e){reject('Parse error')}})
-      .catch(function(e){reject(e)})
+    var url=WEB_APP_URL+'?';
+    var parts=[];
+    for(var key in params){
+      if(params.hasOwnProperty(key)){
+        parts.push(encodeURIComponent(key)+'='+encodeURIComponent(params[key]));
+      }
     }
-  })
+    url+=parts.join('&')+'&_t='+Date.now();
+    fetch(url,{redirect:'follow',cache:'no-store'})
+    .then(function(r){return r.text()})
+    .then(function(txt){try{resolve(JSON.parse(txt))}catch(e){reject('Parse error: '+txt.substring(0,100))}})
+    .catch(function(e){reject(e)});
+  });
 }
 
 function parseRow(r){return{id:Number(r.id)||0,name:String(r.name||'').trim(),dateReleased:normDate(r.dateReleased),dueDate:normDate(r.dueDate),amount:Number(r.amount)||0,rate:Number(r.rate)||10,interest:Number(r.interest)||0,total:Number(r.total)||0,remarks:String(r.remarks||'Pending').trim(),action:String(r.action||'').trim(),cycles:Number(r.cycles)||1,financer:String(r.financer||'').trim()}}
@@ -310,7 +309,6 @@ function openDel(id){var l=loans.find(function(x){return x.id===id});if(!l)retur
 function confirmDelete(){
   if(!lock())return;
   document.getElementById('delBtn').disabled=true;
-  var l=loans.find(function(x){return x.id===delId});
   closeModal('delete');showLoading('Deleting...');
   api({cmd:'delete',id:delId})
   .then(function(d){if(d.status==='ok')return reload();else throw d.message})
@@ -345,8 +343,7 @@ function saveInlineEdit(id){
   if(!lock())return;
   var l=loans.find(function(x){return x.id===id});if(!l){unlock();return}
   var dateEl=document.getElementById('ie_date_'+id),amtEl=document.getElementById('ie_amt_'+id);
-  var changed=false;
-  var params={cmd:'update',id:l.id};
+  var params={cmd:'update',id:l.id};var changed=false;
   if(dateEl){var nd=dateEl.value;if(nd&&nd!==l.dateReleased){params.dateReleased=nd;params.dueDate=addD(nd,CD);changed=true}}
   if(amtEl){var na=parseFloat(amtEl.value);if(na&&na>0&&na!==l.amount){params.amount=na;params.interest=na*(l.rate/100);params.total=na+na*(l.rate/100);changed=true}}
   if(!changed){editingRow=null;renderAll();unlock();return}
