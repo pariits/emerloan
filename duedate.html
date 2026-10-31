@@ -51,16 +51,6 @@ input,select,button{font-family:inherit}
 .dc .dl{color:var(--txt2);font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;font-weight:600}
 .dc .dv{font-size:18px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
 .dv.blue{color:var(--pri)}.dv.red{color:var(--red)}.dv.green{color:var(--grn)}.dv.amber{color:var(--amb)}
-.lcards{display:block}
-.lcard{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;margin-bottom:8px;box-shadow:var(--sh)}
-.lcard.due-c{border-left:4px solid var(--amb)}
-.lcard.paid-c{border-left:4px solid var(--grn)}
-.lc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.lc-nm{font-size:14px;font-weight:700}
-.lc-gr{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:11px}
-.lc-l{color:var(--txt2);font-size:10px}
-.lc-v{font-weight:600;font-family:'SF Mono','Cascadia Code',monospace;font-size:12px}
-.lc-tot{background:#f1f5f9;border-radius:var(--r);padding:10px;text-align:center;margin-bottom:8px;font-size:12px;font-weight:700}
 .badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-block;font-family:system-ui,sans-serif}
 .b-paid{background:#dcfce7;color:#166534}.b-pending{background:#fef3c7;color:#92400e}.b-renewed{background:#dbeafe;color:#1e40af}.b-remitted{background:#f3e8ff;color:#6b21a8}
 .b-axl{background:#fef2f2;color:var(--red)}.b-fritz{background:#eff6ff;color:var(--pri)}.b-axlthea{background:#f5f3ff;color:var(--pur)}
@@ -76,6 +66,33 @@ input,select,button{font-family:inherit}
 .info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:11px;color:#1e40af;line-height:1.6}
 .refresh-btn{padding:10px 14px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--card);font-size:13px;font-weight:600;cursor:pointer;color:var(--pri)}
 .refresh-btn:active{background:#f1f5f9;transform:scale(.97)}
+/* Compact table */
+.ct-wrap{background:var(--card);border:1px solid #c0c0c0;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:12px}
+.ct{width:100%;border-collapse:collapse;font-size:11px}
+.ct th{background:#e8eaed;color:#333;font-weight:600;padding:6px 8px;border:1px solid #c0c0c0;font-size:10px;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;position:sticky;top:0;z-index:2}
+.ct td{padding:5px 8px;border:1px solid #d5d5d5;color:#222;font-family:'SF Mono','Cascadia Code',monospace;font-size:11px;white-space:nowrap;background:#fff}
+.ct tr:nth-child(even) td{background:#fafafa}
+.ct tr:hover td{background:#f0f4ff}
+.ct .right{text-align:right}
+.ct .center{text-align:center}
+.ct tr.ct-totals td{background:#e8eaed!important;font-weight:700;border-top:2px solid #999;font-family:system-ui,sans-serif}
+.ct tr.ct-due td{background:#fff9c3!important;border-color:#e6d98c}
+.ct tr.ct-paid td{background:#e8f5e9!important;border-color:#a5d6a7}
+.ct-sheet{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:60vh;overflow-y:auto}
+/* Name tabs */
+.name-tabs-wrap{background:#e0e0e0;border-top:1px solid #c0c0c0;display:flex;align-items:stretch;overflow:hidden}
+.name-tabs-scroll{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1}
+.name-tabs-scroll::-webkit-scrollbar{display:none}
+.name-tab{padding:8px 14px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;border-right:1px solid #c0c0c0;background:#e0e0e0;color:#555;transition:all .12s;flex-shrink:0;user-select:none;-webkit-user-select:none}
+.name-tab.active{background:#fff;color:var(--pri);font-weight:700;border-bottom:2px solid var(--pri)}
+.name-tab:not(.active):active{background:#d0d0d0}
+.name-tab.all-tab{font-style:italic}
+/* Detail card for selected name */
+.detail-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
+.detail-card .dc-name{font-size:16px;font-weight:800;margin-bottom:8px}
+.detail-card .dc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px}
+.detail-card .dc-l{color:var(--txt2);font-size:10px}
+.detail-card .dc-v{font-weight:700;font-family:'SF Mono','Cascadia Code',monospace;font-size:13px}
 @media(max-width:640px){.dg{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:641px){body{max-width:640px;margin:0 auto}}
 </style>
@@ -122,7 +139,9 @@ var PW_HASH='83b749acd0e64b1f847c01a379614c0c96a8095b8dc9916d36a64c10e18559be';
 var MAX_ATTEMPTS=5,LOCKOUT_MIN=5,CD=6,UO=8;
 var SESSION_KEY='emerloan_dd_session',SESSION_HOURS=8;
 var TAB_KEY='emerloan_dd_tab',DUE_DATE_KEY='emerloan_dd_duedate',PAID_DATE_KEY='emerloan_dd_paiddate',FILTER_KEY='emerloan_dd_filter';
+var DUE_NAME_KEY='emerloan_dd_duename',PAID_NAME_KEY='emerloan_dd_paidname';
 var loans=[];
+var dueSelName='All',paidSelName='All';
 
 function showLoading(m){document.getElementById('loadingText').textContent=m||'Loading...';document.getElementById('loadingOverlay').classList.add('show')}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
@@ -138,15 +157,20 @@ function savePaidDate(){localStorage.setItem(PAID_DATE_KEY,document.getElementBy
 function getSavedPaidDate(){return localStorage.getItem(PAID_DATE_KEY)||today()}
 function saveFilter(){localStorage.setItem(FILTER_KEY,document.getElementById('financerFilter').value)}
 function getSavedFilter(){return localStorage.getItem(FILTER_KEY)||'All'}
+function saveDueName(n){localStorage.setItem(DUE_NAME_KEY,n)}
+function getSavedDueName(){return localStorage.getItem(DUE_NAME_KEY)||'All'}
+function savePaidName(n){localStorage.setItem(PAID_NAME_KEY,n)}
+function getSavedPaidName(){return localStorage.getItem(PAID_NAME_KEY)||'All'}
 
-function initApp(){if(checkSession()){document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';document.getElementById('financerFilter').value=getSavedFilter();loadData()}}
-function doLogin(){var lo=JSON.parse(localStorage.getItem('emerloan_dd_lockout')||'{}');if(lo.until&&Date.now()<lo.until){document.getElementById('loginErr').textContent='🔒 Locked. Try again in '+Math.ceil((lo.until-Date.now())/60000)+' min.';return}var pw=document.getElementById('loginPw').value;if(!pw){document.getElementById('loginErr').textContent='Enter password';return}hashPw(pw).then(function(h){if(h===PW_HASH){localStorage.removeItem('emerloan_dd_lockout');saveSession();document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';document.getElementById('financerFilter').value=getSavedFilter();loadData()}else{var att=(lo.attempts||0)+1;if(att>=MAX_ATTEMPTS){localStorage.setItem('emerloan_dd_lockout',JSON.stringify({attempts:att,until:Date.now()+LOCKOUT_MIN*60000}));document.getElementById('loginErr').textContent='🔒 Locked for '+LOCKOUT_MIN+' minutes.';document.getElementById('loginBtn').disabled=true;setTimeout(function(){document.getElementById('loginBtn').disabled=false;document.getElementById('loginErr').textContent=''},LOCKOUT_MIN*60000)}else{localStorage.setItem('emerloan_dd_lockout',JSON.stringify({attempts:att}));document.getElementById('loginErr').textContent='❌ Wrong password ('+att+'/'+MAX_ATTEMPTS+')'}}})}
+function initApp(){if(checkSession()){document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';document.getElementById('financerFilter').value=getSavedFilter();dueSelName=getSavedDueName();paidSelName=getSavedPaidName();loadData()}}
+function doLogin(){var lo=JSON.parse(localStorage.getItem('emerloan_dd_lockout')||'{}');if(lo.until&&Date.now()<lo.until){document.getElementById('loginErr').textContent='🔒 Locked. Try again in '+Math.ceil((lo.until-Date.now())/60000)+' min.';return}var pw=document.getElementById('loginPw').value;if(!pw){document.getElementById('loginErr').textContent='Enter password';return}hashPw(pw).then(function(h){if(h===PW_HASH){localStorage.removeItem('emerloan_dd_lockout');saveSession();document.getElementById('loginWrap').style.display='none';document.getElementById('mainApp').style.display='block';document.getElementById('financerFilter').value=getSavedFilter();dueSelName=getSavedDueName();paidSelName=getSavedPaidName();loadData()}else{var att=(lo.attempts||0)+1;if(att>=MAX_ATTEMPTS){localStorage.setItem('emerloan_dd_lockout',JSON.stringify({attempts:att,until:Date.now()+LOCKOUT_MIN*60000}));document.getElementById('loginErr').textContent='🔒 Locked for '+LOCKOUT_MIN+' minutes.';document.getElementById('loginBtn').disabled=true;setTimeout(function(){document.getElementById('loginBtn').disabled=false;document.getElementById('loginErr').textContent=''},LOCKOUT_MIN*60000)}else{localStorage.setItem('emerloan_dd_lockout',JSON.stringify({attempts:att}));document.getElementById('loginErr').textContent='❌ Wrong password ('+att+'/'+MAX_ATTEMPTS+')'}}})}
 
 function now8(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()*60000)+(UO*3600000))}
 function today(){var d=now8();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
 function p2(n){return('0'+n).slice(-2)}
 function addD(ds,n){var p=ds.split('-');var d=new Date(+p[0],+p[1]-1,+p[2],12);d.setDate(d.getDate()+n);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
 function normDate(v){if(!v)return '';var s=String(v).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.substring(0,10);var d=new Date(s);if(!isNaN(d.getTime())){var u=new Date(d.getTime()+(d.getTimezoneOffset()*60000)+(UO*3600000));return u.getFullYear()+'-'+p2(u.getMonth()+1)+'-'+p2(u.getDate())}return s}
+function fD(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 function fDY(ds){if(!ds)return '';var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}
 function fDL(ds){var p=ds.split('-');return new Date(+p[0],+p[1]-1,+p[2],12).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',weekday:'short'})}
 function fmt(n){return '₱'+Number(n).toLocaleString('en-PH',{minimumFractionDigits:0})}
@@ -160,11 +184,7 @@ function api(params){
   return new Promise(function(resolve,reject){
     var url=WEB_APP_URL+'?';
     var parts=[];
-    for(var key in params){
-      if(params.hasOwnProperty(key)){
-        parts.push(encodeURIComponent(key)+'='+encodeURIComponent(params[key]));
-      }
-    }
+    for(var key in params){if(params.hasOwnProperty(key)){parts.push(encodeURIComponent(key)+'='+encodeURIComponent(params[key]))}}
     url+=parts.join('&')+'&_t='+Date.now();
     fetch(url,{redirect:'follow',cache:'no-store'})
     .then(function(r){return r.text()})
@@ -192,20 +212,56 @@ function shiftDue(n){document.getElementById('duePicker').value=addD(document.ge
 function setPaidToday(){document.getElementById('paidPicker').value=today();savePaidDate();renderPaid()}
 function shiftPaid(n){document.getElementById('paidPicker').value=addD(document.getElementById('paidPicker').value||today(),n);savePaidDate();renderPaid()}
 
+function selectDueName(n){dueSelName=n;saveDueName(n);renderDue()}
+function selectPaidName(n){paidSelName=n;savePaidName(n);renderPaid()}
+
+function buildTable(items,type){
+  var ta=0,ti=0,tt=0;
+  var h='<div class="ct-wrap"><div class="ct-sheet"><table class="ct"><thead><tr><th>#</th><th>Name</th><th>Released</th><th>Due</th><th class="right">Capital</th><th>Rate</th><th class="right">Interest</th><th class="right">Total</th><th>Cycle</th></tr></thead><tbody>';
+  items.forEach(function(l,i){
+    ta+=l.amount;ti+=l.interest;tt+=l.total;
+    var rc=type==='due'?'ct-due':'ct-paid';
+    h+='<tr class="'+rc+'"><td class="center">'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fD(l.dateReleased)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="center">'+l.rate+'%</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">#'+l.cycles+'</td></tr>';
+  });
+  h+='<tr class="ct-totals"><td colspan="4" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td></td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td></td></tr>';
+  h+='</tbody></table></div></div>';
+  return h;
+}
+
+function buildNameTabs(items,selected,callback){
+  var names=[];
+  items.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name)});
+  names.sort();
+  if(!names.length)return '';
+  var h='<div class="name-tabs-wrap"><div class="name-tabs-scroll">';
+  h+='<div class="name-tab all-tab'+(selected==='All'?' active':'')+'" onclick="'+callback+'(\'All\')">All ('+items.length+')</div>';
+  names.forEach(function(n){
+    var ct=items.filter(function(l){return l.name===n}).length;
+    h+='<div class="name-tab'+(selected===n?' active':'')+'" onclick="'+callback+'(\''+n.replace(/'/g,"\\'")+'\')">'+n+' ('+ct+')</div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
 function renderDue(){
   var sd=document.getElementById('duePicker').value||today(),fl=getFL();
   document.getElementById('dueTodayBtn').className='dpb'+(sd===today()?' ta':'');
   document.getElementById('dueBD').textContent=fDL(sd);
   var due=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Pending'});
   document.getElementById('dueBC').textContent=due.length+' pending · '+fmt(due.reduce(function(s,l){return s+l.total},0))+' to collect';
-  if(!due.length){document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due on this date!</div>';return}
-  var tt=0;
-  var h='<div class="lcards">';
-  due.forEach(function(l){
-    tt+=l.total;
-    h+='<div class="lcard due-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total Due</div><div class="lc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div><div><div class="lc-l">Released</div><div class="lc-v">'+fDY(l.dateReleased)+'</div></div><div><div class="lc-l">Due</div><div class="lc-v">'+fDY(l.dueDate)+'</div></div></div></div>';
-  });
-  h+='<div class="lc-tot" style="color:var(--red)">⏳ Total to Collect: '+fmt(tt)+' ('+due.length+' loans)</div></div>';
+  if(!due.length){dueSelName='All';document.getElementById('dueContent').innerHTML='<div class="empty">🎉 No pending loans due on this date!</div>';return}
+  // Validate selected name still exists
+  var nameExists=due.some(function(l){return l.name===dueSelName});
+  if(!nameExists)dueSelName='All';
+  var filtered=dueSelName==='All'?due:due.filter(function(l){return l.name===dueSelName});
+  var h='';
+  // Detail card if specific name selected
+  if(dueSelName!=='All'&&filtered.length>0){
+    var l=filtered[0];
+    h+='<div class="detail-card"><div class="dc-name">'+l.name+' '+fB(l.financer)+'</div><div class="dc-grid"><div><div class="dc-l">Capital</div><div class="dc-v">'+fmt(l.amount)+'</div></div><div><div class="dc-l">Interest ('+l.rate+'%)</div><div class="dc-v">'+fmt(l.interest)+'</div></div><div><div class="dc-l">Total Due</div><div class="dc-v" style="color:var(--red)">'+fmt(l.total)+'</div></div><div><div class="dc-l">Cycle</div><div class="dc-v">#'+l.cycles+'</div></div></div></div>';
+  }
+  h+=buildTable(filtered,'due');
+  h+=buildNameTabs(due,dueSelName,'selectDueName');
   document.getElementById('dueContent').innerHTML=h;
 }
 
@@ -215,14 +271,17 @@ function renderPaid(){
   document.getElementById('paidBD').textContent=fDL(sd);
   var paid=fl.filter(function(l){return l.dueDate===sd&&l.remarks==='Paid'});
   document.getElementById('paidBC').textContent=paid.length+' paid · '+fmt(paid.reduce(function(s,l){return s+l.total},0))+' collected';
-  if(!paid.length){document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}
-  var tt=0;
-  var h='<div class="lcards">';
-  paid.forEach(function(l){
-    tt+=l.total;
-    h+='<div class="lcard paid-c"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Interest ('+l.rate+'%)</div><div class="lc-v">'+fmt(l.interest)+'</div></div><div><div class="lc-l">Total Paid</div><div class="lc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="lc-l">Action</div><div class="lc-v">'+aB(l.action)+'</div></div><div><div class="lc-l">Released</div><div class="lc-v">'+fDY(l.dateReleased)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div></div>';
-  });
-  h+='<div class="lc-tot" style="color:var(--grn)">✅ Total Collected: '+fmt(tt)+' ('+paid.length+' loans)</div></div>';
+  if(!paid.length){paidSelName='All';document.getElementById('paidContent').innerHTML='<div class="empty">📭 No paid loans for this date.</div>';return}
+  var nameExists=paid.some(function(l){return l.name===paidSelName});
+  if(!nameExists)paidSelName='All';
+  var filtered=paidSelName==='All'?paid:paid.filter(function(l){return l.name===paidSelName});
+  var h='';
+  if(paidSelName!=='All'&&filtered.length>0){
+    var l=filtered[0];
+    h+='<div class="detail-card"><div class="dc-name">'+l.name+' '+fB(l.financer)+'</div><div class="dc-grid"><div><div class="dc-l">Capital</div><div class="dc-v">'+fmt(l.amount)+'</div></div><div><div class="dc-l">Interest ('+l.rate+'%)</div><div class="dc-v">'+fmt(l.interest)+'</div></div><div><div class="dc-l">Total Paid</div><div class="dc-v" style="color:var(--grn)">'+fmt(l.total)+'</div></div><div><div class="dc-l">Action</div><div class="dc-v">'+aB(l.action)+'</div></div></div></div>';
+  }
+  h+=buildTable(filtered,'paid');
+  h+=buildNameTabs(paid,paidSelName,'selectPaidName');
   document.getElementById('paidContent').innerHTML=h;
 }
 
@@ -231,14 +290,20 @@ function renderSummary(){
   fl.forEach(function(l){if(names.indexOf(l.name)===-1)names.push(l.name);if(l.remarks==='Pending'){pa+=l.amount;pi+=l.interest;pt+=l.total}if(l.remarks==='Paid')pc++});
   var dueToday=fl.filter(function(l){return l.dueDate===td2&&l.remarks==='Pending'}).length;
   document.getElementById('sumCards').innerHTML='<div class="dc"><div class="dl">Borrowers</div><div class="dv blue">'+names.length+'</div></div><div class="dc"><div class="dl">Lent Out</div><div class="dv amber">'+fmt(pa)+'</div></div><div class="dc"><div class="dl">To Collect</div><div class="dv red">'+fmt(pt)+'</div></div><div class="dc"><div class="dl">Interest</div><div class="dv green">'+fmt(pi)+'</div></div><div class="dc"><div class="dl">Due Today</div><div class="dv red">'+dueToday+'</div></div><div class="dc"><div class="dl">Paid</div><div class="dv green">'+pc+'</div></div>';
-  var latest={};fl.forEach(function(l){var k=l.name+'_'+l.financer;if(!latest[k]||l.id>latest[k].id)latest[k]=l});var lv=Object.values(latest);
-  if(!lv.length){document.getElementById('sumList').innerHTML='<div class="empty">No loans yet.</div>';return}
-  var h='<div class="lcards">';
-  lv.forEach(function(l){
-    var isDue=l.dueDate===td2&&l.remarks==='Pending';
-    h+='<div class="lcard'+(isDue?' due-c':'')+'"><div class="lc-top"><div><span class="lc-nm">'+l.name+'</span> '+fB(l.financer)+'</div>'+sB(l.remarks)+'</div><div class="lc-gr"><div><div class="lc-l">Amount</div><div class="lc-v">'+fmt(l.amount)+'</div></div><div><div class="lc-l">Total</div><div class="lc-v">'+fmt(l.total)+'</div></div><div><div class="lc-l">Due</div><div class="lc-v">'+fDY(l.dueDate)+'</div></div><div><div class="lc-l">Cycle</div><div class="lc-v">#'+l.cycles+'</div></div></div></div>';
+  // Summary table of all pending
+  var pending=fl.filter(function(l){return l.remarks==='Pending'});
+  pending.sort(function(a,b){return a.dueDate<b.dueDate?-1:a.dueDate>b.dueDate?1:a.name.localeCompare(b.name)});
+  if(!pending.length){document.getElementById('sumList').innerHTML='<div class="empty">No pending loans.</div>';return}
+  var ta=0,ti=0,tt=0;
+  var h='<div class="ct-wrap"><div class="ct-sheet"><table class="ct"><thead><tr><th>#</th><th>Name</th><th>Financer</th><th>Due</th><th class="right">Capital</th><th class="right">Interest</th><th class="right">Total</th><th>Cycle</th></tr></thead><tbody>';
+  pending.forEach(function(l,i){
+    ta+=l.amount;ti+=l.interest;tt+=l.total;
+    var isDue=l.dueDate===td2;
+    h+='<tr class="'+(isDue?'ct-due':'')+'"><td class="center">'+(i+1)+'</td><td style="font-family:system-ui,sans-serif;font-weight:600">'+l.name+'</td><td>'+fB(l.financer)+'</td><td>'+fD(l.dueDate)+'</td><td class="right">'+fmt(l.amount)+'</td><td class="right">'+fmt(l.interest)+'</td><td class="right">'+fmt(l.total)+'</td><td class="center">#'+l.cycles+'</td></tr>';
   });
-  h+='</div>';
+  h+='<tr class="ct-totals"><td colspan="4" style="text-align:right">TOTALS</td><td class="right">'+fmt(ta)+'</td><td class="right">'+fmt(ti)+'</td><td class="right">'+fmt(tt)+'</td><td></td></tr>';
+  h+='</tbody></table></div></div>';
+  h+='<div class="info"><strong>📌 Info:</strong> This is a read-only view. To make changes, use the main EmerLoan app.</div>';
   document.getElementById('sumList').innerHTML=h;
 }
 
